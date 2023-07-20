@@ -4,13 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.giantLink.RH.repositories.EmployeeRepository;
-import com.giantLink.RH.request.EmployeeRequest;
-import com.giantLink.RH.response.EmployeeResponse;
 import com.giantLink.RH.services.EmployeeService;
 
 import jakarta.transaction.Transactional;
 
 import com.giantLink.RH.exceptions.RessourceNotFoundException;
+import com.giantLink.RH.models.request.EmployeeRequest;
+import com.giantLink.RH.models.response.EmployeeResponse;
 import com.giantLink.RH.exceptions.InvalidInputException;
 
 @Service

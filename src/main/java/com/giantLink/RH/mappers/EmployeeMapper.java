@@ -4,8 +4,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 import com.giantLink.RH.entities.Employee;
-import com.giantLink.RH.request.EmployeeRequest;
-import com.giantLink.RH.response.EmployeeResponse;
+import com.giantLink.RH.models.request.EmployeeRequest;
+import com.giantLink.RH.models.response.EmployeeResponse;
 
 
 @Mapper(componentModel="spring")

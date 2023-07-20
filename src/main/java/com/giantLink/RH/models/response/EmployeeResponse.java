@@ -1,4 +1,4 @@
-package com.giantLink.RH.response;
+package com.giantLink.RH.models.response;
 
 public class EmployeeResponse {
 

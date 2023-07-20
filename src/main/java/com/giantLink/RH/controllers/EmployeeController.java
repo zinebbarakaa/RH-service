@@ -6,8 +6,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import com.giantLink.RH.request.EmployeeRequest;
-import com.giantLink.RH.response.EmployeeResponse;
+
+import com.giantLink.RH.models.request.EmployeeRequest;
+import com.giantLink.RH.models.response.EmployeeResponse;
 import com.giantLink.RH.services.EmployeeService;
 
 @RestController

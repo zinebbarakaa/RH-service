@@ -34,7 +34,7 @@ public class RhGlobalExceptionHandler {
         errorResponse.setErrorMessage("Unauthorized access");
         errorResponse.setErrorDetails(ex.getMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
-    }
+    }  
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGenericException(Exception ex) {
@@ -45,6 +45,7 @@ public class RhGlobalExceptionHandler {
         errorResponse.setErrorMessage("Internal server error");
         errorResponse.setErrorDetails(ex.getMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+        
     }
 }
 
