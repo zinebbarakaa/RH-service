@@ -1,0 +1,15 @@
+server:
+  port: 2023
+spring:
+  application:
+    name: rh-service
+  datasource:
+    password:
+    url: jdbc:mysql://localhost:3306/glintranet_rh?useSSL=false
+    username: root
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
