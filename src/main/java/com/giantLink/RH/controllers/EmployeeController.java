@@ -12,7 +12,7 @@ import com.giantLink.RH.models.response.EmployeeResponse;
 import com.giantLink.RH.services.EmployeeService;
 
 @RestController
-@RequestMapping("/Employee")
+@RequestMapping("/employee")
 public class EmployeeController {
 
     @Autowired

@@ -5,7 +5,7 @@ spring:
     name: rh-service
   datasource:
     password:
-    url: jdbc:mysql://localhost:3306/glintranet_rh?useSSL=false
+    url: jdbc:mysql://localhost:3306/rh-service?useSSL=false
     username: root
   jpa:
     hibernate:
