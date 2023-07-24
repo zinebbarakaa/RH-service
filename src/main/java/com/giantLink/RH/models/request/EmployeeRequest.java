@@ -8,8 +8,6 @@ import lombok.Data;
 @Data
 public class EmployeeRequest {
 
-	
-
     @NotBlank
     @Size(min = 2, max = 50)
     private String firstName;
