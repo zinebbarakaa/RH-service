@@ -1,23 +1,20 @@
 package com.giantLink.RH.exceptions;
 
+import lombok.Getter;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import lombok.Getter;
-
-@ResponseStatus(HttpStatus.NOT_FOUND)
+@ResponseStatus(HttpStatus.BAD_REQUEST)
 @Getter
-public class RessourceNotFoundException extends RuntimeException {
+public class ResourceDuplicatedException extends RuntimeException {
     private String entity;
     private String field;
     private String value;
 
-    public RessourceNotFoundException(String entity, String field, String value) {
-        super(String.format("%s Not Found with %s:%s", entity, field, value));
+    public ResourceDuplicatedException(String entity, String field, String value) {
+        super(String.format("%s already exists with %s:%s", entity, field, value));
         this.entity = entity;
         this.field = field;
         this.value = value;
     }
 }
-
-

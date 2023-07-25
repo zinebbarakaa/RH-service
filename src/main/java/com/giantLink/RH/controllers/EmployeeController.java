@@ -1,6 +1,8 @@
 package com.giantLink.RH.controllers;
 import java.util.List;
 
+import com.giantLink.RH.models.response.SuccessResponse;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,14 +14,14 @@ import com.giantLink.RH.models.response.EmployeeResponse;
 import com.giantLink.RH.services.EmployeeService;
 
 @RestController
-@RequestMapping("/employee")
+@RequestMapping("/api/employees")
 public class EmployeeController {
 
     @Autowired
     private EmployeeService employeeService;
 
     @PostMapping
-    public ResponseEntity<EmployeeResponse> addEmployee(@RequestBody @Validated EmployeeRequest request) {
+    public ResponseEntity<EmployeeResponse> addEmployee(@RequestBody @Valid EmployeeRequest request) {
         EmployeeResponse employeeResponse = employeeService.add(request);
         return new ResponseEntity<>(employeeResponse, HttpStatus.CREATED);
     }
@@ -43,8 +45,11 @@ public class EmployeeController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteEmployee(@PathVariable Long id) {
+    public ResponseEntity<SuccessResponse> deleteEmployee(@PathVariable Long id) {
         employeeService.delete(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        SuccessResponse successResponse = SuccessResponse.builder()
+                .message("Employee deleted successfully")
+                .build();
+        return new ResponseEntity<>(successResponse, HttpStatus.OK);
     }
 }
