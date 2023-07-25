@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.TaskScheduler;
+import org.springframework.scheduling.annotation.Scheduled;
 
 import java.util.logging.Logger;
 
@@ -21,4 +23,5 @@ public class RhServiceApplication implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 		databaseUtility.initDatabase();
 	}
+
 }

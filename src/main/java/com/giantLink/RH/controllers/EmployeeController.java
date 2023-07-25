@@ -50,6 +50,6 @@ public class EmployeeController {
         SuccessResponse successResponse = SuccessResponse.builder()
                 .message("Employee deleted successfully")
                 .build();
-        return new ResponseEntity<>(successResponse, HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(successResponse, HttpStatus.OK);
     }
 }
