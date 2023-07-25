@@ -1,5 +1,6 @@
 package com.giantLink.RH.models.response;
 
+import com.giantLink.RH.entities.HolidayBalance;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -18,4 +19,8 @@ public class EmployeeResponse {
 	private String email;
 	private String phone;
 	private Date recrutementDate;
+	private HolidayBalance holidayBalance;
+
+	private Date updatedAt;
+	private Date createdAt;
 }

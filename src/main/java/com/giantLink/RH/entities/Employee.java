@@ -10,7 +10,6 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Data
 @Getter
 @Setter
 @NoArgsConstructor
@@ -38,4 +37,18 @@ public class Employee {
 	private String phone;
 
 	private Date recrutementDate;
+
+	@OneToOne(cascade = CascadeType.REMOVE)
+	HolidayBalance holidayBalance;
+
+	private Date updatedAt;
+	private Date createdAt;
+	@PrePersist
+	void setCreatedAtField(){
+		createdAt = new Date();
+	}
+	@PreUpdate
+	void setUpdatedAtField(){
+		updatedAt = new Date();
+	}
 }

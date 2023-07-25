@@ -3,8 +3,10 @@ import java.util.List;
 import java.util.Optional;
 
 import com.giantLink.RH.entities.Employee;
+import com.giantLink.RH.entities.HolidayBalance;
 import com.giantLink.RH.exceptions.ResourceDuplicatedException;
 import com.giantLink.RH.mappers.EmployeeMapper;
+import com.giantLink.RH.repositories.HolidayBalanceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,9 +22,10 @@ import com.giantLink.RH.models.response.EmployeeResponse;
 @Service
 @Transactional
 public class EmployeeServiceImpl implements EmployeeService {
-
     @Autowired
     private EmployeeRepository employeeRepository;
+    @Autowired
+    private HolidayBalanceRepository holidayBalanceRepository;
 
     @Override
     public EmployeeResponse add(EmployeeRequest request) {
@@ -40,8 +43,13 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .phone(request.getEmail())
                 .recrutementDate(request.getRecrutementDate())
                 .build();
+//        Create holiday balance of the employee
+        HolidayBalance holidayBalance = new HolidayBalance();
+        holidayBalanceRepository.save(holidayBalance);
+        employee.setHolidayBalance(holidayBalance);
 //        Save the employee
         employeeRepository.save(employee);
+
 //        Prepare and return the response
         return EmployeeMapper.INSTANCE.entityToResponse(employee);
     }

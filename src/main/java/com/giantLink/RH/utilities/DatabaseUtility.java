@@ -1,7 +1,9 @@
 package com.giantLink.RH.utilities;
 
 import com.giantLink.RH.entities.Employee;
+import com.giantLink.RH.entities.HolidayBalance;
 import com.giantLink.RH.repositories.EmployeeRepository;
+import com.giantLink.RH.repositories.HolidayBalanceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -12,6 +14,8 @@ import java.util.logging.Logger;
 public class DatabaseUtility {
     @Autowired
     EmployeeRepository employeeRepository;
+    @Autowired
+    HolidayBalanceRepository holidayBalanceRepository;
 
     public void initDatabase(){
         Logger.getLogger("Database utility").info("Seeding database ...");
@@ -65,6 +69,32 @@ public class DatabaseUtility {
                 .cin("z985221")
                 .email("hicham@gmail.com")
                 .build();
+
+        HolidayBalance holidayBalance1 = new HolidayBalance();
+        HolidayBalance holidayBalance2 = new HolidayBalance();
+        HolidayBalance holidayBalance3 = new HolidayBalance();
+        HolidayBalance holidayBalance4 = new HolidayBalance();
+        HolidayBalance holidayBalance5 = new HolidayBalance();
+        HolidayBalance holidayBalance6 = new HolidayBalance();
+        HolidayBalance holidayBalance7 = new HolidayBalance();
+
+        holidayBalanceRepository.saveAll(Arrays.asList(
+                holidayBalance1,
+                holidayBalance2,
+                holidayBalance3,
+                holidayBalance4,
+                holidayBalance5,
+                holidayBalance6,
+                holidayBalance7
+        ));
+
+        employee1.setHolidayBalance(holidayBalance1);
+        employee2.setHolidayBalance(holidayBalance2);
+        employee3.setHolidayBalance(holidayBalance3);
+        employee4.setHolidayBalance(holidayBalance4);
+        employee5.setHolidayBalance(holidayBalance5);
+        employee6.setHolidayBalance(holidayBalance6);
+        employee7.setHolidayBalance(holidayBalance7);
 
         employeeRepository.saveAll(Arrays.asList(
                 employee1,
