@@ -6,5 +6,4 @@ import com.giantLink.RH.models.response.HolidayBalanceResponse;
 
 public interface HolidayBalanceService extends CrudService <HolidayBalanceRequest, HolidayBalanceResponse, HolidayBalance,Long>
 {
-
 }

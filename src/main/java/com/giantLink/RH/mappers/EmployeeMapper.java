@@ -20,4 +20,5 @@ import com.giantLink.RH.models.response.EmployeeResponse;
 public interface EmployeeMapper extends ApplicationMapper<EmployeeRequest, EmployeeResponse, Employee>
 {
 	EmployeeMapper INSTANCE = Mappers.getMapper(EmployeeMapper.class);
+
 }

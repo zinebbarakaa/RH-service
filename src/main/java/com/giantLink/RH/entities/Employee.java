@@ -41,6 +41,7 @@ public class Employee
 	private Date recrutementDate;
 
 	@OneToOne(cascade = CascadeType.REMOVE)
+	@JsonBackReference
 	HolidayBalance holidayBalance;
 
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "employee", cascade = CascadeType.REMOVE)
