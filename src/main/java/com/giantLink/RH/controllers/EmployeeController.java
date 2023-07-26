@@ -13,19 +13,22 @@ import com.giantLink.RH.services.EmployeeService;
 
 @RestController
 @RequestMapping("/employee")
-public class EmployeeController {
+public class EmployeeController
+{
 
     @Autowired
     private EmployeeService employeeService;
 
     @PostMapping
-    public ResponseEntity<EmployeeResponse> addEmployee(@RequestBody @Validated EmployeeRequest request) {
+    public ResponseEntity<EmployeeResponse> addEmployee(@RequestBody @Validated EmployeeRequest request)
+    {
         EmployeeResponse employeeResponse = employeeService.add(request);
         return new ResponseEntity<>(employeeResponse, HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<List<EmployeeResponse>> getAllEmployees() {
+    public ResponseEntity<List<EmployeeResponse>> getAllEmployees()
+    {
         List<EmployeeResponse> employees = employeeService.get();
         return new ResponseEntity<>(employees, HttpStatus.OK);
     }

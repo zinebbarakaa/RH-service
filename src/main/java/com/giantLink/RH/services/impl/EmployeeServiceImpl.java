@@ -16,13 +16,14 @@ import com.giantLink.RH.exceptions.InvalidInputException;
 @Service
 @Transactional // Active la gestion des transactions pour toutes les méthodes de la classe
 
-public class EmployeeServiceImpl implements EmployeeService {
-
+public class EmployeeServiceImpl implements EmployeeService
+{
     @Autowired
     private EmployeeRepository employeeRepository;
 
     @Override
-    public EmployeeResponse add(EmployeeRequest request) {
+    public EmployeeResponse add(EmployeeRequest request)
+    {
         // TODO: Implement the logic to add an employee
         // For example, you can create a new Employee entity and save it to the repository
         // If the request data is invalid, throw InvalidInputException
@@ -38,7 +39,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public List<EmployeeResponse> get() {
+    public List<EmployeeResponse> get()
+    {
         // TODO: Implement the logic to retrieve all employees
         // If there are no employees in the database, throw RessourceNotFoundException
       //  List<EmployeeResponse> employees = // Retrieve employees from the repository
@@ -51,12 +53,14 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public EmployeeResponse update(EmployeeRequest request, Long id) {
+    public EmployeeResponse update(EmployeeRequest request, Long id)
+    {
         // TODO: Implement the logic to update an employee by ID
         // If the employee with the given ID does not exist, throw RessourceNotFoundException
         //EmployeeResponse existingEmployee = // Retrieve the employee from the repository by ID
 
-        //if (existingEmployee == null) {
+        //if (existingEmployee == null)
+        // {
             throw new RessourceNotFoundException("Employee", "id", String.valueOf(id));
       // }
 
@@ -65,12 +69,14 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(Long id)
+    {
         // TODO: Implement the logic to delete an employee by ID
         // If the employee with the given ID does not exist, throw RessourceNotFoundException
        // EmployeeResponse existingEmployee = // Retrieve the employee from the repository by ID
 
-        //if (existingEmployee == null) {
+        //if (existingEmployee == null)
+        // {
             throw new RessourceNotFoundException("Employee", "id", String.valueOf(id));
        // }
 
@@ -78,12 +84,14 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public EmployeeResponse get(Long id) {
+    public EmployeeResponse get(Long id)
+    {
         // TODO: Implement the logic to retrieve an employee by ID
         // If the employee with the given ID does not exist, throw RessourceNotFoundException
         //EmployeeResponse employee = // Retrieve the employee from the repository by ID
 
-        //if (employee == null) {
+        //if (employee == null)
+        // {
             throw new RessourceNotFoundException("Employee", "id", String.valueOf(id));
       //  }
 

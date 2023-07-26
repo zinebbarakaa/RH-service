@@ -26,8 +26,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Employee {
-	
+public class Employee
+{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -37,6 +37,5 @@ public class Employee {
 	private String lastName;
 	
 	private String email;
-	
-	
+
 }

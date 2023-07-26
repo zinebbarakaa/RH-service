@@ -1,7 +1,7 @@
 package com.giantLink.RH.models.response;
 
-public class EmployeeResponse {
-
+public class EmployeeResponse
+{
     private Long id;
 	
 	private String firstName;

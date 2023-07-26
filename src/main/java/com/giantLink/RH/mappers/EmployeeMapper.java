@@ -9,9 +9,7 @@ import com.giantLink.RH.models.response.EmployeeResponse;
 
 
 @Mapper(componentModel="spring")
-public interface EmployeeMapper extends ApplicationMapper<EmployeeRequest, EmployeeResponse, Employee> {
-
+public interface EmployeeMapper extends ApplicationMapper<EmployeeRequest, EmployeeResponse, Employee>
+{
 	EmployeeMapper INSTANCE = Mappers.getMapper(EmployeeMapper.class);
-	
-   
 }
