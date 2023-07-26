@@ -40,6 +40,11 @@ public class Employee {
 
 	@OneToOne(cascade = CascadeType.REMOVE)
 	HolidayBalance holidayBalance;
+	
+	@OneToMany(mappedBy = "employee")
+    @JsonBackReference
+    private Set<Warning> warnings;
+	
 
 	private Date updatedAt;
 	private Date createdAt;
