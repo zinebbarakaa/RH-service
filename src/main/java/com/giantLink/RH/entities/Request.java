@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -18,16 +19,22 @@ import java.util.Date;
 public abstract class Request
 {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    protected Long id;
 
     @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(style = "dd-mm-yyyy")
     protected Date requestDate;
 
     @ManyToOne
     @JoinColumn(name = "employee_id")
     @JsonBackReference
     protected Employee employee;
+
+    @OneToOne
+    @JoinColumn(name = "requestStatus_id")
+    @JsonBackReference
+    protected RequestStatus status;
 
     @PrePersist
     private void onCreate() { this.requestDate = new Date(); }

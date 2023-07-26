@@ -27,4 +27,5 @@ public class RequestHoliday extends Request
     private Long numberOfPaidLeaves;
 
     private Long numberOfUnpaidLeaves;
+
 }

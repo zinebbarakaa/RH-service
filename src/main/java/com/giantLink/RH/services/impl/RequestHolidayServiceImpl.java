@@ -2,12 +2,16 @@ package com.giantLink.RH.services.impl;
 
 import com.giantLink.RH.entities.Employee;
 import com.giantLink.RH.entities.RequestHoliday;
+import com.giantLink.RH.entities.RequestStatus;
 import com.giantLink.RH.mappers.RequestHolidayMapper;
 import com.giantLink.RH.models.request.RequestHolidayRequest;
+import com.giantLink.RH.models.request.RequestStatusRequest;
 import com.giantLink.RH.models.response.RequestHolidayResponse;
 import com.giantLink.RH.repositories.EmployeeRepository;
 import com.giantLink.RH.repositories.RequestHolidayRepository;
+import com.giantLink.RH.repositories.RequestStatusRepository;
 import com.giantLink.RH.services.RequestHolidayService;
+import com.giantLink.RH.services.RequestStatusService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +25,11 @@ public class RequestHolidayServiceImpl implements RequestHolidayService
     private RequestHolidayRepository requestHolidayRepository;
     @Autowired
     private EmployeeRepository employeeRepository;
+
+    @Autowired
+    private RequestStatusService requestStatusService;
+    @Autowired
+    private RequestStatusRepository requestStatusRepository;
 
     @Override
     public List<RequestHolidayResponse> get()
@@ -57,8 +66,14 @@ public class RequestHolidayServiceImpl implements RequestHolidayService
         }
         else
         {
+            RequestStatus requestStatus = RequestStatus.builder()
+                    .type("Pending")
+                    .request(requestHoliday)
+                    .build();
+            requestHoliday.setStatus(requestStatus);
+            requestHolidayRepository.save(requestHoliday);
 
+            return RequestHolidayMapper.INSTANCE.entityToResponse(requestHoliday);
         }
-        return null;
     }
 }
