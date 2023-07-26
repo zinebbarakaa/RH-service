@@ -37,6 +37,12 @@ public class Employee {
 	private String lastName;
 	
 	private String email;
-	
+
+	@OneToMany(mappedBy = "employee")
+	private List<Request> requests;
+
+	@OneToOne(fetch = FetchType.EAGER, optional = false, cascade = CascadeType.ALL)
+	@JoinColumn(name = "holidaybalance_id")
+	private HolidayBalance holidayBalance;
 	
 }

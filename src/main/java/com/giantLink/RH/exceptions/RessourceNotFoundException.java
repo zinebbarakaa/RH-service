@@ -12,6 +12,9 @@ public class RessourceNotFoundException extends RuntimeException {
     private String field;
     private String value;
 
+    public RessourceNotFoundException(String message){
+        super(message);
+    }
     public RessourceNotFoundException(String entity, String field, String value) {
         super(String.format("%s Not Found with %s:%s", entity, field, value));
         this.entity = entity;
