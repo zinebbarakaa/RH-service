@@ -1,5 +1,6 @@
 package com.giantLink.RH.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -28,6 +29,10 @@ public class HolidayBalance {
     @Column(nullable = false)
     @Builder.Default
     private int holidayPerMonth = 2;
+
+    @OneToOne(mappedBy = "holidayBalance")
+    @JsonBackReference
+    private Employee employee;
 
     private Date updatedAt;
     private Date createdAt;
