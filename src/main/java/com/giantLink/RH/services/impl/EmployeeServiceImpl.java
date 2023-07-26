@@ -35,14 +35,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         if (request.getEmail() != null && employeeRepository.findByEmail(request.getEmail()).isPresent())
             throw new ResourceDuplicatedException("employee", "email", request.getEmail());
 //        Create the employee
-        Employee employee = Employee.builder()
-                .firstName(request.getFirstName())
-                .lastName(request.getLastName())
-                .cin(request.getCin())
-                .email(request.getEmail())
-                .phone(request.getEmail())
-                .recrutementDate(request.getRecrutementDate())
-                .build();
+        Employee employee = EmployeeMapper.INSTANCE.requestToEntity(request);
 //        Create holiday balance of the employee
         HolidayBalance holidayBalance = new HolidayBalance();
         holidayBalanceRepository.save(holidayBalance);
@@ -68,12 +61,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 //        Check unique properties are not duplicated
         if (request.getCin() != null){
             Optional<Employee> employeeByCin = employeeRepository.findByCin(request.getCin());
-            if (employeeByCin.isPresent() && employeeByCin.get().getId() != id)
+            if (employeeByCin.isPresent() && !employeeByCin.get().getId().equals(id))
                 throw new ResourceDuplicatedException("employee", "cin", request.getCin());
         }
         if (request.getEmail() != null){
             Optional<Employee> employeeByEmail = employeeRepository.findByEmail(request.getEmail());
-            if (employeeByEmail.isPresent() && employeeByEmail.get().getId() != id)
+            if (employeeByEmail.isPresent() && !employeeByEmail.get().getId().equals(id))
                 throw new ResourceDuplicatedException("employee", "email", request.getEmail());
         }
 //        Update entity
