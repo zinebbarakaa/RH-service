@@ -39,6 +39,7 @@ public class Employee {
 	private Date recrutementDate;
 
 	@OneToOne(cascade = CascadeType.REMOVE)
+	@JsonBackReference
 	HolidayBalance holidayBalance;
 
 	private Date updatedAt;
