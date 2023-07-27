@@ -22,6 +22,7 @@ public abstract class Request
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Long id;
 
+
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(style = "dd-MM-yyyy")
     protected Date requestDate;
@@ -32,7 +33,8 @@ public abstract class Request
     protected Employee employee;
 
 
-    @OneToOne(fetch = FetchType.EAGER, mappedBy = "request")
+    @OneToOne
+    @JoinColumn(name = "requestStatus_id")
     @JsonBackReference
     protected RequestStatus status;
 

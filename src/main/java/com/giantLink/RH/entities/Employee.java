@@ -54,15 +54,11 @@ public class Employee
     @JsonBackReference
     private Set<Request> requests;
 
-
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date updatedAt;
-	
 	@Temporal(TemporalType.TIMESTAMP)
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "employee", cascade = CascadeType.REMOVE)
-	private Set<RequestHoliday> requestHolidays;
+	private Date createdAt;    
 
-	private Date createdAt;
 	@PrePersist
 	void setCreatedAtField(){
 		createdAt = new Date();

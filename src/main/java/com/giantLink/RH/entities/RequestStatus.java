@@ -3,6 +3,7 @@ package com.giantLink.RH.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Set;
 
 @Entity
 @Getter
@@ -19,7 +20,6 @@ public class RequestStatus
     private String type;
 
 
-    @OneToOne
-    @JoinColumn(name = "request_id")
+    @OneToOne(fetch = FetchType.EAGER, mappedBy = "status")
     private Request request;
 }
