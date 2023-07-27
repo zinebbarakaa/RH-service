@@ -13,7 +13,8 @@ import java.util.List;
 import java.util.Optional;
 
 
-public interface RequestStatusService  extends CrudService<RequestStatusRequest, RequestStatusResponse, RequestStatus, Long>{
+public interface RequestStatusService extends CrudService<RequestStatusRequest, RequestStatusResponse, RequestStatus, Long> {
     RequestStatusResponse processHolidayRequest(Long requestStatusId);
+
     List<RequestStatusResponse> getByStatusName(State state);
 }

@@ -1,24 +1,51 @@
 package com.giantLink.RH.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Date;
 
 @Entity
-@Setter
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class HolidayBalance {
+public class HolidayBalance
+{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private int balance;
-    private Date timestamp;
+
+    @Column(nullable = false)
+    @Builder.Default
+    private int balance = 0;
+
+    @Column(nullable = false)
+    @JsonFormat(pattern="yyyy/MM/dd HH:mm:ss")
+    @Builder.Default
+    private Date timestamp = new Date();
+
+    @Column(nullable = false)
+    @Builder.Default
+    private int holidayPerMonth = 2;
+
+    @OneToOne(mappedBy = "holidayBalance")
+    @JsonBackReference
+    private Employee employee;
+
+    @JsonFormat(pattern="yyyy/MM/dd HH:mm:ss")
+    private Date updatedAt;
+    @JsonFormat(pattern="yyyy/MM/dd HH:mm:ss")
+    private Date createdAt;
     @PrePersist
-    private void onCreate() {
-        this.timestamp = new Date();
+    void setCreatedAtField(){
+        createdAt = new Date();
+    }
+    @PreUpdate
+    void setUpdatedAtField(){
+        updatedAt = new Date();
     }
 }

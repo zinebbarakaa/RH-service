@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.Optional;
 
-public interface RequestHolidayRepository extends JpaRepository<RequestHoliday,Long> {
+public interface RequestHolidayRepository extends JpaRepository<RequestHoliday, Long> {
+    @Query(value = "SELECT * FROM request_holiday AS c WHERE c.id = ?1", nativeQuery = true)
+    Optional<RequestHoliday> findByRequeStStatusId(Long id);
 
 }

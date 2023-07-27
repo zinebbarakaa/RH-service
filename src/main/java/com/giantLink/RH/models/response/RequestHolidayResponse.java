@@ -1,21 +1,26 @@
 package com.giantLink.RH.models.response;
 
-import com.giantLink.RH.entities.Request;
-import jakarta.persistence.*;
-import lombok.*;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.giantLink.RH.entities.RequestStatus;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.Date;
-@Data
+
 @Getter
 @Setter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class RequestHolidayResponse {
+public class RequestHolidayResponse
+{
     private Long id;
     private int numberOfDays;
+    @JsonFormat(pattern="dd-MM-yyyy")
     private Date startDate;
+    @JsonFormat(pattern="dd-MM-yyyy")
     private Date finishDate;
+    @JsonFormat(pattern="dd-MM-yyyy")
     private Date returnDate;
+    private Long status_id;
+    private Long employee_id;
     private int numberOfPaidLeaves;
-    private Date numberOfUnpaidLeaves;
+    private int numberOfUnpaidLeaves;
 }

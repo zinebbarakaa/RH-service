@@ -12,7 +12,7 @@ import lombok.*;
 @Builder
 public class RequestStatusResponse {
     private Long id;
-    private State statusName;
+    private State type;
     private String messageDetails;
     private Request request;
 }

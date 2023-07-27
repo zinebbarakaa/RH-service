@@ -2,7 +2,11 @@ package com.giantLink.RH.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -12,14 +16,29 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class Request {
+public abstract class Request {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-    private Date requestDate;
+    protected Long id;
 
+
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(style = "dd-MM-yyyy")
+    protected Date requestDate;
+
+    @ManyToOne
     @JoinColumn(name = "employee_id")
     @JsonBackReference
-    @ManyToOne
-    private Employee employee;
+    protected Employee employee;
+
+
+    @OneToOne
+    @JoinColumn(name = "requestStatus_id")
+    @JsonBackReference
+    protected RequestStatus status;
+
+    @PrePersist
+    private void onCreate() {
+        this.requestDate = new Date();
+    }
 }

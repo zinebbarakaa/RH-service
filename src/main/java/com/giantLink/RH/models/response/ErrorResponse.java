@@ -1,14 +1,12 @@
-package com.giantLink.RH.exceptions;
+package com.giantLink.RH.models.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class ErrorResponse {
     private int errorCode;
     private String errorMessage;

@@ -1,25 +1,79 @@
 package com.giantLink.RH.services.impl;
 
+import com.giantLink.RH.entities.Employee;
 import com.giantLink.RH.entities.RequestHoliday;
+import com.giantLink.RH.entities.RequestStatus;
+import com.giantLink.RH.enums.State;
+import com.giantLink.RH.mappers.RequestHolidayMapper;
+import com.giantLink.RH.models.request.RequestHolidayRequest;
+import com.giantLink.RH.models.request.RequestStatusRequest;
+import com.giantLink.RH.models.response.RequestHolidayResponse;
+import com.giantLink.RH.repositories.EmployeeRepository;
 import com.giantLink.RH.repositories.RequestHolidayRepository;
-import lombok.Builder;
+import com.giantLink.RH.repositories.RequestStatusRepository;
+import com.giantLink.RH.services.RequestHolidayService;
+import com.giantLink.RH.services.RequestStatusService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.Locale;
-
+import java.util.List;
+import java.util.Optional;
 
 @Service
-public class RequestHolidayServiceImpl {
+@Transactional
+public class RequestHolidayServiceImpl implements RequestHolidayService {
     @Autowired
     private RequestHolidayRepository requestHolidayRepository;
+    @Autowired
+    private EmployeeRepository employeeRepository;
 
-    public void createRequestHoliday(RequestHoliday requestHoliday){
+    @Autowired
+    private RequestStatusService requestStatusService;
+    @Autowired
+    private RequestStatusRepository requestStatusRepository;
 
-        RequestHoliday requestHoliday1 = RequestHoliday.builder().numberOfDays(requestHoliday.getNumberOfDays()).numberOfPaidLeaves(requestHoliday.getNumberOfPaidLeaves()).numberOfUnpaidLeaves(requestHoliday.getNumberOfUnpaidLeaves())
-                .build();
-        requestHolidayRepository.save(requestHoliday1);
+    @Override
+    public List<RequestHolidayResponse> get() {
+        return null;
+    }
 
+    @Override
+    public RequestHolidayResponse update(RequestHolidayRequest request, Long aLong) {
+        return null;
+    }
+
+    @Override
+    public void delete(Long aLong) {
+
+    }
+
+    @Override
+    public RequestHolidayResponse get(Long aLong) {
+        return null;
+    }
+
+    @Override
+    public RequestHolidayResponse add(RequestHolidayRequest requestHolidayRequest) {
+        RequestHoliday requestHoliday = RequestHolidayMapper.INSTANCE.requestToEntity(requestHolidayRequest);
+        Optional<Employee> findEmployee = employeeRepository.findById(requestHolidayRequest.getEmployee_id());
+        if (!findEmployee.isPresent()) {
+            throw new RuntimeException("Employee having id : " + requestHolidayRequest.getEmployee_id().toString() + " is not found !");
+        } else {
+            RequestStatus requestStatus = RequestStatus.builder()
+                    .type(State.PENDING)
+                    .request(requestHoliday)
+                    .build();
+
+            requestStatusRepository.save(requestStatus);
+            requestHoliday.setStatus(requestStatus);
+            requestHoliday.setEmployee(findEmployee.get());
+            requestHolidayRepository.save(requestHoliday);
+
+            RequestHolidayResponse response = RequestHolidayMapper.INSTANCE.entityToResponse(requestHoliday);
+            response.setEmployee_id(findEmployee.get().getId());
+            response.setStatus_id(requestStatus.getId());
+            return response;
+        }
     }
 }

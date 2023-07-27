@@ -1,21 +1,34 @@
 package com.giantLink.RH.models.request;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
 
 import java.util.Date;
-@Data
-@NoArgsConstructor
+
+@Getter
+@Setter
 @AllArgsConstructor
-public class RequestHolidayRequest {
+@NoArgsConstructor
+@Builder
+public class RequestHolidayRequest
+{
+    @Min(value = 1 , message = "Number of days must be at least 1.")
     private int numberOfDays;
+
+    @NotNull(message = "Start date cannot be empty.")
+    @Future(message = "Start date must be in the future.")
     private Date startDate;
+
+    @NotNull(message = "Finish date cannot be empty.")
+    @Future(message = "Finish date must be in the future.")
     private Date finishDate;
-    private Date returnDate;
-    private int numberOfPaidLeaves;
-    private int numberOfUnpaidLeaves;
+
+/*    @NotNull(message = "Return date cannot be empty.")
+    @Future(message = "Return date must be in the future.")
+    private Date returnDate;*/
+
+    @NotNull(message = "Employee ID cannot be empty.")
     private Long employee_id;
-    private Long requestStatus_Id;
 }
