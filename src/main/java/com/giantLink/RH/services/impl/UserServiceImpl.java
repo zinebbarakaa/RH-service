@@ -3,7 +3,7 @@ package com.giantLink.RH.services.impl;
 import com.giantLink.RH.entities.Employee;
 import com.giantLink.RH.entities.Role;
 import com.giantLink.RH.entities.User;
-import com.giantLink.RH.exceptions.RessourceNotFoundException;
+import com.giantLink.RH.exceptions.ResourceNotFoundException;
 import com.giantLink.RH.models.request.LoginRequest;
 import com.giantLink.RH.models.request.RegisterRequest;
 import com.giantLink.RH.models.response.LoginResponse;
@@ -46,7 +46,7 @@ public class UserServiceImpl implements UserService {
             if (findRole.isPresent()) {
                 roles.add(findRole.get());
             } else {
-                throw new RessourceNotFoundException(Role.class.getSimpleName(),"id_role",String.valueOf(role.getId()));
+                throw new ResourceNotFoundException(Role.class.getSimpleName(),"id_role",String.valueOf(role.getId()));
             }
         }
 
@@ -94,10 +94,10 @@ public class UserServiceImpl implements UserService {
         Optional<User> findUser = userRepository.findById(id_user);
         Optional<Role> findRole = roleRepository.findById(id_role);
         if (!findUser.isPresent()) {
-            throw new RessourceNotFoundException(User.class.getSimpleName(),"id_user",String.valueOf(id_user));
+            throw new ResourceNotFoundException(User.class.getSimpleName(),"id_user",String.valueOf(id_user));
         }
         if (!findRole.isPresent()) {
-            throw new RessourceNotFoundException(Role.class.getSimpleName(),"id_role",String.valueOf(id_role));
+            throw new ResourceNotFoundException(Role.class.getSimpleName(),"id_role",String.valueOf(id_role));
         }
         User user = findUser.get();
         List<Role> roles = new ArrayList<>();
@@ -116,10 +116,10 @@ public class UserServiceImpl implements UserService {
         Optional<User> findUser = userRepository.findById(id_user);
         Optional<Role> findRole = roleRepository.findById(id_role);
         if (!findUser.isPresent()) {
-            throw new RessourceNotFoundException(User.class.getSimpleName(),"id_user",String.valueOf(id_user));
+            throw new ResourceNotFoundException(User.class.getSimpleName(),"id_user",String.valueOf(id_user));
         }
         if (!findRole.isPresent()) {
-            throw new RessourceNotFoundException(Role.class.getSimpleName(),"id_role",String.valueOf(id_role));
+            throw new ResourceNotFoundException(Role.class.getSimpleName(),"id_role",String.valueOf(id_role));
         }
         User appUser = findUser.get();
         List<Role> roles = appUser.getRoles();

@@ -2,6 +2,7 @@ package com.giantLink.RH.exceptions;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.giantLink.RH.models.response.ErrorResponse;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

@@ -1,4 +1,4 @@
-package com.giantLink.RH.exceptions;
+package com.giantLink.RH.models.response;
 
 import lombok.*;
 
