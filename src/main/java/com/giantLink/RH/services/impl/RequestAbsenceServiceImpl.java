@@ -14,7 +14,9 @@ import com.giantLink.RH.mappers.RequestAbsenceMapper;
 import com.giantLink.RH.models.request.RequestAbscenceUpdateRequest;
 import com.giantLink.RH.models.request.RequestAbsenceRequest;
 import com.giantLink.RH.models.response.RequestAbsenceResponse;
+import com.giantLink.RH.repositories.EmployeeRepository;
 import com.giantLink.RH.repositories.RequestAbsenceRepository;
+import com.giantLink.RH.repositories.RequestStatusRepository;
 import com.giantLink.RH.repositories.WarningRepository;
 import com.giantLink.RH.repositories.WarningTypeRepository;
 import com.giantLink.RH.services.RequestAbsenceService;
@@ -32,28 +34,45 @@ public class RequestAbsenceServiceImpl implements RequestAbsenceService {
     WarningTypeRepository warningTypeRepository;
     @Autowired
     WarningRepository warningRepository;
+    @Autowired
+    RequestStatusRepository requestStatusRepository;
+    @Autowired
+    EmployeeRepository employeeRepository;
 
     @Override
     public RequestAbsenceResponse add(RequestAbsenceRequest request) {
+        if (request.getAbsenceDate() == null) {
+            throw new IllegalArgumentException("La date d'absence ne peut pas être null.");
+        }
+
         RequestAbsence entity = RequestAbsenceMapper.INSTANCE.requestToEntity(request);
+        entity.setEmployee(employeeRepository.findById(request.getIdEmployee()).get());
+       
         RequestStatus requestStatus = new RequestStatus();
         requestStatus.setType("Pending");
         requestStatus.setRequest(entity);
         entity.setStatus(requestStatus);
-        if (request.getAbsenceDate() == null) {
-            
-            throw new IllegalArgumentException("La date d'absence ne peut pas être null.");
+
+        // Sauvegarder l'entité RequestStatus d'abord
+        requestStatusRepository.save(requestStatus);
+        
+        RequestAbsenceResponse responce =RequestAbsenceMapper.INSTANCE.entityToResponse(requestAbsenceRepository.save(entity));
+        responce.setMessage("Request added successfuly");
+        if (entity.getRequestDate() != null) {
+            int dateCompare = entity.getAbsenceDate().compareTo(entity.getRequestDate());
+            if (dateCompare < 0) {
+                WarningType warningType = warningTypeRepository.findByTitle("Warning for Absence Without Request").get();
+                Warning warning = new Warning();
+                warning.setWarningType(warningType);
+                warning.setEmployee(entity.getEmployee());
+                warningRepository.save(warning);
+            }
         }
-        int dateCompare = entity.getAbsenceDate().compareTo(entity.getRequestDate());
-        if(dateCompare<0) {
-        	WarningType warningType = warningTypeRepository.findByTitle("Warning for Absence Without Request").get();
-        	Warning warning = new Warning();
-        	warning.setWarningType(warningType);
-        	warning.setEmployee(entity.getEmployee());
-        	warningRepository.save(warning);
-        }
-        return RequestAbsenceMapper.INSTANCE.entityToResponse(requestAbsenceRepository.save(entity));
+        
+        return responce ;
     }
+
+
 
     @Override
     public List<RequestAbsenceResponse> get() {
