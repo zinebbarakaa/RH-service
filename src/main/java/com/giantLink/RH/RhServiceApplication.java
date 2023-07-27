@@ -30,4 +30,61 @@ public class RhServiceApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(RhServiceApplication.class, args);
 	}
+	@Bean
+	CommandLineRunner commandLineRunner(RequestHolidayRepository requestHolidayRepository,
+										RequestHolidayServiceImpl requestHolidayService,
+										RequestStatusRepository requestStatusRepository,
+										EmployeeRepository employeeRepository,
+										RequestRepository requestRepository,
+										RequestStatusService requestStatusService
+	) {
+		return args -> {
+
+			HolidayBalance holidayBalance = new HolidayBalance();
+			holidayBalance.setBalance(20);
+			holidayBalance.setTimestamp(new Date());
+			System.out.println("Hicham");
+			Employee employee = new Employee();
+			employee.setFirstName("Hicham");
+			employee.setLastName("ASBIKA");
+			employee.setEmail("Hicham.asbika.e@gmail.com");
+			employee.setHolidayBalance(holidayBalance);
+
+			employeeRepository.save(employee);
+
+			Calendar startDateCalendar = Calendar.getInstance();
+			startDateCalendar.set(Calendar.YEAR, 2023);
+			startDateCalendar.set(Calendar.MONTH, Calendar.JULY);
+			startDateCalendar.set(Calendar.DAY_OF_MONTH, 26);
+
+			Calendar startDateCalendar2 = Calendar.getInstance();
+			startDateCalendar2.set(Calendar.YEAR, 2023);
+			startDateCalendar2.set(Calendar.MONTH, Calendar.JULY);
+			startDateCalendar2.set(Calendar.DAY_OF_MONTH, 29);
+
+
+			RequestHoliday requestHoliday = new RequestHoliday();
+			requestHoliday.setNumberOfDays(3);
+			requestHoliday.setNumberOfPaidLeaves(1);
+			requestHoliday.setNumberOfUnpaidLeaves(2);
+			requestHoliday.setStartDate(startDateCalendar.getTime());
+			requestHoliday.setFinishDate(startDateCalendar2.getTime());
+			requestHoliday.setEmployee(employee);
+			RequestStatus requestStatus = new RequestStatus();
+			requestStatus.setStatusName(State.PENDING);
+			requestStatus.setRequest(requestHoliday);
+			requestRepository.save(requestHoliday);
+			requestStatusRepository.save(requestStatus);
+			requestHolidayRepository.save(requestHoliday);
+
+//			try {
+//				requestStatusService.processHolidayRequest(3L);
+//			} catch (Exception e) {
+//				throw new RuntimeException(e);
+//			}
+
+		};
+	}
+
+
 }
