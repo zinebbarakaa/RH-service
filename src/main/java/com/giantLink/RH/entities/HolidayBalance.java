@@ -1,6 +1,7 @@
 package com.giantLink.RH.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,8 +13,8 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class HolidayBalance {
-
+public class HolidayBalance
+{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,6 +24,7 @@ public class HolidayBalance {
     private int balance = 0;
 
     @Column(nullable = false)
+    @JsonFormat(pattern="yyyy/MM/dd HH:mm:ss")
     @Builder.Default
     private Date timestamp = new Date();
 
@@ -34,7 +36,9 @@ public class HolidayBalance {
     @JsonBackReference
     private Employee employee;
 
+    @JsonFormat(pattern="yyyy/MM/dd HH:mm:ss")
     private Date updatedAt;
+    @JsonFormat(pattern="yyyy/MM/dd HH:mm:ss")
     private Date createdAt;
     @PrePersist
     void setCreatedAtField(){

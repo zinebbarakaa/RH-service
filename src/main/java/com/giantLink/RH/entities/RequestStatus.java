@@ -3,6 +3,7 @@ package com.giantLink.RH.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+
 @Entity
 @Getter
 @Setter
@@ -16,6 +17,7 @@ public class RequestStatus
     private Long id;
 
     private String type;
+
 
     @OneToOne
     @JoinColumn(name = "request_id")

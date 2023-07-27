@@ -31,6 +31,7 @@ public abstract class Request
     @JsonBackReference
     protected Employee employee;
 
+
     @OneToOne(fetch = FetchType.EAGER, mappedBy = "request")
     @JsonBackReference
     protected RequestStatus status;

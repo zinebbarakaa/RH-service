@@ -1,11 +1,45 @@
 {
 	"info": {
-		"_postman_id": "693c76cb-e7c0-4f16-9666-16dbc11d4aaa",
+		"_postman_id": "9ce49c26-9984-440b-a6fb-1f7fe6f34122",
 		"name": "Rh service",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "28324967"
 	},
 	"item": [
+		{
+			"name": "RequestHoliday",
+			"item": [
+				{
+					"name": "Add Holiday Request",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"numberofdays\": 5,\r\n    \"startDate\": \"2023-07-15\",\r\n    \"finishDate\": \"2023-07-20\",\r\n    \"employee_id\": 110\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:2023/api/request-holidays",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "2023",
+							"path": [
+								"api",
+								"request-holidays"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
 		{
 			"name": "Employee",
 			"item": [
@@ -110,12 +144,12 @@
 					"response": []
 				},
 				{
-					"name": "Delete employee",
+					"name": "Detach holiday balance from employee",
 					"request": {
-						"method": "DELETE",
+						"method": "PATCH",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:2023/api/employees/10",
+							"raw": "http://localhost:2023/api/employees/1/detachholidaybalance",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -124,7 +158,29 @@
 							"path": [
 								"api",
 								"employees",
-								"10"
+								"1",
+								"detachholidaybalance"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete employee",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:2023/api/employees/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "2023",
+							"path": [
+								"api",
+								"employees",
+								"1"
 							]
 						}
 					},
@@ -409,6 +465,451 @@
 							"path": [
 								"warnings",
 								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Holiday balance",
+			"item": [
+				{
+					"name": "Get all holiday balance",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:2023/api/holidaybalances",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "2023",
+							"path": [
+								"api",
+								"holidaybalances"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get holiday balance by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:2023/api/holidaybalances/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "2023",
+							"path": [
+								"api",
+								"holidaybalances",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add holiday balance",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"balance\": 30\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:2023/api/holidaybalances",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "2023",
+							"path": [
+								"api",
+								"holidaybalances"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update holiday balance",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"balance\": \"28\",\r\n    \"holidayPerMonth\": 3\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:2023/api/holidaybalances/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "2023",
+							"path": [
+								"api",
+								"holidaybalances",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete holiday balance",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:2023/api/holidaybalances/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "2023",
+							"path": [
+								"api",
+								"holidaybalances",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Warning Type",
+			"item": [
+				{
+					"name": "GET ALL Warning types",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:2023/warningtypes",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "2023",
+							"path": [
+								"warningtypes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ADD new warning type",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\":\"Unjustified absence\",\r\n    \"description\":\"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:2023/warningtypes",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "2023",
+							"path": [
+								"warningtypes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UPDATE a warning type",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Unjustified absence\",\r\n    \"description\": \"Absence without justification\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:2023/warningtypes/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "2023",
+							"path": [
+								"warningtypes",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:2023/warningtypes/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "2023",
+							"path": [
+								"warningtypes",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET BY ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:2023/warningtypes/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "2023",
+							"path": [
+								"warningtypes",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Warnings",
+			"item": [
+				{
+					"name": "ADD warning to employee",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"messageDetails\":\"Veuillez rendre votre justification d'absence au service RH\",\r\n\t\"warningTypeId\":1,\r\n\t\"employeeId\":1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:2023/warnings",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "2023",
+							"path": [
+								"warnings"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET ALL wanings",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:2023/warnings",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "2023",
+							"path": [
+								"warnings"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET warning by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:2023/warnings/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "2023",
+							"path": [
+								"warnings",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET ALL BY EMPLOYEE ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:2023/warnings/employee/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "2023",
+							"path": [
+								"warnings",
+								"employee",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET ALL BY WARNING TYPE ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:2023/warnings/warningType/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "2023",
+							"path": [
+								"warnings",
+								"warningType",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UPDATE warning",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"messageDetails\":\"Veuillez rendre votre justification d'absence au service RH le plus tôt possible\",\r\n\t\"warningTypeId\":1,\r\n\t\"employeeId\":1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:2023/warnings/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "2023",
+							"path": [
+								"warnings",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE warning",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:2023/warnings/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "2023",
+							"path": [
+								"warnings",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Absence",
+			"item": [
+				{
+					"name": "ADD absence request",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"absenceDate\":\"12-07-2023\",\r\n    \"exitTime\": \"10:54\",\r\n    \"entryTime\": \"13:12\",\r\n    \"sickness\": false,\r\n    \"reason\": \"\",\r\n    \"idEmployee\": 4\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:2023/api/absences/add",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "2023",
+							"path": [
+								"api",
+								"absences",
+								"add"
 							]
 						}
 					},

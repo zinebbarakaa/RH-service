@@ -1,10 +1,7 @@
 package com.giantLink.RH.exceptions.handlers;
 
-import com.giantLink.RH.exceptions.ResourceDuplicatedException;
+import com.giantLink.RH.exceptions.*;
 import com.giantLink.RH.models.response.ErrorResponse;
-import com.giantLink.RH.exceptions.InvalidInputException;
-import com.giantLink.RH.exceptions.ResourceNotFoundException;
-import com.giantLink.RH.exceptions.UnauthorizedAccessException;
 import com.giantLink.RH.models.response.ValidationErrorResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -50,6 +47,14 @@ public class RhGlobalExceptionHandler extends ResponseEntityExceptionHandler {
         errorResponse.setErrorMessage("Resource duplicated");
         errorResponse.setErrorDetails(ex.getMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+    @ExceptionHandler(ResourceCantBeDeletedException.class)
+    public ResponseEntity<ErrorResponse> handleResourceCantBeDeletedException(ResourceCantBeDeletedException ex) {
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setErrorCode(HttpStatus.FORBIDDEN.value());
+        errorResponse.setErrorMessage("Cant delete resource");
+        errorResponse.setErrorDetails(ex.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler(InvalidInputException.class)

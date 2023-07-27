@@ -11,7 +11,8 @@ import java.util.Date;
 
 @Data
 @Builder
-public class EmployeeResponse {
+public class EmployeeResponse
+{
 	private Long id;
 	private String firstName;
 	private String lastName;
@@ -20,7 +21,6 @@ public class EmployeeResponse {
 	private String phone;
 	private Date recrutementDate;
 	private HolidayBalance holidayBalance;
-
 	private Date updatedAt;
 	private Date createdAt;
 }

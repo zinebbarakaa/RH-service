@@ -6,6 +6,7 @@ import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -14,8 +15,10 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+
 @Builder
-public class Employee {
+public class Employee
+{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,6 +39,7 @@ public class Employee {
 	@Column(length = 15)
 	private String phone;
 
+	@JsonFormat(pattern="yyyy/MM/dd HH:mm:ss")
 	private Date recrutementDate;
 
 	@OneToOne(cascade = CascadeType.REMOVE)
@@ -50,9 +54,14 @@ public class Employee {
     @JsonBackReference
     private Set<Request> requests;
 
+
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date updatedAt;
+	
 	@Temporal(TemporalType.TIMESTAMP)
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "employee", cascade = CascadeType.REMOVE)
+	private Set<RequestHoliday> requestHolidays;
+
 	private Date createdAt;
 	@PrePersist
 	void setCreatedAtField(){

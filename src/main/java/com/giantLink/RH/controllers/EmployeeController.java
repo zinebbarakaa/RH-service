@@ -15,41 +15,52 @@ import com.giantLink.RH.services.EmployeeService;
 
 @RestController
 @RequestMapping("/api/employees")
-public class EmployeeController {
-
+public class EmployeeController
+{
     @Autowired
     private EmployeeService employeeService;
 
     @PostMapping
-    public ResponseEntity<EmployeeResponse> addEmployee(@RequestBody @Valid EmployeeRequest request) {
+    public ResponseEntity<EmployeeResponse> addEmployee(@RequestBody @Validated EmployeeRequest request)
+    {
         EmployeeResponse employeeResponse = employeeService.add(request);
         return new ResponseEntity<>(employeeResponse, HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<List<EmployeeResponse>> getAllEmployees() {
+    public ResponseEntity<List<EmployeeResponse>> getAllEmployees()
+    {
         List<EmployeeResponse> employees = employeeService.get();
         return new ResponseEntity<>(employees, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<EmployeeResponse> getEmployeeById(@PathVariable Long id) {
+    public ResponseEntity<EmployeeResponse> getEmployeeById(@PathVariable Long id)
+    {
         EmployeeResponse employee = employeeService.get(id);
         return new ResponseEntity<>(employee, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<EmployeeResponse> updateEmployee(@PathVariable Long id, @RequestBody EmployeeRequest request) {
+    public ResponseEntity<EmployeeResponse> updateEmployee(@PathVariable Long id, @RequestBody EmployeeRequest request)
+    {
         EmployeeResponse updatedEmployee = employeeService.update(request, id);
         return new ResponseEntity<>(updatedEmployee, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<SuccessResponse> deleteEmployee(@PathVariable Long id) {
+    public ResponseEntity<SuccessResponse> deleteEmployee(@PathVariable Long id)
+    {
         employeeService.delete(id);
         SuccessResponse successResponse = SuccessResponse.builder()
                 .message("Employee deleted successfully")
                 .build();
         return new ResponseEntity<>(successResponse, HttpStatus.OK);
+    }
+
+    @PatchMapping("/{id}/detachholidaybalance")
+    public ResponseEntity<EmployeeResponse> detachHolidayBalance(@PathVariable Long id) {
+        EmployeeResponse employeeResponse = employeeService.detachHolidayBalanceFromEmployee(id);
+        return new ResponseEntity<>(employeeResponse, HttpStatus.OK);
     }
 }

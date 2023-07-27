@@ -1,7 +1,9 @@
 package com.giantLink.RH.services.impl;
 
+
 import com.giantLink.RH.entities.Employee;
 import com.giantLink.RH.entities.HolidayBalance;
+import com.giantLink.RH.exceptions.ResourceCantBeDeletedException;
 import com.giantLink.RH.exceptions.ResourceDuplicatedException;
 import com.giantLink.RH.exceptions.ResourceNotFoundException;
 import com.giantLink.RH.mappers.EmployeeMapper;
@@ -20,22 +22,26 @@ import java.util.List;
 
 @Service
 @Transactional
-public class HolidayBalanceServiceImpl implements HolidayBalanceService {
+public class HolidayBalanceServiceImpl implements HolidayBalanceService
+{
     @Autowired
     private EmployeeRepository employeeRepository;
     @Autowired
     private HolidayBalanceRepository holidayBalanceRepository;
 
     @Override
-    public HolidayBalanceResponse add(HolidayBalanceRequest request) {
+
+    public HolidayBalanceResponse add(HolidayBalanceRequest request)
+    {
 //        Create the employee
         HolidayBalance holidayBalance = HolidayBalanceMapper.INSTANCE.requestToEntity(request);
 //        Save the holiday balance
         HolidayBalance holidayBalanceSaved = holidayBalanceRepository.save(holidayBalance);
 //        Link the holiday balance to the employee
-        if (request.getEmployeeId() != null){
+        if (request.getEmployeeId() != null)
+        {
             Employee employee = employeeRepository.findById(request.getEmployeeId())
-                    .orElseThrow(() -> new ResourceNotFoundException("employee", "id", request.getId().toString()));
+                    .orElseThrow(() -> new ResourceNotFoundException("employee", "id", request.getEmployeeId().toString()));
             employee.setHolidayBalance(holidayBalanceSaved);
             employeeRepository.save(employee);
         }
@@ -44,13 +50,15 @@ public class HolidayBalanceServiceImpl implements HolidayBalanceService {
     }
 
     @Override
-    public List<HolidayBalanceResponse> get() {
+    public List<HolidayBalanceResponse> get()
+    {
         List<HolidayBalance> holidayBalances = holidayBalanceRepository.findAll();
         return HolidayBalanceMapper.INSTANCE.listToResponseList(holidayBalances);
     }
 
     @Override
-    public HolidayBalanceResponse update(HolidayBalanceRequest request, Long id) {
+    public HolidayBalanceResponse update(HolidayBalanceRequest request, Long id)
+    {
 //        Check holiday balance exist
         HolidayBalance holidayBalance = holidayBalanceRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("holiday balance", "id", id.toString()));
@@ -63,16 +71,21 @@ public class HolidayBalanceServiceImpl implements HolidayBalanceService {
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(Long id)
+    {
 //        Check holiday balance exist
-        holidayBalanceRepository.findById(id)
+        HolidayBalance holidayBalance = holidayBalanceRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("holiday balance", "id", id.toString()));
+//        Check if it is linked to an employee
+        if (holidayBalance.getEmployee() != null)
+            throw new ResourceCantBeDeletedException("holiday balance", "it is linked to an employee");
 //        delete the holiday
         holidayBalanceRepository.deleteById(id);
     }
 
     @Override
-    public HolidayBalanceResponse get(Long id) {
+    public HolidayBalanceResponse get(Long id)
+    {
 //        Check holiday balance exist
         HolidayBalance holidayBalance = holidayBalanceRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("holiday balance", "id", id.toString()));
