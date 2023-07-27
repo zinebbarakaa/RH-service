@@ -14,8 +14,10 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+
 @Builder
-public class Employee {
+public class Employee
+{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,7 +44,11 @@ public class Employee {
 	@JsonBackReference
 	HolidayBalance holidayBalance;
 
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "employee", cascade = CascadeType.REMOVE)
+	private Set<RequestHoliday> requestHolidays;
+
 	private Date updatedAt;
+
 	private Date createdAt;
 	@PrePersist
 	void setCreatedAtField(){

@@ -11,7 +11,8 @@ import java.util.Date;
 
 @Data
 @Builder
-public class HolidayBalanceRequest {
+public class HolidayBalanceRequest
+{
     private Long id;
 
     @NotBlank

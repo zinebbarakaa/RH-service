@@ -12,8 +12,8 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class HolidayBalance {
-
+public class HolidayBalance
+{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -35,6 +35,7 @@ public class HolidayBalance {
     private Employee employee;
 
     private Date updatedAt;
+
     private Date createdAt;
     @PrePersist
     void setCreatedAtField(){
