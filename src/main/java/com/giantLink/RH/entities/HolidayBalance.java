@@ -13,8 +13,8 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class HolidayBalance {
-
+public class HolidayBalance
+{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

@@ -21,15 +21,18 @@ import com.giantLink.RH.models.request.EmployeeRequest;
 import com.giantLink.RH.models.response.EmployeeResponse;
 
 @Service
-@Transactional
-public class EmployeeServiceImpl implements EmployeeService {
+@Transactional // Active la gestion des transactions pour toutes les méthodes de la classe
+
+public class EmployeeServiceImpl implements EmployeeService
+{
     @Autowired
     private EmployeeRepository employeeRepository;
     @Autowired
     private HolidayBalanceRepository holidayBalanceRepository;
 
     @Override
-    public EmployeeResponse add(EmployeeRequest request) {
+    public EmployeeResponse add(EmployeeRequest request)
+    {
 //        Check unique properties are not duplicated
         if (request.getCin() != null && employeeRepository.findByCin(request.getCin()).isPresent())
             throw new ResourceDuplicatedException("employee", "cin", request.getCin());
@@ -48,19 +51,21 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setHolidayBalance(holidayBalance);
 //        Save the employee
         employeeRepository.save(employee);
-
 //        Prepare and return the response
         return EmployeeMapper.INSTANCE.entityToResponse(employee);
     }
 
     @Override
-    public List<EmployeeResponse> get() {
+
+    public List<EmployeeResponse> get()
+    {
         List<Employee> employees = employeeRepository.findAll();
         return EmployeeMapper.INSTANCE.listToResponseList(employees);
     }
 
     @Override
-    public EmployeeResponse update(EmployeeRequest request, Long id) {
+    public EmployeeResponse update(EmployeeRequest request, Long id)
+    {
 //        Check if the employee exists
         Employee employee = employeeRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("employee", "id", id.toString()));
@@ -84,7 +89,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(Long id)
+    {
 //        Check if the employee exists
         Employee employee = employeeRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("employee", "id", id.toString()));
@@ -93,7 +99,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public EmployeeResponse get(Long id) {
+    public EmployeeResponse get(Long id)
+    {
 //        Check if the employee exists
         Employee employee = employeeRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("employee", "id", id.toString()));

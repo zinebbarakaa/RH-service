@@ -7,6 +7,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class SuccessResponse {
+public class SuccessResponse
+{
     String message;
 }

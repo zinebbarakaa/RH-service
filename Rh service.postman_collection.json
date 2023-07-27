@@ -1,11 +1,49 @@
 {
 	"info": {
+<<<<<<< HEAD
 		"_postman_id": "f9b3eb87-4ae5-4120-97e6-714da1f0e1ad",
+=======
+		"_postman_id": "547af7c0-0262-4eac-b8c6-1c6bcee0f963",
+>>>>>>> sprint_1
 		"name": "Rh service",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "13108943"
+		"_exporter_id": "28305694"
 	},
 	"item": [
+		{
+			"name": "RequestHoliday",
+			"item": [
+				{
+					"name": "Add Holiday Request",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"numberofdays\": 5,\r\n    \"startDate\": \"2023-07-15\",\r\n    \"finishDate\": \"2023-07-20\",\r\n    \"employee_id\": 110\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:2023/api/request-holidays",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "2023",
+							"path": [
+								"api",
+								"request-holidays"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
 		{
 			"name": "Employee",
 			"item": [

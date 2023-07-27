@@ -15,8 +15,10 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+
 @Builder
-public class Employee {
+public class Employee
+{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,6 +45,9 @@ public class Employee {
 	@OneToOne(cascade = CascadeType.REMOVE)
 	@JsonBackReference
 	HolidayBalance holidayBalance;
+
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "employee", cascade = CascadeType.REMOVE)
+	private Set<RequestHoliday> requestHolidays;
 
 	@JsonFormat(pattern="yyyy/MM/dd HH:mm:ss")
 	private Date updatedAt;

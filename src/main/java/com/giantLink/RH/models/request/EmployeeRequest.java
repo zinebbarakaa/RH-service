@@ -11,9 +11,9 @@ import java.util.Date;
 
 @Data
 @Builder
-public class EmployeeRequest {
+public class EmployeeRequest
+{
     private Long id;
-
     @NotBlank
     @Size(min = 2, max = 50)
     private String firstName;
