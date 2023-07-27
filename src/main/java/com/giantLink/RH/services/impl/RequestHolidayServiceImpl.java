@@ -12,6 +12,7 @@ import com.giantLink.RH.repositories.RequestHolidayRepository;
 import com.giantLink.RH.repositories.RequestStatusRepository;
 import com.giantLink.RH.services.RequestHolidayService;
 import com.giantLink.RH.services.RequestStatusService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class RequestHolidayServiceImpl implements RequestHolidayService
 {
     @Autowired
@@ -70,10 +72,16 @@ public class RequestHolidayServiceImpl implements RequestHolidayService
                     .type("Pending")
                     .request(requestHoliday)
                     .build();
+
+            requestStatusRepository.save(requestStatus);
             requestHoliday.setStatus(requestStatus);
+            requestHoliday.setEmployee(findEmployee.get());
             requestHolidayRepository.save(requestHoliday);
 
-            return RequestHolidayMapper.INSTANCE.entityToResponse(requestHoliday);
+            RequestHolidayResponse response =  RequestHolidayMapper.INSTANCE.entityToResponse(requestHoliday);
+            response.setEmployee_id(findEmployee.get().getId());
+            response.setStatus_id(requestStatus.getId());
+            return response;
         }
     }
 }

@@ -15,7 +15,7 @@ import java.util.Date;
 public class RequestHolidayRequest
 {
     @Min(value = 1, message = "Number of days must be at least 1.")
-    private int numberofdays;
+    private int numberOfDays;
 
     @NotNull(message = "Start date cannot be empty.")
     @Future(message = "Start date must be in the future.")
@@ -25,9 +25,9 @@ public class RequestHolidayRequest
     @Future(message = "Finish date must be in the future.")
     private Date finishDate;
 
-    @NotNull(message = "Return date cannot be empty.")
+/*    @NotNull(message = "Return date cannot be empty.")
     @Future(message = "Return date must be in the future.")
-    private Date returnDate;
+    private Date returnDate;*/
 
     @NotNull(message = "Employee ID cannot be empty.")
     private Long employee_id;
