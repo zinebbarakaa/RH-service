@@ -14,6 +14,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -39,10 +40,26 @@ public class WarningType {
 	private String description;
 	
 	@DateTimeFormat(style = "dd-mm-yyyy HH:mm")
-	private Date createAt;
+	private Date createdAt;
+	
+	@DateTimeFormat(style = "dd-mm-yyyy HH:mm")
+	private Date updatedAt;
 	
 	@PrePersist
 	public void onCreate() {
-		this.createAt= new Date();
+		this.createdAt= new Date();
 	}
+	
+	@PreUpdate
+	public void onUpdate() {
+		this.updatedAt=new Date();
+	}
+
+	public WarningType(String title, String description) {
+		super();
+		this.title = title;
+		this.description = description;
+	}
+	
+	
 }

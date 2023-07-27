@@ -12,6 +12,7 @@ import lombok.Data;
 @Data
 public class RequestAbsenceRequest {
 
+	@Temporal(TemporalType.DATE)
 	@JsonFormat(pattern="dd-MM-yyyy")
 	private Date absenceDate;
 	@Temporal(TemporalType.TIME)

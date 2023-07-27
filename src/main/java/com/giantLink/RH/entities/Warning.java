@@ -13,6 +13,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,14 +30,9 @@ public class Warning {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	
-	
+	private Long id;	
 
 	private String messageDetails;
-	
-	@DateTimeFormat(style = "dd-mm-yyyy")
-	private Date dateTime;
 	
 	@ManyToOne
 	@JoinColumn(name="warningType_id")
@@ -46,9 +44,22 @@ public class Warning {
 	@JsonManagedReference
 	private Employee employee;
 	
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date updatedAt;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date createdAt;
+	
+	
 	@PrePersist
 	public void oncreate() {
-		this.dateTime=new Date();
+		this.createdAt=new Date();
 	}
+	
+	@PreUpdate
+	public void onUpdate() {
+		this.updatedAt = new Date();
+	}
+
 	
 }

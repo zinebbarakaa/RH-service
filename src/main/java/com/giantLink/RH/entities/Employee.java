@@ -46,8 +46,13 @@ public class Employee {
     @JsonBackReference
     private Set<Warning> warnings;
 	
+	@OneToMany(mappedBy = "employee")
+    @JsonBackReference
+    private Set<Request> requests;
 
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date updatedAt;
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date createdAt;
 	@PrePersist
 	void setCreatedAtField(){
