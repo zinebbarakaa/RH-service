@@ -6,6 +6,7 @@ import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -38,6 +39,7 @@ public class Employee
 	@Column(length = 15)
 	private String phone;
 
+	@JsonFormat(pattern="yyyy/MM/dd HH:mm:ss")
 	private Date recrutementDate;
 
 	@OneToOne(cascade = CascadeType.REMOVE)
@@ -47,8 +49,9 @@ public class Employee
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "employee", cascade = CascadeType.REMOVE)
 	private Set<RequestHoliday> requestHolidays;
 
+	@JsonFormat(pattern="yyyy/MM/dd HH:mm:ss")
 	private Date updatedAt;
-
+	@JsonFormat(pattern="yyyy/MM/dd HH:mm:ss")
 	private Date createdAt;
 	@PrePersist
 	void setCreatedAtField(){

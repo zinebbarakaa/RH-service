@@ -3,6 +3,7 @@ package com.giantLink.RH.models.request;
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Data;
@@ -15,14 +16,11 @@ public class HolidayBalanceRequest
 {
     private Long id;
 
-    @NotBlank
     @Min(0)
     private int balance;
 
-    @NotBlank
     private Date timestamp;
 
-    @NotBlank
     @Min(0)
     private int holidayPerMonth;
 

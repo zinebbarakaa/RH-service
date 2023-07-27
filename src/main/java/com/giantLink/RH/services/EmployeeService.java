@@ -6,5 +6,5 @@ import com.giantLink.RH.models.response.EmployeeResponse;
 
 public interface EmployeeService extends CrudService<EmployeeRequest, EmployeeResponse, Employee, Long>
 {
-
+    EmployeeResponse detachHolidayBalanceFromEmployee(Long id);
 }

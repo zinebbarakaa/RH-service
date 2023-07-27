@@ -34,4 +34,6 @@ public class EmployeeRequest
     private String phone;
 
     private Date recrutementDate;
+
+    private HolidayBalanceRequest holidayBalance;
 }

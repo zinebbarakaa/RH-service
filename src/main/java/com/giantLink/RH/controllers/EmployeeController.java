@@ -57,4 +57,10 @@ public class EmployeeController
                 .build();
         return new ResponseEntity<>(successResponse, HttpStatus.OK);
     }
+
+    @PatchMapping("/{id}/detachholidaybalance")
+    public ResponseEntity<EmployeeResponse> detachHolidayBalance(@PathVariable Long id) {
+        EmployeeResponse employeeResponse = employeeService.detachHolidayBalanceFromEmployee(id);
+        return new ResponseEntity<>(employeeResponse, HttpStatus.OK);
+    }
 }
