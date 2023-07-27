@@ -37,6 +37,9 @@ public class Employee {
 	private String lastName;
 	
 	private String email;
-	
-	
+
+	private String cin;
+
+	@OneToOne (mappedBy = "employee")
+	private User user;
 }
