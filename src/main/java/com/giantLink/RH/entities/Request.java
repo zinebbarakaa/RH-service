@@ -22,8 +22,8 @@ public abstract class Request
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Long id;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @DateTimeFormat(style = "dd-mm-yyyy")
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(style = "dd-MM-yyyy")
     protected Date requestDate;
 
     @ManyToOne
@@ -31,8 +31,8 @@ public abstract class Request
     @JsonBackReference
     protected Employee employee;
 
-    @OneToOne
-    @JoinColumn(name = "requestStatus_id")
+
+    @OneToOne(fetch = FetchType.EAGER, mappedBy = "request")
     @JsonBackReference
     protected RequestStatus status;
 

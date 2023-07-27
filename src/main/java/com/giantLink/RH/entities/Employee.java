@@ -45,13 +45,23 @@ public class Employee
 	@OneToOne(cascade = CascadeType.REMOVE)
 	@JsonBackReference
 	HolidayBalance holidayBalance;
+	
+	@OneToMany(mappedBy = "employee")
+    @JsonBackReference
+    private Set<Warning> warnings;
+	
+	@OneToMany(mappedBy = "employee")
+    @JsonBackReference
+    private Set<Request> requests;
 
+
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date updatedAt;
+	
+	@Temporal(TemporalType.TIMESTAMP)
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "employee", cascade = CascadeType.REMOVE)
 	private Set<RequestHoliday> requestHolidays;
 
-	@JsonFormat(pattern="yyyy/MM/dd HH:mm:ss")
-	private Date updatedAt;
-	@JsonFormat(pattern="yyyy/MM/dd HH:mm:ss")
 	private Date createdAt;
 	@PrePersist
 	void setCreatedAtField(){

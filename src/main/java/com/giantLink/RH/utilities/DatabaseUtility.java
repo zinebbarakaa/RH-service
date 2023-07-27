@@ -1,12 +1,19 @@
 package com.giantLink.RH.utilities;
 
-import com.giantLink.RH.entities.Employee;
+import com.giantLink.RH.entities.Employee; 
 import com.giantLink.RH.entities.HolidayBalance;
+import com.giantLink.RH.entities.Warning;
+import com.giantLink.RH.entities.WarningType;
+import com.giantLink.RH.models.request.WarningRequest;
 import com.giantLink.RH.repositories.EmployeeRepository;
 import com.giantLink.RH.repositories.HolidayBalanceRepository;
+import com.giantLink.RH.repositories.WarningRepository;
+import com.giantLink.RH.repositories.WarningTypeRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.logging.Logger;
 
@@ -16,10 +23,17 @@ public class DatabaseUtility {
     EmployeeRepository employeeRepository;
     @Autowired
     HolidayBalanceRepository holidayBalanceRepository;
+    
+    @Autowired
+    WarningTypeRepository warningTypeRepository;
+    
+    @Autowired
+    WarningRepository warningRepository ;
 
     public void initDatabase(){
         Logger.getLogger("Database utility").info("Seeding database ...");
         initEmployees();
+        initWarningTypes();
         Logger.getLogger("Database utility").info("Database seeding complete");
     }
 
@@ -106,4 +120,21 @@ public class DatabaseUtility {
                 employee7
         ));
     }
+    public void initWarningTypes(){
+
+      if (warningTypeRepository.count() > 0) return;
+      
+      warningTypeRepository.saveAll(Arrays.asList(
+    		  new WarningType("Unjustified Absence"," An unjustified absence warning is given to an employee"
+    		  		+ " when they have been absent from work without providing a valid reason or without obtaining proper approval. "),
+    		  new WarningType("Ethical Violation"," If an employee is found to have violated the company's code of ethics or engaged "
+    		  		+ "in unethical behavior, they may receive an ethical violation warning "),
+    		  new WarningType("Verbal Warning"," A verbal warning is usually the initial step in addressing a performance or behavioral concern"),
+    		  new WarningType("Written Warning"," If the performance or behavior issue persists after a verbal warning, a written warning may be issued. "),
+    		  new WarningType("Performance Improvement Plan (PIP)"," A Performance Improvement Plan is a structured document that outlines"
+    		  		+ " specific performance goals and expectations for an employee over a specified period. "),
+    		  new WarningType("Warning for Absence Without Request"," Warning for Absence Without Request. ")));
+      }
+    
+    
 }
