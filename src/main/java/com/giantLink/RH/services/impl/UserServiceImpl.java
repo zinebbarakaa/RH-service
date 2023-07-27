@@ -12,6 +12,8 @@ import com.giantLink.RH.repositories.UserRepository;
 import com.giantLink.RH.repositories.RoleRepository;
 import com.giantLink.RH.services.UserService;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -31,22 +33,25 @@ public class UserServiceImpl implements UserService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final EmployeeRepository employeeRepository;
+    Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+
 
     @Override
     public List<LoginResponse> register(RegisterRequest request) {
         Optional<Employee> findEmployee = employeeRepository.findById(request.getId_employee());
         if (!findEmployee.isPresent()) {
-            throw new RuntimeException("Employee Not found");
+            logger.error("Employee with id {} not found", request.getId_employee());
+            throw new ResourceNotFoundException(Employee.class.getSimpleName(), "id_employee", String.valueOf(request.getId_employee()));
         }
         Employee employee = findEmployee.get();
         List<Role> roles = new ArrayList<>();
         for (Role role : request.getRoles()) {
-            // Assuming AppRoleRepository has a method to find roles by roleName
             Optional<Role> findRole = roleRepository.findByRoleName(role.getRoleName());
             if (findRole.isPresent()) {
                 roles.add(findRole.get());
             } else {
-                throw new ResourceNotFoundException(Role.class.getSimpleName(),"id_role",String.valueOf(role.getId()));
+                logger.error("Role with id {} not found", role.getId());
+                throw new ResourceNotFoundException(Role.class.getSimpleName(), "id_role", String.valueOf(role.getId()));
             }
         }
 
@@ -58,12 +63,12 @@ public class UserServiceImpl implements UserService {
                 .build();
 
         userRepository.save(user);
-//        var jwtToken = jwtService.generateToken(user);
         List<LoginResponse> loginResponses = new ArrayList<>();
         for (Role role : user.getRoles()) {
             var roleToken = jwtService.generateTokenWithRole(role, user);
             loginResponses.add(LoginResponse.builder().role(role.getRoleName()).token(roleToken).build());
-            System.out.println("Role: " + role.getRoleName() + " | Token: " + roleToken);
+            logger.info("Role: {} | Token: {}", role.getRoleName(), roleToken);
+//            System.out.println("Role: " + role.getRoleName() + " | Token: " + roleToken);
         }
 
         return loginResponses;
@@ -76,16 +81,12 @@ public class UserServiceImpl implements UserService {
                 request.getPassword()
         ));
         var user = userRepository.findByUsername(request.getUsername());
-        var jwtToken = jwtService.generateToken(user);
-        for (Role role : user.getRoles()) {
-            var roleToken = jwtService.generateTokenWithRole(role, user);
-            System.out.println("Role: " + role.getRoleName() + " | Token: " + roleToken);
-        }
         List<LoginResponse> loginResponses = new ArrayList<>();
         for (Role role : user.getRoles()) {
             var roleToken = jwtService.generateTokenWithRole(role, user);
             loginResponses.add(LoginResponse.builder().role(role.getRoleName()).token(roleToken).build());
-            System.out.println("Role: " + role.getRoleName() + " | Token: " + roleToken);
+            logger.info("Role: {} | Token: {}", role.getRoleName(), roleToken);
+//            System.out.println("Role: " + role.getRoleName() + " | Token: " + roleToken);
         }
         return loginResponses;
     }
@@ -94,10 +95,12 @@ public class UserServiceImpl implements UserService {
         Optional<User> findUser = userRepository.findById(id_user);
         Optional<Role> findRole = roleRepository.findById(id_role);
         if (!findUser.isPresent()) {
-            throw new ResourceNotFoundException(User.class.getSimpleName(),"id_user",String.valueOf(id_user));
+            logger.error("User with id {} not found", id_user);
+            throw new ResourceNotFoundException(User.class.getSimpleName(), "id_user", String.valueOf(id_user));
         }
         if (!findRole.isPresent()) {
-            throw new ResourceNotFoundException(Role.class.getSimpleName(),"id_role",String.valueOf(id_role));
+            logger.error("Role with id {} not found", id_role);
+            throw new ResourceNotFoundException(Role.class.getSimpleName(), "id_role", String.valueOf(id_role));
         }
         User user = findUser.get();
         List<Role> roles = new ArrayList<>();
@@ -107,6 +110,7 @@ public class UserServiceImpl implements UserService {
         for (Role role : user.getRoles()) {
             var roleToken = jwtService.generateTokenWithRole(role, user);
             loginResponses.add(LoginResponse.builder().role(role.getRoleName()).token(roleToken).build());
+            logger.info("Role: {} | Token: {}", role.getRoleName(), roleToken);
             System.out.println("Role: " + role.getRoleName() + " | Token: " + roleToken);
         }
         return loginResponses;
@@ -116,19 +120,19 @@ public class UserServiceImpl implements UserService {
         Optional<User> findUser = userRepository.findById(id_user);
         Optional<Role> findRole = roleRepository.findById(id_role);
         if (!findUser.isPresent()) {
-            throw new ResourceNotFoundException(User.class.getSimpleName(),"id_user",String.valueOf(id_user));
+            logger.error("User with id {} not found", id_user);
+            throw new ResourceNotFoundException(User.class.getSimpleName(), "id_user", String.valueOf(id_user));
         }
         if (!findRole.isPresent()) {
-            throw new ResourceNotFoundException(Role.class.getSimpleName(),"id_role",String.valueOf(id_role));
+            logger.error("User with id {} not found", id_role);
+            throw new ResourceNotFoundException(Role.class.getSimpleName(), "id_role", String.valueOf(id_role));
         }
         User appUser = findUser.get();
         List<Role> roles = appUser.getRoles();
         roles.remove(findRole.get());
         appUser.setRoles(roles);
-        var jwtToken = jwtService.generateToken(appUser);
         for (Role role : appUser.getRoles()) {
-            var roleToken = jwtService.generateTokenWithRole(role, appUser);
-            System.out.println("Role: " + role.getRoleName() + " | Token: " + roleToken);
+            logger.info("Role: {} | Token: {}", role.getRoleName(), jwtService.generateTokenWithRole(role, appUser));
         }
     }
 }

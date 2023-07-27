@@ -1,10 +1,7 @@
 package com.giantLink.RH.exceptions.handlers;
 
-import com.giantLink.RH.exceptions.ResourceDuplicatedException;
+import com.giantLink.RH.exceptions.*;
 import com.giantLink.RH.models.response.ErrorResponse;
-import com.giantLink.RH.exceptions.InvalidInputException;
-import com.giantLink.RH.exceptions.ResourceNotFoundException;
-import com.giantLink.RH.exceptions.UnauthorizedAccessException;
 import com.giantLink.RH.models.response.ValidationErrorResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -69,7 +66,6 @@ public class RhGlobalExceptionHandler extends ResponseEntityExceptionHandler {
         errorResponse.setErrorDetails(ex.getMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
     }
-
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
         ValidationErrorResponse errorResponse = new ValidationErrorResponse();

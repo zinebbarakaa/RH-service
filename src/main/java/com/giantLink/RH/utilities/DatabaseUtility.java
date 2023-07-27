@@ -2,28 +2,36 @@ package com.giantLink.RH.utilities;
 
 import com.giantLink.RH.entities.Employee;
 import com.giantLink.RH.entities.HolidayBalance;
+import com.giantLink.RH.entities.Permission;
+import com.giantLink.RH.entities.Role;
 import com.giantLink.RH.repositories.EmployeeRepository;
 import com.giantLink.RH.repositories.HolidayBalanceRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.giantLink.RH.repositories.PermissionRepository;
+import com.giantLink.RH.repositories.RoleRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Logger;
 
 @Component
+@RequiredArgsConstructor
 public class DatabaseUtility {
-    @Autowired
-    EmployeeRepository employeeRepository;
-    @Autowired
-    HolidayBalanceRepository holidayBalanceRepository;
 
-    public void initDatabase(){
+    private final EmployeeRepository employeeRepository;
+    private final HolidayBalanceRepository holidayBalanceRepository;
+    private final PermissionRepository permissionRepository;
+    private final RoleRepository roleRepository;
+
+    public void initDatabase() {
         Logger.getLogger("Database utility").info("Seeding database ...");
         initEmployees();
+        initRoles();
         Logger.getLogger("Database utility").info("Database seeding complete");
     }
 
-    public void initEmployees(){
+    public void initEmployees() {
 //        Check table is empty
         if (employeeRepository.count() > 0) return;
 
@@ -105,5 +113,35 @@ public class DatabaseUtility {
                 employee6,
                 employee7
         ));
+    }
+
+    public void initRoles() {
+//        Check table is empty
+        if (roleRepository.count() > 0) return;
+
+        Permission readPermission = Permission.builder().namePermission("READ").build();
+        Permission updatePermission = Permission.builder().namePermission("UPDATE").build();
+        Permission createPermission = Permission.builder().namePermission("CREATE").build();
+        Permission deletePermission = Permission.builder().namePermission("DELETE").build();
+
+        permissionRepository.saveAll(Arrays.asList(
+                readPermission,
+                updatePermission,
+                createPermission,
+                deletePermission
+        ));
+        List<Permission> permissions = Arrays.asList(
+                readPermission,
+                updatePermission,
+                createPermission,
+                deletePermission
+        );
+
+        roleRepository.saveAll(Arrays.asList(
+                Role.builder().roleName("ADMIN_RH").permissions(permissions).build(),
+                Role.builder().roleName("MANAGER_RH").permissions(permissions).build(),
+                Role.builder().roleName("DIRECTOR").permissions(permissions).build()
+        ));
+
     }
 }
