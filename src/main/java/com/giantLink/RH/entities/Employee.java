@@ -37,16 +37,16 @@ public class Employee {
 	@Column(length = 15)
 	private String phone;
 
-	@JsonFormat(pattern="yyyy/MM/dd HH:mm:ii")
+	@JsonFormat(pattern="yyyy/MM/dd HH:mm:ss")
 	private Date recrutementDate;
 
 	@OneToOne(cascade = CascadeType.REMOVE)
 	@JsonBackReference
 	HolidayBalance holidayBalance;
 
-	@JsonFormat(pattern="yyyy/MM/dd HH:mm:ii")
+	@JsonFormat(pattern="yyyy/MM/dd HH:mm:ss")
 	private Date updatedAt;
-	@JsonFormat(pattern="yyyy/MM/dd HH:mm:ii")
+	@JsonFormat(pattern="yyyy/MM/dd HH:mm:ss")
 	private Date createdAt;
 	@PrePersist
 	void setCreatedAtField(){

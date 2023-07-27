@@ -22,19 +22,19 @@ public class ScheduleUtility {
 
     @Scheduled(fixedRate = 5000) // every 24 hours = 86400000 ms
     public void incrementHolidayBalancePerMonth() {
-        holidayBalanceRepository.findAll().forEach(holidayBalance -> {
-            Logger.getLogger("Schedule utility").info("----------------");
-            Logger.getLogger("Schedule utility").info("timestamp : " + formatter.format(holidayBalance.getTimestamp()));
-            Logger.getLogger("Schedule utility").info("now : " + formatter.format(new Date()));
-            Long result;
-            try {
-                result = formatter.parse(formatter.format(new Date())).getTime() - formatter.parse(formatter.format(holidayBalance.getTimestamp())).getTime();
-            } catch (ParseException e) {
-                throw new RuntimeException(e);
-            }
-            Logger.getLogger("Schedule utility").info("result : " + result.toString());
-            Logger.getLogger("Schedule utility").info("----------------");
-        });
+//        holidayBalanceRepository.findAll().forEach(holidayBalance -> {
+//            Logger.getLogger("Schedule utility").info("----------------");
+//            Logger.getLogger("Schedule utility").info("timestamp : " + formatter.format(holidayBalance.getTimestamp()));
+//            Logger.getLogger("Schedule utility").info("now : " + formatter.format(new Date()));
+//            Long result;
+//            try {
+//                result = formatter.parse(formatter.format(new Date())).getTime() - formatter.parse(formatter.format(holidayBalance.getTimestamp())).getTime();
+//            } catch (ParseException e) {
+//                throw new RuntimeException(e);
+//            }
+//            Logger.getLogger("Schedule utility").info("result : " + result.toString());
+//            Logger.getLogger("Schedule utility").info("----------------");
+//        });
     }
 
 }

@@ -24,7 +24,7 @@ public class HolidayBalance {
     private int balance = 0;
 
     @Column(nullable = false)
-    @JsonFormat(pattern="yyyy/MM/dd HH:mm:ii")
+    @JsonFormat(pattern="yyyy/MM/dd HH:mm:ss")
     @Builder.Default
     private Date timestamp = new Date();
 
@@ -36,9 +36,9 @@ public class HolidayBalance {
     @JsonBackReference
     private Employee employee;
 
-    @JsonFormat(pattern="yyyy/MM/dd HH:mm:ii")
+    @JsonFormat(pattern="yyyy/MM/dd HH:mm:ss")
     private Date updatedAt;
-    @JsonFormat(pattern="yyyy/MM/dd HH:mm:ii")
+    @JsonFormat(pattern="yyyy/MM/dd HH:mm:ss")
     private Date createdAt;
     @PrePersist
     void setCreatedAtField(){
