@@ -23,13 +23,15 @@ public abstract class Request
     protected Long id;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @DateTimeFormat(style = "dd-mm-yyyy")
+    @DateTimeFormat(style = "dd-MM-yyyy")
     protected Date requestDate;
 
     @ManyToOne
-    @JoinColumn(name = "employee_id")
+    @JoinColumn(name = "employee_id", nullable = false)
     @JsonBackReference
     protected Employee employee;
+    private Date updatedAt;
+    private Date createdAt;
 
     @OneToOne
     @JoinColumn(name = "requestStatus_id")
@@ -37,5 +39,12 @@ public abstract class Request
     protected RequestStatus status;
 
     @PrePersist
-    private void onCreate() { this.requestDate = new Date(); }
+    private void onCreate() {
+        createdAt = new Date();
+        this.requestDate = new Date();
+    }
+    @PreUpdate
+    void setUpdatedAtField(){
+        updatedAt = new Date();
+    }
 }
