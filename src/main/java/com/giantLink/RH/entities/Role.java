@@ -32,6 +32,7 @@ public class Role {
     )
     private List<Permission> permissions = new ArrayList<>();
 
+
     public Collection<SimpleGrantedAuthority> getAuthorities() {
         var authorities = getPermissions()
                 .stream()

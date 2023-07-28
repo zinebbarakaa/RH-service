@@ -1,5 +1,6 @@
 package com.giantLink.RH.services.impl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.giantLink.RH.entities.Employee;
 import com.giantLink.RH.entities.Role;
 import com.giantLink.RH.entities.User;
@@ -11,14 +12,21 @@ import com.giantLink.RH.repositories.EmployeeRepository;
 import com.giantLink.RH.repositories.UserRepository;
 import com.giantLink.RH.repositories.RoleRepository;
 import com.giantLink.RH.services.UserService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -65,12 +73,12 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
         List<LoginResponse> loginResponses = new ArrayList<>();
         for (Role role : user.getRoles()) {
-            var roleToken = jwtService.generateTokenWithRole(role, user);
-            loginResponses.add(LoginResponse.builder().role(role.getRoleName()).token(roleToken).build());
-            logger.info("Role: {} | Token: {}", role.getRoleName(), roleToken);
-//            System.out.println("Role: " + role.getRoleName() + " | Token: " + roleToken);
+            var roleAccessToken = jwtService.generateTokenWithRole(role, user);
+            var roleRefreshToken = jwtService.generateRefreshTokenWithRole(role,user);
+            loginResponses.add(LoginResponse.builder().role(role.getRoleName()).accessToken(roleAccessToken).refreshToken(roleRefreshToken).build());
+            logger.info("Role: {} | Token: {}  | refreshToken: {}", role.getRoleName(), roleAccessToken,roleRefreshToken);
+            System.out.println("Role: " + role.getRoleName() + " | Token: " + roleAccessToken);
         }
-
         return loginResponses;
     }
 
@@ -83,10 +91,11 @@ public class UserServiceImpl implements UserService {
         var user = userRepository.findByUsername(request.getUsername());
         List<LoginResponse> loginResponses = new ArrayList<>();
         for (Role role : user.getRoles()) {
-            var roleToken = jwtService.generateTokenWithRole(role, user);
-            loginResponses.add(LoginResponse.builder().role(role.getRoleName()).token(roleToken).build());
-            logger.info("Role: {} | Token: {}", role.getRoleName(), roleToken);
-//            System.out.println("Role: " + role.getRoleName() + " | Token: " + roleToken);
+            var roleAccessToken = jwtService.generateTokenWithRole(role, user);
+            var roleRefreshToken = jwtService.generateRefreshTokenWithRole(role,user);
+            loginResponses.add(LoginResponse.builder().role(role.getRoleName()).accessToken(roleAccessToken).refreshToken(roleRefreshToken).build());
+            logger.info("Role: {} | Token: {}  | refreshToken: {}", role.getRoleName(), roleAccessToken,roleRefreshToken);
+            System.out.println("Role: " + role.getRoleName() + " | Token: " + roleAccessToken);
         }
         return loginResponses;
     }
@@ -108,10 +117,11 @@ public class UserServiceImpl implements UserService {
         user.setRoles(roles);
         List<LoginResponse> loginResponses = new ArrayList<>();
         for (Role role : user.getRoles()) {
-            var roleToken = jwtService.generateTokenWithRole(role, user);
-            loginResponses.add(LoginResponse.builder().role(role.getRoleName()).token(roleToken).build());
-            logger.info("Role: {} | Token: {}", role.getRoleName(), roleToken);
-            System.out.println("Role: " + role.getRoleName() + " | Token: " + roleToken);
+            var roleAccessToken = jwtService.generateTokenWithRole(role, user);
+            var roleRefreshToken = jwtService.generateRefreshTokenWithRole(role,user);
+            loginResponses.add(LoginResponse.builder().role(role.getRoleName()).accessToken(roleAccessToken).refreshToken(roleRefreshToken).build());
+            logger.info("Role: {} | Token: {}  | refreshToken: {}", role.getRoleName(), roleAccessToken,roleRefreshToken);
+            System.out.println("Role: " + role.getRoleName() + " | Token: " + roleAccessToken);
         }
         return loginResponses;
     }
@@ -134,5 +144,33 @@ public class UserServiceImpl implements UserService {
         for (Role role : appUser.getRoles()) {
             logger.info("Role: {} | Token: {}", role.getRoleName(), jwtService.generateTokenWithRole(role, appUser));
         }
+    }
+    public  void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+        final String authHeader =  request.getHeader(HttpHeaders.AUTHORIZATION);
+        final String refreshToken ;
+        final String username;
+        final String roleName;
+        if(authHeader == null || !authHeader.startsWith("Bearer ")){
+            return;
+        }
+        refreshToken = authHeader.substring(7);
+        username = jwtService.extractUsername(refreshToken);
+        roleName =jwtService.extractRoleFromToken(refreshToken);
+        Optional<Role> findRole = roleRepository.findByRoleName(roleName);
+        if(username != null && findRole.isPresent()){
+            Role role = findRole.get();
+            var userDetails = userRepository.findByEmployeeCin(username).orElseThrow();
+            if(jwtService.isTokenValid(refreshToken,userDetails)){
+                var accessToken = jwtService.generateRefreshTokenWithRole(role ,userDetails);
+                var authResponse = LoginResponse.builder()
+                        .accessToken(accessToken)
+                        .refreshToken(refreshToken)
+                        .build();
+
+                new ObjectMapper().writeValue(response.getOutputStream(),authResponse);
+            }
+        }
+
     }
 }

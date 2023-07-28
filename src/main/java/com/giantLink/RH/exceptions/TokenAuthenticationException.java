@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import java.io.IOException;
 
 @Component
-public class TokenAuthenticationException  implements AuthenticationEntryPoint {
+public class TokenAuthenticationException extends RuntimeException implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
         ErrorResponse errorDetails = ErrorResponse.builder()

@@ -33,6 +33,8 @@ public class SecurityConfiguration {
                         .requestMatchers("api/v1/auth/**").permitAll()
                         .requestMatchers(GET,"api/v1/employees/**").hasAnyAuthority("READ")
                         .requestMatchers(POST, "api/v1/employees/**").hasAnyAuthority("CREATE")
+                        .requestMatchers(PUT,"api/v1/employees/**").hasAnyAuthority("UPDATE")
+                        .requestMatchers(DELETE, "api/v1/employees/**").hasAnyAuthority("DELETE")
                         .requestMatchers("api/v1/employees").hasAnyRole("ADMIN_RH","MANAGER_RH")
                         .anyRequest().authenticated())
                 .authenticationProvider(authenticationProvider)

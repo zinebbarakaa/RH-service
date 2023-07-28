@@ -26,8 +26,8 @@ public class DatabaseUtility {
 
     public void initDatabase() {
         Logger.getLogger("Database utility").info("Seeding database ...");
-        initEmployees();
         initRoles();
+        initEmployees();
         Logger.getLogger("Database utility").info("Database seeding complete");
     }
 
@@ -113,6 +113,7 @@ public class DatabaseUtility {
                 employee6,
                 employee7
         ));
+
     }
 
     public void initRoles() {

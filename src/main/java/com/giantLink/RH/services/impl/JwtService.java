@@ -1,6 +1,7 @@
 package com.giantLink.RH.services.impl;
 import com.giantLink.RH.entities.Role;
 import com.giantLink.RH.entities.User;
+import com.giantLink.RH.exceptions.TokenAuthenticationException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -25,8 +26,14 @@ public class JwtService {
     private String secretKey;
     @Value("${application.security.jwt.expiration}")
     private long jwtExpiration;
+    @Value("${application.security.jwt.refresh-token.expiration}")
+    private long refreshExpiration;
     public String extractUsername(String token){
         return  extractClaim(token,Claims::getSubject);
+    }
+    public String extractRoleFromToken(String token) {
+        Claims claims = extractAllClaims(token);
+        return (String) claims.get("role");
     }
 
     public String generateToken(UserDetails userDetails){
@@ -35,8 +42,10 @@ public class JwtService {
     }
     public boolean isTokenValid(String token,UserDetails userDetails){
         final  String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
-
+        if (!username.equals(userDetails.getUsername()) || isTokenExpired(token)) {
+            throw new TokenAuthenticationException();
+        }
+        return true;
     }
 
     private boolean isTokenExpired(String token) {
@@ -48,6 +57,9 @@ public class JwtService {
     }
 
     public String generateToken(Map<String, Objects> extraClaims, UserDetails userDetails){
+        return buildToken( extraClaims, userDetails, jwtExpiration);
+    }
+    public String buildToken(Map<String, Objects> extraClaims, UserDetails userDetails,long jwtExpiration){
         return Jwts
                 .builder()
                 .setClaims(extraClaims)
@@ -56,6 +68,7 @@ public class JwtService {
                 .setExpiration(new Date(System.currentTimeMillis() + jwtExpiration))
                 .signWith(getSignIngKey(), SignatureAlgorithm.HS256)
                 .compact();
+
     }
     public String generateTokenWithRole(Role role, User user) {
         Map<String, Object> claims = new HashMap<>();
@@ -67,6 +80,19 @@ public class JwtService {
                 .setSubject(user.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + jwtExpiration))
+                .signWith(SignatureAlgorithm.HS256, secretKey)
+                .compact();
+    }
+    public String generateRefreshTokenWithRole(Role role, User user) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("role", role.getRoleName());
+        claims.put("userId", user.getId());
+
+        return Jwts.builder()
+                .setClaims(claims)
+                .setSubject(user.getUsername())
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + refreshExpiration))
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
     }
