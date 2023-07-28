@@ -6,9 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import com.giantLink.RH.entities.HolidayBalance;
-import com.giantLink.RH.entities.RequestHoliday;
-import com.giantLink.RH.models.response.HolidayBalanceResponse;
+
 import com.giantLink.RH.models.response.RequestHolidayResponse;
 import com.giantLink.RH.models.response.SuccessResponse;
 import com.giantLink.RH.services.HolidayBalanceService;
@@ -17,7 +15,6 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.Valid;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -34,6 +31,7 @@ import com.giantLink.RH.models.request.EmployeeRequest;
 import com.giantLink.RH.models.response.EmployeeResponse;
 import com.giantLink.RH.services.EmployeeService;
 
+@CrossOrigin("*")
 @RestController
 @RequestMapping("/api/employees")
 public class EmployeeController {
@@ -64,6 +62,7 @@ public class EmployeeController {
 
     @PutMapping("/{id}")
     public ResponseEntity<EmployeeResponse> updateEmployee(@PathVariable Long id, @RequestBody EmployeeRequest request) {
+
         EmployeeResponse updatedEmployee = employeeService.update(request, id);
         return new ResponseEntity<>(updatedEmployee, HttpStatus.OK);
     }
@@ -76,32 +75,6 @@ public class EmployeeController {
                 .build();
         return new ResponseEntity<>(successResponse, HttpStatus.OK);
     }
-
-
-    /*
-        requestHoliday controller
-
-    //Has role adminRH
-    @GetMapping("/holiday/{employeeId}")
-    public ResponseEntity<RequestHoliday> getRequestHolidayByEmployeeId(@PathVariable Long employeeId) {
-        RequestHoliday requestHoliday = requestHolidayService.getRequestHolidayByEmployeeId(employeeId);
-        if (requestHoliday != null) {
-            return ResponseEntity.ok(requestHoliday);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-    //Has role adminRH
-
-    @GetMapping("/Holidays")
-    public ResponseEntity<List<RequestHoliday>> getAllRequestHoliday() {
-        List<RequestHoliday> requestHoliday = requestHolidayService.getAllRequestHoliday();
-        return ResponseEntity.ok(requestHoliday);
-    }
-
-
-    --------------------------------------------------------------------------------------------
-     */
 
     DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy - HH:mm:ss");
     public String currentDate = dateFormat.format(new Date());
@@ -164,8 +137,9 @@ public class EmployeeController {
             row.createCell(1).setCellValue(data.getEmployee().getCin());
             sheet.autoSizeColumn(1);
 
-            row.createCell(2).setCellValue(data.getStatus().getType());
+            row.createCell(2).setCellValue(data.getStatus().getType().ordinal());
             sheet.autoSizeColumn(2);
+
 
             row.createCell(3).setCellValue(data.getNumberOfDays());
             sheet.autoSizeColumn(3);
@@ -239,14 +213,12 @@ public class EmployeeController {
         for (RequestHolidayResponse data : requestHolidays) {
             table.addCell(String.valueOf(data.getEmployee().getFirstName()+" "+data.getEmployee().getLastName()));
             table.addCell(String.valueOf(data.getEmployee().getCin()));
-            table.addCell(String.valueOf(data.getStatus().getType()));
+            table.addCell(String.valueOf(data.getStatus().getType().toString()));
             table.addCell(String.valueOf(data.getNumberOfDays()));
             table.addCell(String.valueOf(data.getStartDate()));
             table.addCell(String.valueOf(data.getFinishDate()));
             table.addCell(String.valueOf(data.getReturnDate()));
             table.addCell(String.valueOf(data.getRequestDate()));
-
-
 
         }
         document.add(table);

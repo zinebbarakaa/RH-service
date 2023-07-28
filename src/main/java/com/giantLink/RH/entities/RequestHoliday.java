@@ -13,10 +13,9 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class RequestHoliday extends Request
-{
-    private Long numberOfDays;
-    @JsonFormat(pattern = "dd-MM-yyyy", shape = JsonFormat.Shape.STRING)
+public class RequestHoliday extends Request {
+
+    private int numberOfDays;
     private Date startDate;
 
     @JsonFormat(pattern = "dd-MM-yyyy", shape = JsonFormat.Shape.STRING)
@@ -28,5 +27,4 @@ public class RequestHoliday extends Request
     private Long numberOfPaidLeaves;
 
     private Long numberOfUnpaidLeaves;
-
 }

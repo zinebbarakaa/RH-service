@@ -3,10 +3,7 @@ package com.giantLink.RH.mappers;
 import com.giantLink.RH.entities.HolidayBalance;
 import com.giantLink.RH.models.request.HolidayBalanceRequest;
 import com.giantLink.RH.models.response.HolidayBalanceResponse;
-import org.mapstruct.Mapper;
-import org.mapstruct.NullValueCheckStrategy;
-import org.mapstruct.NullValueMappingStrategy;
-import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring",

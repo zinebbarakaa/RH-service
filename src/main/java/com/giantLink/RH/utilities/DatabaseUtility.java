@@ -8,12 +8,18 @@ import com.giantLink.RH.repositories.EmployeeRepository;
 import com.giantLink.RH.repositories.HolidayBalanceRepository;
 import com.giantLink.RH.repositories.RequestHolidayRepository;
 import com.giantLink.RH.repositories.RequestStatusRepository;
+import com.giantLink.RH.entities.*;
+import com.giantLink.RH.enums.State;
+import com.giantLink.RH.models.request.WarningRequest;
+import com.giantLink.RH.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Optional;
+import java.util.Calendar;
 import java.util.logging.Logger;
 
 @Component
@@ -26,22 +32,27 @@ public class DatabaseUtility {
     RequestStatusRepository requestStatusRepository;
     @Autowired
     RequestHolidayRepository requestHolidayRepository;
+    @Autowired
+    WarningTypeRepository warningTypeRepository;
 
+    @Autowired
+    WarningRepository warningRepository;
 
-    public void initDatabase(){
+    public void initDatabase() {
         Logger.getLogger("Database utility").info("Seeding database ...");
         iniRequestStatus();
         initEmployees();
-        initHolidayBalance();
+        initWarningTypes();
         initHolidayRequest();
+
         Logger.getLogger("Database utility").info("Database seeding complete");
     }
 
     public void iniRequestStatus(){
         if (requestStatusRepository.count() > 0) return;
-        RequestStatus requestStatus1 = RequestStatus.builder().type("pending").build();
-        RequestStatus requestStatus2 = RequestStatus.builder().type("approved").build();
-        RequestStatus requestStatus3 = RequestStatus.builder().type("denied").build();
+        RequestStatus requestStatus1 = RequestStatus.builder().type(State.PENDING).build();
+        RequestStatus requestStatus2 = RequestStatus.builder().type(State.ACCEPTED).build();
+        RequestStatus requestStatus3 = RequestStatus.builder().type(State.REFUSED).build();
         requestStatusRepository.saveAll(Arrays.asList(
                 requestStatus1,
                 requestStatus2,
@@ -49,35 +60,6 @@ public class DatabaseUtility {
         ));
 
     }
-    public void initHolidayBalance(){
-        if (holidayBalanceRepository.count() > 0) return;
-        HolidayBalance holidayBalance1 = HolidayBalance.builder()
-                .balance(4)
-                .timestamp(new Date())
-                .balance(5)
-                .createdAt(new Date())
-                .updatedAt(new Date())
-                .build();
-        HolidayBalance holidayBalance2 = HolidayBalance.builder()
-                .balance(4)
-                .timestamp(new Date())
-                .createdAt(new Date())
-                .updatedAt(new Date())
-                .build();
-        HolidayBalance holidayBalance3 = HolidayBalance.builder()
-                .balance(6)
-                .timestamp(new Date())
-                .createdAt(new Date())
-                .updatedAt(new Date())
-                .build();
-        holidayBalanceRepository.saveAll(Arrays.asList(
-                holidayBalance1,
-                holidayBalance2,
-                holidayBalance3
-
-        ));
-    }
-
     public void initEmployees(){
 //        Check table is empty
         if (employeeRepository.count() > 0) return;
@@ -120,9 +102,9 @@ public class DatabaseUtility {
                 .build();
         Employee employee7 = Employee.builder()
                 .firstName("hicham")
-                .lastName("soussi")
+                .lastName("asbika")
                 .cin("z985221")
-                .email("hicham@gmail.com")
+                .email("hicham.asbika@gmail.com")
                 .build();
 
         HolidayBalance holidayBalance1 = new HolidayBalance();
@@ -161,8 +143,8 @@ public class DatabaseUtility {
                 employee7
         ));
     }
-    public void initHolidayRequest(){
-        if (requestHolidayRepository.count() > 0)return;
+    public void initHolidayRequest() {
+        if (requestHolidayRepository.count() > 0) return;
         Employee employee1 = employeeRepository.findById(1L).get();
         Employee employee2 = employeeRepository.findById(5L).get();
         Employee employee3 = employeeRepository.findById(3L).get();
@@ -172,7 +154,7 @@ public class DatabaseUtility {
         RequestStatus requestStatus3 = requestStatusRepository.findById(3L).get();
 
         RequestHoliday requestHoliday1 = RequestHoliday.builder()
-                .numberOfDays(3L)
+                .numberOfDays(5)
                 .startDate(new Date())
                 .returnDate(new Date())
                 .finishDate(new Date())
@@ -180,7 +162,7 @@ public class DatabaseUtility {
                 .numberOfUnpaidLeaves(1L)
                 .build();
         RequestHoliday requestHoliday2 = RequestHoliday.builder()
-                .numberOfDays(3L)
+                .numberOfDays(4)
                 .startDate(new Date())
                 .returnDate(new Date())
                 .finishDate(new Date())
@@ -188,7 +170,7 @@ public class DatabaseUtility {
                 .numberOfUnpaidLeaves(1L)
                 .build();
         RequestHoliday requestHoliday3 = RequestHoliday.builder()
-                .numberOfDays(3L)
+                .numberOfDays(3)
                 .startDate(new Date())
                 .returnDate(new Date())
                 .finishDate(new Date())
@@ -209,5 +191,52 @@ public class DatabaseUtility {
                 requestHoliday2,
                 requestHoliday3
         ));
+    }
+
+    public void initWarningTypes() {
+
+        if (warningTypeRepository.count() > 0) return;
+
+        warningTypeRepository.saveAll(Arrays.asList(
+                new WarningType("Unjustified Absence", " An unjustified absence warning is given to an employee"
+                        + " when they have been absent from work without providing a valid reason or without obtaining proper approval. "),
+                new WarningType("Ethical Violation", " If an employee is found to have violated the company's code of ethics or engaged "
+                        + "in unethical behavior, they may receive an ethical violation warning "),
+                new WarningType("Verbal Warning", " A verbal warning is usually the initial step in addressing a performance or behavioral concern"),
+                new WarningType("Written Warning", " If the performance or behavior issue persists after a verbal warning, a written warning may be issued. "),
+                new WarningType("Performance Improvement Plan (PIP)", " A Performance Improvement Plan is a structured document that outlines"
+                        + " specific performance goals and expectations for an employee over a specified period. "),
+                new WarningType("Warning for Absence Without Request", " Warning for Absence Without Request. ")));
+    }
+
+    public void initRequestHoliday() {
+        Calendar startDateCalendar = Calendar.getInstance();
+        startDateCalendar.set(Calendar.YEAR, 2023);
+        startDateCalendar.set(Calendar.MONTH, Calendar.JULY);
+        startDateCalendar.set(Calendar.DAY_OF_MONTH, 26);
+
+        Calendar startDateCalendar2 = Calendar.getInstance();
+        startDateCalendar2.set(Calendar.YEAR, 2023);
+        startDateCalendar2.set(Calendar.MONTH, Calendar.JULY);
+        startDateCalendar2.set(Calendar.DAY_OF_MONTH, 29);
+
+
+        RequestHoliday requestHoliday = new RequestHoliday();
+        requestHoliday.setNumberOfDays(2);
+        requestHoliday.setStartDate(startDateCalendar.getTime());
+        requestHoliday.setFinishDate(startDateCalendar2.getTime());
+        requestHoliday.setEmployee(employeeRepository.findById(7L).get());
+
+        RequestStatus requestStatus = RequestStatus.builder()
+                .type(State.PENDING)
+                .request(requestHoliday)
+                .build();
+
+        requestStatusRepository.save(requestStatus);
+        requestHoliday.setStatus(requestStatus);
+
+        requestHolidayRepository.save(requestHoliday);
+
+
     }
 }

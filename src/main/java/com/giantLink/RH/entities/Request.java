@@ -2,10 +2,7 @@ package com.giantLink.RH.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
@@ -16,13 +13,12 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public abstract class Request
-{
+public abstract class Request {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Long id;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     @DateTimeFormat(style = "dd-MM-yyyy")
     protected Date requestDate;
 
@@ -33,8 +29,9 @@ public abstract class Request
     private Date updatedAt;
     private Date createdAt;
 
+
     @OneToOne
-    @JoinColumn(name = "requestStatus_id")
+    @JoinColumn(name = "request_status_id")
     @JsonBackReference
     protected RequestStatus status;
 
@@ -47,4 +44,5 @@ public abstract class Request
     void setUpdatedAtField(){
         updatedAt = new Date();
     }
+
 }

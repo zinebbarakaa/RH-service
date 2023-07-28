@@ -1,5 +1,11 @@
 server:
   port: 2023
+  servlet:
+    multipart:
+      file-size-threshold: 2KB
+      max-file-size: 200MB
+      max-request-size: 215MB
+      enabled: true
 spring:
   application:
     name: rh-service
@@ -9,8 +15,7 @@ spring:
     username: root
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
-#    show-sql: true

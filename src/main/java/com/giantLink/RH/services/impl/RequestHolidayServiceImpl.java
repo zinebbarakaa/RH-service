@@ -3,6 +3,7 @@ package com.giantLink.RH.services.impl;
 import com.giantLink.RH.entities.Employee;
 import com.giantLink.RH.entities.RequestHoliday;
 import com.giantLink.RH.entities.RequestStatus;
+import com.giantLink.RH.enums.State;
 import com.giantLink.RH.mappers.RequestHolidayMapper;
 import com.giantLink.RH.models.request.RequestHolidayRequest;
 import com.giantLink.RH.models.response.RequestHolidayResponse;
@@ -21,8 +22,7 @@ import java.util.Optional;
 
 @Service
 @Transactional
-public class RequestHolidayServiceImpl implements RequestHolidayService
-{
+public class RequestHolidayServiceImpl implements RequestHolidayService {
     @Autowired
     private RequestHolidayRepository requestHolidayRepository;
     @Autowired
@@ -36,41 +36,34 @@ public class RequestHolidayServiceImpl implements RequestHolidayService
     private HolidayBalanceRepository holidayBalanceRepository;
 
     @Override
-    public List<RequestHolidayResponse> get()
-    {
+    public List<RequestHolidayResponse> get() {
         return null;
     }
 
     @Override
-    public RequestHolidayResponse update(RequestHolidayRequest request, Long aLong)
-    {
+    public RequestHolidayResponse update(RequestHolidayRequest request, Long aLong) {
         return null;
     }
 
     @Override
-    public void delete(Long aLong)
-    {
+    public void delete(Long aLong) {
 
     }
 
     @Override
-    public RequestHolidayResponse get(Long aLong){
+    public RequestHolidayResponse get(Long aLong) {
         return null;
     }
 
     @Override
-    public RequestHolidayResponse add(RequestHolidayRequest requestHolidayRequest)
-    {
+    public RequestHolidayResponse add(RequestHolidayRequest requestHolidayRequest) {
         RequestHoliday requestHoliday = RequestHolidayMapper.INSTANCE.requestToEntity(requestHolidayRequest);
         Optional<Employee> findEmployee = employeeRepository.findById(requestHolidayRequest.getEmployee_id());
-        if (!findEmployee.isPresent())
-        {
+        if (!findEmployee.isPresent()) {
             throw new RuntimeException("Employee having id : " + requestHolidayRequest.getEmployee_id().toString() + " is not found !");
-        }
-        else
-        {
+        } else {
             RequestStatus requestStatus = RequestStatus.builder()
-                    .type("Pending")
+                    .type(State.PENDING)
                     .request(requestHoliday)
                     .build();
 
@@ -79,7 +72,7 @@ public class RequestHolidayServiceImpl implements RequestHolidayService
             requestHoliday.setEmployee(findEmployee.get());
             requestHolidayRepository.save(requestHoliday);
 
-            RequestHolidayResponse response =  RequestHolidayMapper.INSTANCE.entityToResponse(requestHoliday);
+            RequestHolidayResponse response = RequestHolidayMapper.INSTANCE.entityToResponse(requestHoliday);
 //            response.setEmployee_id(findEmployee.get().getId());
 //            response.setStatus_id(requestStatus.getId());
             return response;
