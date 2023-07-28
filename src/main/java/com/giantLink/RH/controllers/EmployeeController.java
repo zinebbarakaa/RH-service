@@ -13,6 +13,7 @@ import com.giantLink.RH.models.request.EmployeeRequest;
 import com.giantLink.RH.models.response.EmployeeResponse;
 import com.giantLink.RH.services.EmployeeService;
 
+@CrossOrigin("*")
 @RestController
 @RequestMapping("/api/employees")
 public class EmployeeController

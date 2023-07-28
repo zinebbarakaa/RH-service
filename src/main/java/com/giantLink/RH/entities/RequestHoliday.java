@@ -2,10 +2,7 @@ package com.giantLink.RH.entities;
 
 import jakarta.persistence.Entity;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Date;
 
@@ -14,9 +11,10 @@ import java.util.Date;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class RequestHoliday extends Request
 {
-    private Long numberOfDays;
+    private int numberOfDays;
 
     private Date startDate;
 
@@ -27,5 +25,4 @@ public class RequestHoliday extends Request
     private Long numberOfPaidLeaves;
 
     private Long numberOfUnpaidLeaves;
-
 }
