@@ -1,5 +1,18 @@
 package com.giantLink.RH.models.response;
 
-public class RequestStatusResponse
-{
+import com.giantLink.RH.entities.Request;
+import com.giantLink.RH.enums.State;
+import jakarta.persistence.*;
+import lombok.*;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class RequestStatusResponse {
+    private Long id;
+    private State type;
+    private String messageDetails;
+    private Request request;
 }
