@@ -1,5 +1,14 @@
 package com.giantLink.RH.services.impl;
 import java.util.List;
+
+import java.util.Optional;
+
+import com.giantLink.RH.entities.Employee;
+import com.giantLink.RH.entities.HolidayBalance;
+import com.giantLink.RH.exceptions.ResourceDuplicatedException;
+import com.giantLink.RH.mappers.EmployeeMapper;
+import com.giantLink.RH.mappers.HolidayBalanceMapper;
+import com.giantLink.RH.repositories.HolidayBalanceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -8,85 +17,108 @@ import com.giantLink.RH.services.EmployeeService;
 
 import jakarta.transaction.Transactional;
 
-import com.giantLink.RH.exceptions.RessourceNotFoundException;
+
+import com.giantLink.RH.exceptions.ResourceNotFoundException;
 import com.giantLink.RH.models.request.EmployeeRequest;
 import com.giantLink.RH.models.response.EmployeeResponse;
-import com.giantLink.RH.exceptions.InvalidInputException;
+
 
 @Service
 @Transactional // Active la gestion des transactions pour toutes les méthodes de la classe
 
-public class EmployeeServiceImpl implements EmployeeService {
-
+public class EmployeeServiceImpl implements EmployeeService
+{
     @Autowired
     private EmployeeRepository employeeRepository;
+    @Autowired
+    private HolidayBalanceRepository holidayBalanceRepository;
 
     @Override
-    public EmployeeResponse add(EmployeeRequest request) {
-        // TODO: Implement the logic to add an employee
-        // For example, you can create a new Employee entity and save it to the repository
-        // If the request data is invalid, throw InvalidInputException
-
-       // if (request.getFirstName() == null || request.getFirstName().isEmpty()
-        //        || request.getLastName() == null || request.getLastName().isEmpty()
-        //        || request.getEmail() == null || request.getEmail().isEmpty()) {
-            throw new InvalidInputException("Invalid input data. All fields are required.");
-        //}
-
-        // Implement the saving logic here and return the EmployeeResponse object
-       // return null;
+    public EmployeeResponse add(EmployeeRequest request)
+    {
+//        Check unique properties are not duplicated
+        if (request.getCin() != null && employeeRepository.findByCin(request.getCin()).isPresent())
+            throw new ResourceDuplicatedException("employee", "cin", request.getCin());
+        if (request.getEmail() != null && employeeRepository.findByEmail(request.getEmail()).isPresent())
+            throw new ResourceDuplicatedException("employee", "email", request.getEmail());
+//        Create the employee
+        Employee employee = EmployeeMapper.INSTANCE.requestToEntity(request);
+//        Create holiday balance of the employee
+        HolidayBalance holidayBalance = new HolidayBalance();
+//        Get holiday balance info if exist
+        if(request.getHolidayBalance() != null){
+            HolidayBalanceMapper.INSTANCE.updateEntityFromRequest(request.getHolidayBalance(), holidayBalance);
+        }
+//        Save the holiday balance
+        holidayBalanceRepository.save(holidayBalance);
+        employee.setHolidayBalance(holidayBalance);
+//        Save the employee
+        employeeRepository.save(employee);
+//        Prepare and return the response
+        return EmployeeMapper.INSTANCE.entityToResponse(employee);
     }
 
     @Override
-    public List<EmployeeResponse> get() {
-        // TODO: Implement the logic to retrieve all employees
-        // If there are no employees in the database, throw RessourceNotFoundException
-      //  List<EmployeeResponse> employees = // Retrieve employees from the repository
 
-       // if (employees.isEmpty()) {
-            throw new RessourceNotFoundException("Employees", "list", "No employees found.");
-       // }
-
-       // return employees;
+    public List<EmployeeResponse> get()
+    {
+        List<Employee> employees = employeeRepository.findAll();
+        return EmployeeMapper.INSTANCE.listToResponseList(employees);
     }
 
     @Override
-    public EmployeeResponse update(EmployeeRequest request, Long id) {
-        // TODO: Implement the logic to update an employee by ID
-        // If the employee with the given ID does not exist, throw RessourceNotFoundException
-        //EmployeeResponse existingEmployee = // Retrieve the employee from the repository by ID
-
-        //if (existingEmployee == null) {
-            throw new RessourceNotFoundException("Employee", "id", String.valueOf(id));
-      // }
-
-        // Implement the updating logic here and return the updated EmployeeResponse object
-       // return null;
+    public EmployeeResponse update(EmployeeRequest request, Long id)
+    {
+//        Check if the employee exists
+        Employee employee = employeeRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("employee", "id", id.toString()));
+//        Check unique properties are not duplicated
+        if (request.getCin() != null){
+            Optional<Employee> employeeByCin = employeeRepository.findByCin(request.getCin());
+            if (employeeByCin.isPresent() && !employeeByCin.get().getId().equals(id))
+                throw new ResourceDuplicatedException("employee", "cin", request.getCin());
+        }
+        if (request.getEmail() != null){
+            Optional<Employee> employeeByEmail = employeeRepository.findByEmail(request.getEmail());
+            if (employeeByEmail.isPresent() && !employeeByEmail.get().getId().equals(id))
+                throw new ResourceDuplicatedException("employee", "email", request.getEmail());
+        }
+//        Update entity
+        EmployeeMapper.INSTANCE.updateEntityFromRequest(request, employee);
+//        Save changes
+        employeeRepository.save(employee);
+//        Prepare and return the response
+        return EmployeeMapper.INSTANCE.entityToResponse(employee);
     }
 
     @Override
-    public void delete(Long id) {
-        // TODO: Implement the logic to delete an employee by ID
-        // If the employee with the given ID does not exist, throw RessourceNotFoundException
-       // EmployeeResponse existingEmployee = // Retrieve the employee from the repository by ID
-
-        //if (existingEmployee == null) {
-            throw new RessourceNotFoundException("Employee", "id", String.valueOf(id));
-       // }
-
-        // Implement the deletion logic here
+    public void delete(Long id)
+    {
+//        Check if the employee exists
+        Employee employee = employeeRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("employee", "id", id.toString()));
+//        Delete entity
+        employeeRepository.delete(employee);
     }
 
     @Override
-    public EmployeeResponse get(Long id) {
-        // TODO: Implement the logic to retrieve an employee by ID
-        // If the employee with the given ID does not exist, throw RessourceNotFoundException
-        //EmployeeResponse employee = // Retrieve the employee from the repository by ID
+    public EmployeeResponse get(Long id)
+    {
+//        Check if the employee exists
+        Employee employee = employeeRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("employee", "id", id.toString()));
+//        Prepare and return the response
+        return EmployeeMapper.INSTANCE.entityToResponse(employee);
+    }
 
-        //if (employee == null) {
-            throw new RessourceNotFoundException("Employee", "id", String.valueOf(id));
-      //  }
+    @Override
+    public EmployeeResponse detachHolidayBalanceFromEmployee(Long id) {
+//        Check if the employee exists
+        Employee employee = employeeRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("employee", "id", id.toString()));
+        employee.setHolidayBalance(null);
+        employeeRepository.save(employee);
 
-       // return employee;
+        return EmployeeMapper.INSTANCE.entityToResponse(employee);
     }
 }
