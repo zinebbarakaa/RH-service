@@ -2,10 +2,7 @@ package com.giantLink.RH.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
@@ -33,7 +30,7 @@ public abstract class Request {
 
 
     @OneToOne
-    @JoinColumn(name = "requestStatus_id")
+    @JoinColumn(name = "request_status_id")
     @JsonBackReference
     protected RequestStatus status;
 

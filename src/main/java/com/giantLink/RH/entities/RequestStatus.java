@@ -22,7 +22,8 @@ public class RequestStatus {
     private State type;
 
     private String messageDetails;
+
     @OneToOne(fetch = FetchType.EAGER, mappedBy = "status",cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "request_id")
+    //@JoinColumn(name = "request_id")
     private Request request;
 }

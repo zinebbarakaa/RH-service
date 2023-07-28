@@ -32,9 +32,9 @@ public class DatabaseUtility {
 
     public void initDatabase() {
         Logger.getLogger("Database utility").info("Seeding database ...");
-        //initEmployees();
-        //initWarningTypes();
-        //initRequestHoliday();
+        initEmployees();
+        initWarningTypes();
+        initRequestHoliday();
         Logger.getLogger("Database utility").info("Database seeding complete");
     }
 
@@ -156,10 +156,16 @@ public class DatabaseUtility {
         requestHoliday.setFinishDate(startDateCalendar2.getTime());
         requestHoliday.setEmployee(employeeRepository.findById(7L).get());
 
-        RequestStatus requestStatus = new RequestStatus();
-        requestStatus.setType(State.PENDING);
-        requestStatus.setRequest(requestHoliday);
+        RequestStatus requestStatus = RequestStatus.builder()
+                .type(State.PENDING)
+                .request(requestHoliday)
+                .build();
+
         requestStatusRepository.save(requestStatus);
+        requestHoliday.setStatus(requestStatus);
+
         requestHolidayRepository.save(requestHoliday);
+
+
     }
 }

@@ -11,6 +11,7 @@ package com.giantLink.RH.models.request;
 //    private int requestId;
 //=======
 
+import com.giantLink.RH.entities.Request;
 import com.giantLink.RH.enums.State;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -22,6 +23,6 @@ public class RequestStatusRequest {
     @Size(max = 200, message = "Description cannot exceed 200 characters")
 
     private String messageDetails;
-    private int requestId;
+    private Request request;
 
 }
