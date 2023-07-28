@@ -22,6 +22,7 @@ public class EmployeeController
     private EmployeeService employeeService;
 
     @PostMapping
+
     public ResponseEntity<EmployeeResponse> addEmployee(@RequestBody @Validated EmployeeRequest request)
     {
         EmployeeResponse employeeResponse = employeeService.add(request);
@@ -29,6 +30,7 @@ public class EmployeeController
     }
 
     @GetMapping
+
     public ResponseEntity<List<EmployeeResponse>> getAllEmployees()
     {
         List<EmployeeResponse> employees = employeeService.get();
@@ -43,6 +45,7 @@ public class EmployeeController
     }
 
     @PutMapping("/{id}")
+
     public ResponseEntity<EmployeeResponse> updateEmployee(@PathVariable Long id, @RequestBody EmployeeRequest request)
     {
         EmployeeResponse updatedEmployee = employeeService.update(request, id);
