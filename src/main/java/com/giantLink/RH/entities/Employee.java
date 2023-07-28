@@ -49,7 +49,7 @@ public class Employee
 	@OneToMany(mappedBy = "employee")
     @JsonBackReference
     private Set<Warning> warnings;
-	
+
 	@OneToMany(mappedBy = "employee")
     @JsonBackReference
     private Set<Request> requests;

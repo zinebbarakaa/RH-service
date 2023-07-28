@@ -2,10 +2,7 @@ package com.giantLink.RH.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
@@ -16,8 +13,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public abstract class Request
-{
+public abstract class Request {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Long id;
@@ -34,10 +30,12 @@ public abstract class Request
 
 
     @OneToOne
-    @JoinColumn(name = "requestStatus_id")
+    @JoinColumn(name = "request_status_id")
     @JsonBackReference
     protected RequestStatus status;
 
     @PrePersist
-    private void onCreate() { this.requestDate = new Date(); }
+    private void onCreate() {
+        this.requestDate = new Date();
+    }
 }
