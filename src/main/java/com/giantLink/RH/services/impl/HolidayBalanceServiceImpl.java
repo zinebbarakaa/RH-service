@@ -63,6 +63,8 @@ public class HolidayBalanceServiceImpl implements HolidayBalanceService
         HolidayBalance holidayBalance = holidayBalanceRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("holiday balance", "id", id.toString()));
 //        Update entity
+        if(request.getBalance() == 0) request.setBalance(holidayBalance.getBalance());
+        if(request.getHolidayPerMonth() == 0) request.setHolidayPerMonth(holidayBalance.getHolidayPerMonth());
         HolidayBalanceMapper.INSTANCE.updateEntityFromRequest(request, holidayBalance);
 
 //        Save changes

@@ -25,6 +25,7 @@ public class HolidayBalance
     private int balance = 0;
 
     @Column(nullable = false)
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
     @JsonFormat(pattern = "dd-MM-yyyy", shape = JsonFormat.Shape.STRING)
     @Builder.Default
     private Date timestamp = new Date();

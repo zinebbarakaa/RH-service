@@ -107,15 +107,4 @@ public class EmployeeServiceImpl implements EmployeeService
 //        Prepare and return the response
         return EmployeeMapper.INSTANCE.entityToResponse(employee);
     }
-
-    @Override
-    public EmployeeResponse detachHolidayBalanceFromEmployee(Long id) {
-//        Check if the employee exists
-        Employee employee = employeeRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("employee", "id", id.toString()));
-        employee.setHolidayBalance(null);
-        employeeRepository.save(employee);
-
-        return EmployeeMapper.INSTANCE.entityToResponse(employee);
-    }
 }
