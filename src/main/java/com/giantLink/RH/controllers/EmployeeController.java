@@ -99,7 +99,7 @@ public class EmployeeController {
         CellStyle style = workbook.createCellStyle();
         XSSFFont font = (XSSFFont) workbook.createFont();
         font.setBold(true);
-        font.setFontHeightInPoints((short) 8);
+        font.setFontHeightInPoints((short) 14);
         style.setFont(font);
 
         // Create headers
@@ -137,7 +137,7 @@ public class EmployeeController {
             row.createCell(1).setCellValue(data.getEmployee().getCin());
             sheet.autoSizeColumn(1);
 
-            row.createCell(2).setCellValue(data.getStatus().getType().ordinal());
+            row.createCell(2).setCellValue(data.getStatus().getType().toString());
             sheet.autoSizeColumn(2);
 
 

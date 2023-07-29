@@ -43,8 +43,9 @@ public class DatabaseUtility {
         iniRequestStatus();
         initEmployees();
         initWarningTypes();
-        initHolidayRequest();
+//        initHolidayRequest();
 
+        initRequestHoliday();
         Logger.getLogger("Database utility").info("Database seeding complete");
     }
 
