@@ -10,7 +10,7 @@ spring:
   application:
     name: rh-service
   datasource:
-    password: w@2915djkq#
+    password:
     url: jdbc:mysql://localhost:3306/rh-service?useSSL=false
     username: root
   jpa:
