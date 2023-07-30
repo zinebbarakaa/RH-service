@@ -914,6 +914,99 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "GET ALL requests absence",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:2023/api/absences",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "2023",
+							"path": [
+								"api",
+								"absences"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UPDATE absence justification",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"justification\" : true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:2023/api/absences/justification/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "2023",
+							"path": [
+								"api",
+								"absences",
+								"justification",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET absence BY ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:2023/api/absences/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "2023",
+							"path": [
+								"api",
+								"absences",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE absence",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:2023/api/absences/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "2023",
+							"path": [
+								"api",
+								"absences",
+								"1"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		}

@@ -1,5 +1,6 @@
 package com.giantLink.RH.services.impl;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -87,6 +88,19 @@ public class RequestAbsenceServiceImpl implements RequestAbsenceService {
             RequestAbsence entity = optionalEntity.get();
             RequestAbsenceMapper.INSTANCE.updateEntityFromRequest(request, entity);
             RequestAbsence updatedEntity = requestAbsenceRepository.save(entity);
+            
+            int compareDate = entity.getAbsenceDate().compareTo(updatedEntity.getAbsenceDate());
+            if(compareDate != 0) {
+            	 int dateCompare = entity.getAbsenceDate().compareTo(entity.getRequestDate());
+                 if (dateCompare < 0) {
+                     WarningType warningType = warningTypeRepository.findByTitle("Warning for Absence Without Request").get();
+                     Warning warning = new Warning();
+                     warning.setWarningType(warningType);
+                     warning.setEmployee(entity.getEmployee());
+                     warningRepository.save(warning);
+                 }
+            }
+            
             return RequestAbsenceMapper.INSTANCE.entityToResponse(updatedEntity);
         }
         return null; // Gérer le cas où l'entité n'existe pas
@@ -111,6 +125,12 @@ public class RequestAbsenceServiceImpl implements RequestAbsenceService {
             // Mettre à jour l'attribut 'justification' de l'entité avec la valeur de la requête
             entity.setJustification(requestUpdate.isJustification());
             RequestAbsence updatedEntity = requestAbsenceRepository.save(entity);
+            warningRepository.findByEmployee(entity.getEmployee()).forEach(warning->{
+            	long compareDate = warning.getCreatedAt().compareTo(entity.getAbsenceDate());
+                if (compareDate == 1 && updatedEntity.isJustification() == true && warning.getWarningType()== warningTypeRepository.findByTitle("Unjustified Absence").get()) {
+                	warningRepository.delete(warning);
+                }
+            });
             return RequestAbsenceMapper.INSTANCE.entityToResponse(updatedEntity);
         }
         return null; // Gérer le cas où l'entité n'existe pas
