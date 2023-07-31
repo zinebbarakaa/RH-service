@@ -22,6 +22,7 @@ public class RhServiceApplication implements CommandLineRunner
 	public void run(String... args) throws Exception
 	{
 		databaseUtility.initDatabase();
+		databaseUtility.initRoles();
 	}
 
 }

@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,13 +16,16 @@ import com.giantLink.RH.services.EmployeeService;
 
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/api/employees")
+@RequestMapping("api/v1/employees")
+@PreAuthorize("hasRole('ADMIN_RH')")
 public class EmployeeController
 {
     @Autowired
     private EmployeeService employeeService;
 
     @PostMapping
+
+    @PreAuthorize("hasAuthority('CREATE')")
 
     public ResponseEntity<EmployeeResponse> addEmployee(@RequestBody @Validated EmployeeRequest request)
     {
@@ -30,7 +34,7 @@ public class EmployeeController
     }
 
     @GetMapping
-
+    @PreAuthorize("hasAuthority('READ')")
     public ResponseEntity<List<EmployeeResponse>> getAllEmployees()
     {
         List<EmployeeResponse> employees = employeeService.get();
