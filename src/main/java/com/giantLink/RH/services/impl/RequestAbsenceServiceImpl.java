@@ -13,7 +13,7 @@ import com.giantLink.RH.entities.RequestStatus;
 import com.giantLink.RH.entities.Warning;
 import com.giantLink.RH.entities.WarningType;
 import com.giantLink.RH.mappers.RequestAbsenceMapper;
-import com.giantLink.RH.models.request.RequestAbscenceUpdateRequest;
+import com.giantLink.RH.models.request.RequestAbsenceUpdateRequest;
 import com.giantLink.RH.models.request.RequestAbsenceRequest;
 import com.giantLink.RH.models.response.RequestAbsenceResponse;
 import com.giantLink.RH.repositories.EmployeeRepository;
@@ -65,8 +65,8 @@ public class RequestAbsenceServiceImpl implements RequestAbsenceService {
         // Sauvegarder l'entité RequestStatus d'abord
         requestStatusRepository.save(requestStatus);
         
-        RequestAbsenceResponse responce =RequestAbsenceMapper.INSTANCE.entityToResponse(requestAbsenceRepository.save(entity));
-        responce.setMessage("Request added successfuly");
+        RequestAbsenceResponse response =RequestAbsenceMapper.INSTANCE.entityToResponse(requestAbsenceRepository.save(entity));
+        response.setMessage("Request added successfully");
         if (entity.getRequestDate() != null) {
             int dateCompare = entity.getAbsenceDate().compareTo(entity.getRequestDate());
             if (dateCompare < 0) {
@@ -78,9 +78,8 @@ public class RequestAbsenceServiceImpl implements RequestAbsenceService {
             }
         }
         
-        return responce ;
+        return response ;
     }
-
 
 
     @Override
@@ -126,7 +125,7 @@ public class RequestAbsenceServiceImpl implements RequestAbsenceService {
     }
 
     @Override
-    public RequestAbsenceResponse updateJustification(RequestAbscenceUpdateRequest requestUpdate, Long id) {
+    public RequestAbsenceResponse updateJustification(RequestAbsenceUpdateRequest requestUpdate, Long id) {
         Optional<RequestAbsence> optionalEntity = requestAbsenceRepository.findById(id);
         if (optionalEntity.isPresent()) {
             RequestAbsence entity = optionalEntity.get();
@@ -169,4 +168,5 @@ public class RequestAbsenceServiceImpl implements RequestAbsenceService {
 	    // Convertir les entités en objets de réponse
 	    return RequestAbsenceMapper.INSTANCE.listToResponseList(requestAbsences);
 	}
+	
 }

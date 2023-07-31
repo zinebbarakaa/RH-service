@@ -11,7 +11,7 @@ import jakarta.persistence.TemporalType;
 import lombok.Data;
 
 @Data
-public class RequestAbscenceUpdateRequest {
+public class RequestAbsenceUpdateRequest {
 
 	@JsonFormat(pattern="dd-MM-yyyy")
 	private Date absenceDate;

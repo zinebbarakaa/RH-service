@@ -1,6 +1,6 @@
 package com.giantLink.RH.controllers;
 
-import com.giantLink.RH.models.request.RequestAbscenceUpdateRequest;
+import com.giantLink.RH.models.request.RequestAbsenceUpdateRequest;
 import com.giantLink.RH.models.request.RequestAbsenceRequest;
 import com.giantLink.RH.models.response.RequestAbsenceResponse;
 import com.giantLink.RH.services.RequestAbsenceService;
@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/absences")
@@ -71,7 +70,7 @@ public class RequestAbsenceController {
     }
 
     @PutMapping("/justification/{id}")
-    public ResponseEntity<RequestAbsenceResponse> updateJustification(@PathVariable Long id, @RequestBody RequestAbscenceUpdateRequest request) {
+    public ResponseEntity<RequestAbsenceResponse> updateJustification(@PathVariable Long id, @RequestBody RequestAbsenceUpdateRequest request) {
         RequestAbsenceResponse response = requestAbsenceService.updateJustification(request, id);
         if (response != null) {
             return new ResponseEntity<>(response, HttpStatus.OK);
