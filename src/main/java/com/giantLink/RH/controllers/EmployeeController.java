@@ -10,6 +10,7 @@ import java.util.List;
 import com.giantLink.RH.models.response.RequestHolidayResponse;
 import com.giantLink.RH.models.response.SuccessResponse;
 import com.giantLink.RH.services.HolidayBalanceService;
+import com.giantLink.RH.services.RequestAbsenceService;
 import com.giantLink.RH.services.impl.RequestHolidayServiceImpl;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPTable;
@@ -29,6 +30,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.giantLink.RH.models.request.EmployeeRequest;
 import com.giantLink.RH.models.response.EmployeeResponse;
+import com.giantLink.RH.models.response.RequestAbsenceResponse;
 import com.giantLink.RH.services.EmployeeService;
 
 @CrossOrigin("*")
@@ -41,6 +43,9 @@ public class EmployeeController {
     private RequestHolidayServiceImpl requestHolidayService;
     @Autowired
     private HolidayBalanceService holidayBalanceService;
+    
+    @Autowired
+    private RequestAbsenceService requestAbsenceService;
 
     @PostMapping
     public ResponseEntity<EmployeeResponse> addEmployee(@RequestBody @Validated EmployeeRequest request) {
@@ -238,5 +243,19 @@ public class EmployeeController {
         return new ResponseEntity(requestHoliday, HttpStatus.OK);
     }
 
+    @GetMapping("/request_absence/{id}")
+    public List<RequestAbsenceResponse> getRequestAbsenceByEmployeeId(@PathVariable Long id) {
+        return requestAbsenceService.getRequestAbsenceByEmployeeId(id);
+    }
+    
+    @GetMapping("/sickness/{id}")
+    public List<RequestAbsenceResponse> getSicknessByEmployee(@PathVariable Long id ) {
+        return requestAbsenceService.getByEmployeeIsSickness(true, id);
+    }
+    
+    @GetMapping("/absence/{id}")
+    public List<RequestAbsenceResponse> getAbsenceByEmployee(@PathVariable Long id ) {
+        return requestAbsenceService.getByEmployeeIsSickness(false, id);
+    }
 
 }

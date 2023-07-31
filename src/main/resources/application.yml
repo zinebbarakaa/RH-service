@@ -10,12 +10,14 @@ spring:
   application:
     name: rh-service
   datasource:
+
     password:
+
     url: jdbc:mysql://localhost:3306/rh-service?useSSL=false
     username: root
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
