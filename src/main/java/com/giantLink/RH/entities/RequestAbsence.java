@@ -25,11 +25,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public class RequestAbsence extends Request {
 	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column()
-	private Long id;
-	
 	private boolean sickness;
 	private String reason;
 	private boolean justification;

@@ -6,6 +6,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.giantLink.RH.entities.Employee;
+import com.giantLink.RH.entities.RequestStatus;
+import com.giantLink.RH.enums.State;
 
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;

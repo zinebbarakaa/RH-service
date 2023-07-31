@@ -53,7 +53,14 @@ public class RequestAbsenceServiceImpl implements RequestAbsenceService {
         RequestStatus requestStatus = new RequestStatus();
         requestStatus.setType(State.PENDING);
         requestStatus.setRequest(entity);
+        if (entity.isSickness()== false) {
+        	requestStatus.setMessageDetails(" Request for Absence");
+        }
+        else {
+        	 requestStatus.setMessageDetails("Request for Sick Leave");
+        }
         entity.setStatus(requestStatus);
+        
 
         // Sauvegarder l'entité RequestStatus d'abord
         requestStatusRepository.save(requestStatus);
@@ -115,7 +122,7 @@ public class RequestAbsenceServiceImpl implements RequestAbsenceService {
     @Override
     public RequestAbsenceResponse get(Long id) {
         Optional<RequestAbsence> optionalEntity = requestAbsenceRepository.findById(id);
-        return optionalEntity.map(RequestAbsenceMapper.INSTANCE::entityToResponse).orElse(null);
+        return RequestAbsenceMapper.INSTANCE.entityToResponse(optionalEntity.get());
     }
 
     @Override
@@ -136,4 +143,12 @@ public class RequestAbsenceServiceImpl implements RequestAbsenceService {
         }
         return null; // Gérer le cas où l'entité n'existe pas
     }
+
+
+
+	@Override
+	public List<RequestAbsenceResponse> getIsSickness(boolean sickness) {
+		 List<RequestAbsence> entities = requestAbsenceRepository.findBySickness(sickness);
+	        return RequestAbsenceMapper.INSTANCE.listToResponseList(entities);
+	}
 }

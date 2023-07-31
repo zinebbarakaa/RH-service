@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/absences")
@@ -23,7 +24,7 @@ public class RequestAbsenceController {
         this.requestAbsenceService = requestAbsenceService;
     }
 
-    @PostMapping("/add")
+    @PostMapping
     public ResponseEntity<RequestAbsenceResponse> addRequestAbsence(@RequestBody RequestAbsenceRequest request) {
         RequestAbsenceResponse response = requestAbsenceService.add(request);
         if (response != null) {
@@ -76,6 +77,25 @@ public class RequestAbsenceController {
             return new ResponseEntity<>(response, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+    
+    @GetMapping("/by_absence")
+    public ResponseEntity<List<RequestAbsenceResponse>> getAbsence(){
+    	List<RequestAbsenceResponse> responses = requestAbsenceService.getIsSickness(false);
+        if (!responses.isEmpty()) {
+            return new ResponseEntity<>(responses, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+    }
+    @GetMapping("/by_sickness")
+    public ResponseEntity<List<RequestAbsenceResponse>> getSickness(){
+    	List<RequestAbsenceResponse> responses = requestAbsenceService.getIsSickness(true);
+        if (!responses.isEmpty()) {
+            return new ResponseEntity<>(responses, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
     }
 }
