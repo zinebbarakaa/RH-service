@@ -14,13 +14,11 @@ public class RhServiceApplication implements CommandLineRunner
 	@Autowired
 	DatabaseUtility databaseUtility;
 
-	public static void main(String[] args)
-	{
+	public static void main(String[] args){
 		SpringApplication.run(RhServiceApplication.class, args);
 	}
 	@Override
-	public void run(String... args) throws Exception
-	{
+	public void run(String... args) throws Exception{
 		databaseUtility.initDatabase();
 	}
 

@@ -12,4 +12,8 @@ public interface ApplicationMapper<RQ,RS,ET>
     RS entityToResponse(ET entity);
 
     List<RS> listToResponseList(List<ET> entities);
+
+//    RequestHoliday toEntity(RequestHolidayRequest requestHolidayRequest); === requestToEntity
+
+//    RequestHolidayResponse toResponse(RequestHoliday requestHoliday); === entityToResponse
 }
