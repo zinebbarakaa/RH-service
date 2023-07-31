@@ -23,4 +23,5 @@ public class EmployeeResponse
 	private HolidayBalance holidayBalance;
 	private Date updatedAt;
 	private Date createdAt;
+
 }

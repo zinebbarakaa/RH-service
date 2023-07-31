@@ -13,6 +13,7 @@ import com.giantLink.RH.models.request.EmployeeRequest;
 import com.giantLink.RH.models.response.EmployeeResponse;
 import com.giantLink.RH.services.EmployeeService;
 
+@CrossOrigin("*")
 @RestController
 @RequestMapping("/api/employees")
 public class EmployeeController
@@ -21,6 +22,7 @@ public class EmployeeController
     private EmployeeService employeeService;
 
     @PostMapping
+
     public ResponseEntity<EmployeeResponse> addEmployee(@RequestBody @Validated EmployeeRequest request)
     {
         EmployeeResponse employeeResponse = employeeService.add(request);
@@ -28,6 +30,7 @@ public class EmployeeController
     }
 
     @GetMapping
+
     public ResponseEntity<List<EmployeeResponse>> getAllEmployees()
     {
         List<EmployeeResponse> employees = employeeService.get();
@@ -42,6 +45,7 @@ public class EmployeeController
     }
 
     @PutMapping("/{id}")
+
     public ResponseEntity<EmployeeResponse> updateEmployee(@PathVariable Long id, @RequestBody EmployeeRequest request)
     {
         EmployeeResponse updatedEmployee = employeeService.update(request, id);
@@ -56,11 +60,5 @@ public class EmployeeController
                 .message("Employee deleted successfully")
                 .build();
         return new ResponseEntity<>(successResponse, HttpStatus.OK);
-    }
-
-    @PatchMapping("/{id}/detachholidaybalance")
-    public ResponseEntity<EmployeeResponse> detachHolidayBalance(@PathVariable Long id) {
-        EmployeeResponse employeeResponse = employeeService.detachHolidayBalanceFromEmployee(id);
-        return new ResponseEntity<>(employeeResponse, HttpStatus.OK);
     }
 }

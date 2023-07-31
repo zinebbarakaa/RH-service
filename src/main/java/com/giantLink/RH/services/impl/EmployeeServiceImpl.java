@@ -1,5 +1,6 @@
 package com.giantLink.RH.services.impl;
 import java.util.List;
+
 import java.util.Optional;
 
 import com.giantLink.RH.entities.Employee;
@@ -16,9 +17,11 @@ import com.giantLink.RH.services.EmployeeService;
 
 import jakarta.transaction.Transactional;
 
+
 import com.giantLink.RH.exceptions.ResourceNotFoundException;
 import com.giantLink.RH.models.request.EmployeeRequest;
 import com.giantLink.RH.models.response.EmployeeResponse;
+
 
 @Service
 @Transactional // Active la gestion des transactions pour toutes les méthodes de la classe
@@ -105,17 +108,6 @@ public class EmployeeServiceImpl implements EmployeeService
         Employee employee = employeeRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("employee", "id", id.toString()));
 //        Prepare and return the response
-        return EmployeeMapper.INSTANCE.entityToResponse(employee);
-    }
-
-    @Override
-    public EmployeeResponse detachHolidayBalanceFromEmployee(Long id) {
-//        Check if the employee exists
-        Employee employee = employeeRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("employee", "id", id.toString()));
-        employee.setHolidayBalance(null);
-        employeeRepository.save(employee);
-
         return EmployeeMapper.INSTANCE.entityToResponse(employee);
     }
 }

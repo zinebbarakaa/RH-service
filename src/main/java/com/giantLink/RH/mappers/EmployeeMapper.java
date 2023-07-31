@@ -1,6 +1,7 @@
 package com.giantLink.RH.mappers;
 
 import org.mapstruct.Mapper;
+
 import org.mapstruct.NullValueCheckStrategy;
 import org.mapstruct.NullValueMappingStrategy;
 import org.mapstruct.NullValuePropertyMappingStrategy;

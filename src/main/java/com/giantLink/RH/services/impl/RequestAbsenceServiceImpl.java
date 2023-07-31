@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import com.giantLink.RH.enums.State;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -50,7 +51,7 @@ public class RequestAbsenceServiceImpl implements RequestAbsenceService {
         entity.setEmployee(employeeRepository.findById(request.getIdEmployee()).get());
        
         RequestStatus requestStatus = new RequestStatus();
-        requestStatus.setType("Pending");
+        requestStatus.setType(State.PENDING);
         requestStatus.setRequest(entity);
         entity.setStatus(requestStatus);
 
