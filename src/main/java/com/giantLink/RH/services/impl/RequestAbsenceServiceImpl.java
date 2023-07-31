@@ -22,7 +22,6 @@ import com.giantLink.RH.repositories.RequestStatusRepository;
 import com.giantLink.RH.repositories.WarningRepository;
 import com.giantLink.RH.repositories.WarningTypeRepository;
 import com.giantLink.RH.services.RequestAbsenceService;
-import com.giantLink.RH.services.WarningService;
 
 import jakarta.transaction.Transactional;
 
