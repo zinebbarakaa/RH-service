@@ -37,7 +37,7 @@ public class Role {
         var authorities = getPermissions()
                 .stream()
                 .map(permission -> new SimpleGrantedAuthority(permission.getNamePermission()))
-                .collect(Collectors.toList()); // Use collect() instead of toList()
+                .collect(Collectors.toList());
         authorities.add(new SimpleGrantedAuthority("ROLE_" + this.roleName));
         return authorities;
 

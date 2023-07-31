@@ -23,7 +23,7 @@ public class EmployeeController
     private EmployeeService employeeService;
 
     @PostMapping
-    @PreAuthorize("hasAuthority('CREATE')")
+    @PreAuthorize("hasAuthority('ADMIN_CREATE')")
     public ResponseEntity<EmployeeResponse> addEmployee(@RequestBody @Validated EmployeeRequest request)
     {
         EmployeeResponse employeeResponse = employeeService.add(request);
@@ -31,7 +31,7 @@ public class EmployeeController
     }
 
     @GetMapping
-    @PreAuthorize("hasAuthority('READ')")
+    @PreAuthorize("hasAuthority('ADMIN_READ')")
     public ResponseEntity<List<EmployeeResponse>> getAllEmployees()
     {
         List<EmployeeResponse> employees = employeeService.get();

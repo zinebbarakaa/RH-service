@@ -5,9 +5,11 @@ import com.giantLink.RH.entities.Employee;
 import com.giantLink.RH.entities.Role;
 import com.giantLink.RH.entities.User;
 import com.giantLink.RH.exceptions.ResourceNotFoundException;
+import com.giantLink.RH.mappers.UserMapper;
 import com.giantLink.RH.models.request.LoginRequest;
 import com.giantLink.RH.models.request.RegisterRequest;
 import com.giantLink.RH.models.response.LoginResponse;
+import com.giantLink.RH.models.response.UserResponse;
 import com.giantLink.RH.repositories.EmployeeRepository;
 import com.giantLink.RH.repositories.UserRepository;
 import com.giantLink.RH.repositories.RoleRepository;
@@ -20,16 +22,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -45,62 +45,53 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public List<LoginResponse> register(RegisterRequest request) {
-        Optional<Employee> findEmployee = employeeRepository.findById(request.getId_employee());
-        if (!findEmployee.isPresent()) {
-            logger.error("Employee with id {} not found", request.getId_employee());
-            throw new ResourceNotFoundException(Employee.class.getSimpleName(), "id_employee", String.valueOf(request.getId_employee()));
-        }
-        Employee employee = findEmployee.get();
-        List<Role> roles = new ArrayList<>();
-        for (Role role : request.getRoles()) {
-            Optional<Role> findRole = roleRepository.findByRoleName(role.getRoleName());
-            if (findRole.isPresent()) {
-                roles.add(findRole.get());
-            } else {
-                logger.error("Role with id {} not found", role.getId());
-                throw new ResourceNotFoundException(Role.class.getSimpleName(), "id_role", String.valueOf(role.getId()));
-            }
-        }
+    public UserResponse register(RegisterRequest request) {
+        // Retrieve the employee associated with the given ID.
+        Employee employee = employeeRepository.findById(request.getId_employee())
+                .orElseThrow(() -> new ResourceNotFoundException(Employee.class.getSimpleName(), "id_employee", String.valueOf(request.getId_employee())));
 
+        // Fetch roles from the request and find them in the role repository.
+        List<Role> roles = request.getRoles().stream()
+                .map(role -> roleRepository.findByRoleName(role.getRoleName())
+                        .orElseThrow(() -> new ResourceNotFoundException(Role.class.getSimpleName(), "id_role", String.valueOf(role.getId()))))
+                .collect(Collectors.toList());
+
+        // Create the user entity with the associated employee and roles, then save it to the database.
         var user = User.builder()
                 .username(employee.getCin())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .employee(employeeRepository.findById(request.getId_employee()).get())
+                .employee(employee)
                 .roles(roles)
                 .build();
-
         userRepository.save(user);
-        List<LoginResponse> loginResponses = new ArrayList<>();
-        for (Role role : user.getRoles()) {
-            var roleAccessToken = jwtService.generateTokenWithRole(role, user);
-            var roleRefreshToken = jwtService.generateRefreshTokenWithRole(role,user);
-            loginResponses.add(LoginResponse.builder().role(role.getRoleName()).accessToken(roleAccessToken).refreshToken(roleRefreshToken).build());
-            logger.info("Role: {} | Token: {}  | refreshToken: {}", role.getRoleName(), roleAccessToken,roleRefreshToken);
-            System.out.println("Role: " + role.getRoleName() + " | Token: " + roleAccessToken);
-        }
-        return loginResponses;
+        return UserMapper.INSTANCE.entityToResponse(user);
     }
 
     @Override
     public List<LoginResponse> login(LoginRequest request) {
+        // Authenticate the user with the provided credentials.
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 request.getUsername(),
                 request.getPassword()
         ));
+
+        // Find the user based on the username.
         var user = userRepository.findByUsername(request.getUsername());
         List<LoginResponse> loginResponses = new ArrayList<>();
         for (Role role : user.getRoles()) {
+            // Generate access and refresh tokens for each role associated with the user.
             var roleAccessToken = jwtService.generateTokenWithRole(role, user);
-            var roleRefreshToken = jwtService.generateRefreshTokenWithRole(role,user);
+            var roleRefreshToken = jwtService.generateRefreshTokenWithRole(role, user);
+            // Build the login response for each role and add it to the list.
             loginResponses.add(LoginResponse.builder().role(role.getRoleName()).accessToken(roleAccessToken).refreshToken(roleRefreshToken).build());
-            logger.info("Role: {} | Token: {}  | refreshToken: {}", role.getRoleName(), roleAccessToken,roleRefreshToken);
-            System.out.println("Role: " + role.getRoleName() + " | Token: " + roleAccessToken);
+            // Log the role information.
+            logger.info("Role: {} | Token: {} | refreshToken: {}", role.getRoleName(), roleAccessToken, roleRefreshToken);
         }
         return loginResponses;
     }
 
-    public List<LoginResponse> addRoleToUser(Long id_user, Long id_role) {
+
+    public UserResponse addRoleToUser(Long id_user, Long id_role) {
         Optional<User> findUser = userRepository.findById(id_user);
         Optional<Role> findRole = roleRepository.findById(id_role);
         if (!findUser.isPresent()) {
@@ -112,18 +103,10 @@ public class UserServiceImpl implements UserService {
             throw new ResourceNotFoundException(Role.class.getSimpleName(), "id_role", String.valueOf(id_role));
         }
         User user = findUser.get();
-        List<Role> roles = new ArrayList<>();
-        roles.add(findRole.get());
-        user.setRoles(roles);
-        List<LoginResponse> loginResponses = new ArrayList<>();
-        for (Role role : user.getRoles()) {
-            var roleAccessToken = jwtService.generateTokenWithRole(role, user);
-            var roleRefreshToken = jwtService.generateRefreshTokenWithRole(role,user);
-            loginResponses.add(LoginResponse.builder().role(role.getRoleName()).accessToken(roleAccessToken).refreshToken(roleRefreshToken).build());
-            logger.info("Role: {} | Token: {}  | refreshToken: {}", role.getRoleName(), roleAccessToken,roleRefreshToken);
-            System.out.println("Role: " + role.getRoleName() + " | Token: " + roleAccessToken);
-        }
-        return loginResponses;
+        user.getRoles().add(
+                findRole.get()
+        );
+        return UserMapper.INSTANCE.entityToResponse(user);
     }
 
     public void deleteRoleFromUser(Long id_user, Long id_role) {
@@ -138,37 +121,32 @@ public class UserServiceImpl implements UserService {
             throw new ResourceNotFoundException(Role.class.getSimpleName(), "id_role", String.valueOf(id_role));
         }
         User appUser = findUser.get();
-        List<Role> roles = appUser.getRoles();
-        roles.remove(findRole.get());
-        appUser.setRoles(roles);
-        for (Role role : appUser.getRoles()) {
-            logger.info("Role: {} | Token: {}", role.getRoleName(), jwtService.generateTokenWithRole(role, appUser));
-        }
+        appUser.getRoles().remove(findRole.get());
     }
-    public  void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        final String authHeader =  request.getHeader(HttpHeaders.AUTHORIZATION);
-        final String refreshToken ;
+    public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+        final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+        final String refreshToken;
         final String username;
         final String roleName;
-        if(authHeader == null || !authHeader.startsWith("Bearer ")){
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             return;
         }
         refreshToken = authHeader.substring(7);
         username = jwtService.extractUsername(refreshToken);
-        roleName =jwtService.extractRoleFromToken(refreshToken);
+        roleName = jwtService.extractRoleFromToken(refreshToken);
         Optional<Role> findRole = roleRepository.findByRoleName(roleName);
-        if(username != null && findRole.isPresent()){
+        if (username != null && findRole.isPresent()) {
             Role role = findRole.get();
             var userDetails = userRepository.findByEmployeeCin(username).orElseThrow();
-            if(jwtService.isTokenValid(refreshToken,userDetails)){
-                var accessToken = jwtService.generateRefreshTokenWithRole(role ,userDetails);
+            if (jwtService.isTokenValid(refreshToken, userDetails)) {
+                var accessToken = jwtService.generateRefreshTokenWithRole(role, userDetails);
                 var authResponse = LoginResponse.builder()
                         .accessToken(accessToken)
                         .refreshToken(refreshToken)
                         .build();
-
-                new ObjectMapper().writeValue(response.getOutputStream(),authResponse);
+                new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
             }
         }
 

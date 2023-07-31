@@ -4,13 +4,16 @@ import com.giantLink.RH.entities.Employee;
 import com.giantLink.RH.entities.HolidayBalance;
 import com.giantLink.RH.entities.Permission;
 import com.giantLink.RH.entities.Role;
+import com.giantLink.RH.models.response.RoleResponse;
 import com.giantLink.RH.repositories.EmployeeRepository;
 import com.giantLink.RH.repositories.HolidayBalanceRepository;
 import com.giantLink.RH.repositories.PermissionRepository;
 import com.giantLink.RH.repositories.RoleRepository;
+import com.giantLink.RH.services.RoleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
@@ -23,6 +26,8 @@ public class DatabaseUtility {
     private final HolidayBalanceRepository holidayBalanceRepository;
     private final PermissionRepository permissionRepository;
     private final RoleRepository roleRepository;
+    private final RoleService roleService;
+
 
     public void initDatabase() {
         Logger.getLogger("Database utility").info("Seeding database ...");
@@ -117,32 +122,50 @@ public class DatabaseUtility {
     }
 
     public void initRoles() {
-//        Check table is empty
-        if (roleRepository.count() > 0) return;
+    // Check if roles already exist. If yes, no need to add them again.
+        if (roleRepository.count() > 0)
+            return;
 
-        Permission readPermission = Permission.builder().namePermission("READ").build();
-        Permission updatePermission = Permission.builder().namePermission("UPDATE").build();
-        Permission createPermission = Permission.builder().namePermission("CREATE").build();
-        Permission deletePermission = Permission.builder().namePermission("DELETE").build();
+    // Create individual permission objects for different actions.
+        Permission readPermission = Permission.builder().namePermission("ADMIN_READ").build();
+        Permission updatePermission = Permission.builder().namePermission("ADMIN_UPDATE").build();
+        Permission createPermission = Permission.builder().namePermission("ADMIN_CREATE").build();
+        Permission deletePermission = Permission.builder().namePermission("ADMIN_DELETE").build();
+        Permission readPermissionManager = Permission.builder().namePermission("MANAGER_READ").build();
+        Permission updatePermissionManager = Permission.builder().namePermission("MANAGER_UPDATE").build();
+        Permission createPermissionManager = Permission.builder().namePermission("MANAGER_CREATE").build();
+        Permission deletePermissionManager = Permission.builder().namePermission("MANAGER_DELETE").build();
 
+    // Save all the permissions to the database.
         permissionRepository.saveAll(Arrays.asList(
                 readPermission,
                 updatePermission,
                 createPermission,
-                deletePermission
+                deletePermission,
+                readPermissionManager,
+                updatePermissionManager,
+                createPermissionManager,
+                deletePermissionManager
         ));
-        List<Permission> permissions = Arrays.asList(
-                readPermission,
-                updatePermission,
-                createPermission,
-                deletePermission
-        );
 
+    // Create individual role objects and assign them role names.
         roleRepository.saveAll(Arrays.asList(
-                Role.builder().roleName("ADMIN_RH").permissions(permissions).build(),
-                Role.builder().roleName("MANAGER_RH").permissions(permissions).build(),
-                Role.builder().roleName("DIRECTOR").permissions(permissions).build()
+                Role.builder().roleName("ADMIN_RH").build(),
+                Role.builder().roleName("MANAGER_RH").build(),
+                Role.builder().roleName("DIRECTOR").build()
         ));
+
+    // Assign permissions to the "ADMIN_RH" role.
+        roleService.addPermissionToRole(1L, 1L); // ADMIN_READ
+        roleService.addPermissionToRole(1L, 2L); // ADMIN_UPDATE
+        roleService.addPermissionToRole(1L, 3L); // ADMIN_CREATE
+        roleService.addPermissionToRole(1L, 4L); // ADMIN_DELETE
+
+    // Assign permissions to the "MANAGER_RH" role.
+        roleService.addPermissionToRole(2L, 5L); // MANAGER_READ
+        roleService.addPermissionToRole(2L, 6L); // MANAGER_UPDATE
+        roleService.addPermissionToRole(2L, 7L); // MANAGER_CREATE
+        roleService.addPermissionToRole(2L, 8L); // MANAGER_DELETE
 
     }
 }

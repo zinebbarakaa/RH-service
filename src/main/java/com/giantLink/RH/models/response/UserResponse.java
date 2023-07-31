@@ -13,6 +13,7 @@ public class UserResponse {
 
     private Long id;
     private String username;
-    private List<Role> role;
     private Employee employee;
+    private List<Role> roles;
+
 }
