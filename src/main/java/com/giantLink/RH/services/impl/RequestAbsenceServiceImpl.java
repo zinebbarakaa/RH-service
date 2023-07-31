@@ -151,4 +151,22 @@ public class RequestAbsenceServiceImpl implements RequestAbsenceService {
 		 List<RequestAbsence> entities = requestAbsenceRepository.findBySickness(sickness);
 	        return RequestAbsenceMapper.INSTANCE.listToResponseList(entities);
 	}
+
+	@Override
+	public List<RequestAbsenceResponse> getRequestAbsenceByEmployeeId(Long id) {
+	    // Rechercher toutes les demandes d'absence associées à l'employé ayant l'ID spécifié
+	    List<RequestAbsence> requestAbsences = requestAbsenceRepository.findByEmployee(employeeRepository.findById(id).get());
+	    // Convertir les entités en objets de réponse
+	    return RequestAbsenceMapper.INSTANCE.listToResponseList(requestAbsences);
+	}
+
+
+
+	@Override
+	public List<RequestAbsenceResponse> getByEmployeeIsSickness(boolean sickness, Long id) {
+	    // Rechercher toutes les demandes d'absence associées à l'employé ayant l'ID spécifié et à la condition de maladie donnée
+	    List<RequestAbsence> requestAbsences = requestAbsenceRepository.findByEmployeeAndSickness(employeeRepository.findById(id).get(), sickness);
+	    // Convertir les entités en objets de réponse
+	    return RequestAbsenceMapper.INSTANCE.listToResponseList(requestAbsences);
+	}
 }

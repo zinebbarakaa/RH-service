@@ -26,6 +26,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
@@ -66,11 +67,17 @@ public class ScheduleUtility {
     }
 
 
-    @Scheduled(fixedRate = 40000)
+    @Scheduled(fixedRate = 86400000)
     public void checkJustificationAbsence() {
-        requestAbsenceRepository.findAll().forEach(requestAbsence -> {
-            long compareDate = new Date().compareTo(requestAbsence.getAbsenceDate());
-            if (compareDate == 1 && requestAbsence.isJustification() == false) {
+        
+        	LocalDate currentDate = LocalDate.now(); // Obtenir la date actuelle sans l'heure
+
+            requestAbsenceRepository.findAll().forEach(requestAbsence -> {
+                LocalDate absenceDate = requestAbsence.getAbsenceDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+                // Comparer les dates par jour
+                int compareDate = currentDate.compareTo(absenceDate);
+                if (compareDate == 30 && !requestAbsence.isJustification()) {
                 Warning warning = new Warning();
                 warning.setEmployee(requestAbsence.getEmployee());
                 warning.setWarningType(warningTypeRepository.findByTitle("Unjustified Absence").get());

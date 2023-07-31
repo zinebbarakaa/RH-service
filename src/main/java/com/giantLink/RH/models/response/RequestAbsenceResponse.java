@@ -31,6 +31,7 @@ public class RequestAbsenceResponse {
 	private String reason;
 	private String justfication;
 	private Employee employee;
+	private RequestStatus status;
 	private String message;
 
 }

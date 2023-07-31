@@ -11,5 +11,7 @@ public interface RequestAbsenceService extends CrudService<RequestAbsenceRequest
 	
 	public RequestAbsenceResponse updateJustification(RequestAbscenceUpdateRequest requestUpdate,Long id);
 	public List<RequestAbsenceResponse> getIsSickness(boolean sickness);
+	public List<RequestAbsenceResponse> getRequestAbsenceByEmployeeId(Long id);
+	public List<RequestAbsenceResponse> getByEmployeeIsSickness(boolean sickness , Long id);
 
 }

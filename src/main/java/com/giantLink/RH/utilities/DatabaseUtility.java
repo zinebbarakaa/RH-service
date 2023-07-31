@@ -1,15 +1,24 @@
 package com.giantLink.RH.utilities;
 
+import com.giantLink.RH.entities.Employee;
+import com.giantLink.RH.entities.HolidayBalance;
+import com.giantLink.RH.entities.RequestHoliday;
+import com.giantLink.RH.entities.RequestStatus;
+import com.giantLink.RH.repositories.EmployeeRepository;
+import com.giantLink.RH.repositories.HolidayBalanceRepository;
+import com.giantLink.RH.repositories.RequestHolidayRepository;
+import com.giantLink.RH.repositories.RequestStatusRepository;
 import com.giantLink.RH.entities.*;
 import com.giantLink.RH.enums.State;
 import com.giantLink.RH.models.request.WarningRequest;
 import com.giantLink.RH.repositories.*;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
+import java.util.Optional;
 import java.util.Calendar;
 import java.util.logging.Logger;
 
@@ -23,7 +32,6 @@ public class DatabaseUtility {
     RequestStatusRepository requestStatusRepository;
     @Autowired
     RequestHolidayRepository requestHolidayRepository;
-
     @Autowired
     WarningTypeRepository warningTypeRepository;
 
@@ -32,13 +40,28 @@ public class DatabaseUtility {
 
     public void initDatabase() {
         Logger.getLogger("Database utility").info("Seeding database ...");
+        iniRequestStatus();
         initEmployees();
         initWarningTypes();
+//        initHolidayRequest();
+
         initRequestHoliday();
         Logger.getLogger("Database utility").info("Database seeding complete");
     }
 
-    public void initEmployees() {
+    public void iniRequestStatus(){
+        if (requestStatusRepository.count() > 0) return;
+        RequestStatus requestStatus1 = RequestStatus.builder().type(State.PENDING).build();
+        RequestStatus requestStatus2 = RequestStatus.builder().type(State.ACCEPTED).build();
+        RequestStatus requestStatus3 = RequestStatus.builder().type(State.REFUSED).build();
+        requestStatusRepository.saveAll(Arrays.asList(
+                requestStatus1,
+                requestStatus2,
+                requestStatus3
+        ));
+
+    }
+    public void initEmployees(){
 //        Check table is empty
         if (employeeRepository.count() > 0) return;
 
@@ -119,6 +142,55 @@ public class DatabaseUtility {
                 employee5,
                 employee6,
                 employee7
+        ));
+    }
+    public void initHolidayRequest() {
+        if (requestHolidayRepository.count() > 0) return;
+        Employee employee1 = employeeRepository.findById(1L).get();
+        Employee employee2 = employeeRepository.findById(5L).get();
+        Employee employee3 = employeeRepository.findById(3L).get();
+
+        RequestStatus requestStatus1 = requestStatusRepository.findById(1L).get();
+        RequestStatus requestStatus2 = requestStatusRepository.findById(2L).get();
+        RequestStatus requestStatus3 = requestStatusRepository.findById(3L).get();
+
+        RequestHoliday requestHoliday1 = RequestHoliday.builder()
+                .numberOfDays(5)
+                .startDate(new Date())
+                .returnDate(new Date())
+                .finishDate(new Date())
+                .numberOfPaidLeaves(0L)
+                .numberOfUnpaidLeaves(1L)
+                .build();
+        RequestHoliday requestHoliday2 = RequestHoliday.builder()
+                .numberOfDays(4)
+                .startDate(new Date())
+                .returnDate(new Date())
+                .finishDate(new Date())
+                .numberOfPaidLeaves(0L)
+                .numberOfUnpaidLeaves(1L)
+                .build();
+        RequestHoliday requestHoliday3 = RequestHoliday.builder()
+                .numberOfDays(3)
+                .startDate(new Date())
+                .returnDate(new Date())
+                .finishDate(new Date())
+                .numberOfPaidLeaves(0L)
+                .numberOfUnpaidLeaves(1L)
+                .build();
+
+        requestHoliday1.setEmployee(employee3);
+        requestHoliday2.setEmployee(employee1);
+        requestHoliday3.setEmployee(employee2);
+
+        requestHoliday1.setStatus(requestStatus1);
+        requestHoliday2.setStatus(requestStatus2);
+        requestHoliday3.setStatus(requestStatus3);
+
+        requestHolidayRepository.saveAll(Arrays.asList(
+                requestHoliday1,
+                requestHoliday2,
+                requestHoliday3
         ));
     }
 

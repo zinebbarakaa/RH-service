@@ -98,4 +98,18 @@ public class RequestAbsenceController {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
     }
+    @GetMapping("/employee/{id}")
+    public List<RequestAbsenceResponse> getRequestAbsenceByEmployeeId(@PathVariable Long id) {
+        return requestAbsenceService.getRequestAbsenceByEmployeeId(id);
+    }
+    
+    @GetMapping("/employee/sickness/{id}")
+    public List<RequestAbsenceResponse> getSicknessByEmployee(@PathVariable Long id ) {
+        return requestAbsenceService.getByEmployeeIsSickness(true, id);
+    }
+    
+    @GetMapping("/employee/absence/{id}")
+    public List<RequestAbsenceResponse> getAbsenceByEmployee(@PathVariable Long id ) {
+        return requestAbsenceService.getByEmployeeIsSickness(false, id);
+    }
 }

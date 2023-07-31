@@ -9,5 +9,8 @@ public interface CrudService <RQ,RS,ET,ID>
 	RS update(RQ request, ID id);
 	void delete(ID id);
 	RS get(ID id);
+//	List<RS> getRequestHolidayByEmployeeId(ID id);
+
+
 
 }
