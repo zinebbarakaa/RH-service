@@ -7,6 +7,7 @@ import com.giantLink.RH.entities.User;
 import com.giantLink.RH.exceptions.ResourceNotFoundException;
 import com.giantLink.RH.models.request.LoginRequest;
 import com.giantLink.RH.models.request.RegisterRequest;
+import com.giantLink.RH.models.request.UpdateProfileRequest;
 import com.giantLink.RH.models.response.LoginResponse;
 import com.giantLink.RH.repositories.EmployeeRepository;
 import com.giantLink.RH.repositories.UserRepository;
@@ -188,26 +189,31 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateProfile(User updatedUser) {
-        User user = getAuthenticatedUser();
-        if (!user.getId().equals(updatedUser.getId())) {
-            throw new AccessDeniedException("Vous n'êtes pas autorisé à mettre à jour le profil d'un autre utilisateur");
-        }
-        boolean hasEmployeeRole = user.getRoles().stream()
-                .anyMatch(role -> role.getRoleName().equals("ADMIN_RH"));
+    public void updateUserProfile(Employee employee, UpdateProfileRequest updateRequest) {
 
-        if (!hasEmployeeRole) {
-            throw new AccessDeniedException("Vous n'avez pas la permission de mettre à jour le profil car vous n'avez pas le rôle EMPLOYEE.");
-        }
-        Employee employee = user.getEmployee();
-        employee.setFirstName(updatedUser.getEmployee().getFirstName());
-        employee.setLastName(updatedUser.getEmployee().getLastName());
-        employee.setEmail(updatedUser.getEmployee().getEmail());
-        employee.setPhone(updatedUser.getEmployee().getPhone());
+            if (updateRequest.getFirstName() != null) {
+                employee.setFirstName(updateRequest.getFirstName());
+            }
+            if (updateRequest.getLastName() != null) {
+                employee.setLastName(updateRequest.getLastName());
+            }
+            if (updateRequest.getEmail() != null) {
+                employee.setEmail(updateRequest.getEmail());
+            }
+            if (updateRequest.getPhone() != null) {
+                employee.setPhone(updateRequest.getPhone());
+            }
+            if(updateRequest.getCin() !=null) {
+                employee.setCin(updateRequest.getCin());
+            }
 
-        // Enregistrez les modifications dans la base de données
-        employeeRepository.save(employee);
-        return user;
+            employeeRepository.save(employee);
+    }
+
+
+    @Override
+    public User findByUserName(String username) {
+        return userRepository.findByUsername(username);
     }
 
 }
