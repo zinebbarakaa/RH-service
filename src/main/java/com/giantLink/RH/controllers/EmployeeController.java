@@ -1,10 +1,13 @@
 package com.giantLink.RH.controllers;
 import java.util.List;
 
+import com.giantLink.RH.entities.User;
 import com.giantLink.RH.models.response.SuccessResponse;
+import com.giantLink.RH.services.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -16,15 +19,16 @@ import com.giantLink.RH.services.EmployeeService;
 
 @CrossOrigin("*")
 @RestController
-@RequestMapping("api/v1/employees")
+@RequestMapping(value = "/api/v1/employees", consumes = MediaType.APPLICATION_JSON_VALUE)
 @PreAuthorize("hasRole('ADMIN_RH')")
 public class EmployeeController
 {
     @Autowired
     private EmployeeService employeeService;
+    @Autowired
+    private UserService userService;
 
     @PostMapping
-
     @PreAuthorize("hasAuthority('CREATE')")
 
     public ResponseEntity<EmployeeResponse> addEmployee(@RequestBody @Validated EmployeeRequest request)
@@ -65,4 +69,5 @@ public class EmployeeController
                 .build();
         return new ResponseEntity<>(successResponse, HttpStatus.OK);
     }
+
 }

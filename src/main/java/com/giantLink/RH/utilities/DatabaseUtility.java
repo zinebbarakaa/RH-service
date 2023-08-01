@@ -3,7 +3,6 @@ package com.giantLink.RH.utilities;
 
 import com.giantLink.RH.entities.*;
 import com.giantLink.RH.enums.State;
-import com.giantLink.RH.models.request.WarningRequest;
 import com.giantLink.RH.repositories.*;
 
 import org.springframework.beans.factory.annotation.Autowired;

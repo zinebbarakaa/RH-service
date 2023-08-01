@@ -18,8 +18,10 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -173,4 +175,39 @@ public class UserServiceImpl implements UserService {
         }
 
     }
+
+
+    @Override
+    public User getAuthenticatedUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null) {
+            return null;
+        }
+        String username = authentication.getName();
+        return userRepository.findByUsername(username);
+    }
+
+    @Override
+    public User updateProfile(User updatedUser) {
+        User user = getAuthenticatedUser();
+        if (!user.getId().equals(updatedUser.getId())) {
+            throw new AccessDeniedException("Vous n'êtes pas autorisé à mettre à jour le profil d'un autre utilisateur");
+        }
+        boolean hasEmployeeRole = user.getRoles().stream()
+                .anyMatch(role -> role.getRoleName().equals("ADMIN_RH"));
+
+        if (!hasEmployeeRole) {
+            throw new AccessDeniedException("Vous n'avez pas la permission de mettre à jour le profil car vous n'avez pas le rôle EMPLOYEE.");
+        }
+        Employee employee = user.getEmployee();
+        employee.setFirstName(updatedUser.getEmployee().getFirstName());
+        employee.setLastName(updatedUser.getEmployee().getLastName());
+        employee.setEmail(updatedUser.getEmployee().getEmail());
+        employee.setPhone(updatedUser.getEmployee().getPhone());
+
+        // Enregistrez les modifications dans la base de données
+        employeeRepository.save(employee);
+        return user;
+    }
+
 }

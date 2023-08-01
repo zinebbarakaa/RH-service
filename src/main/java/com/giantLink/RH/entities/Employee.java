@@ -56,7 +56,7 @@ public class Employee
 
 	@Temporal(TemporalType.TIMESTAMP)
 
-	@OneToOne (mappedBy = "employee")
+	@OneToOne (mappedBy = "employee", cascade = CascadeType.ALL)
 	private User user;
 
 	private Date updatedAt;
