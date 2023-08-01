@@ -54,6 +54,10 @@ public class Employee
     @JsonBackReference
     private Set<Request> requests;
 
+	@OneToMany(mappedBy = "employee", cascade = CascadeType.REMOVE)
+    @JsonBackReference
+    private Set<ApprovedLeave> approvedLeaves;
+
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date updatedAt;
 	@Temporal(TemporalType.TIMESTAMP)

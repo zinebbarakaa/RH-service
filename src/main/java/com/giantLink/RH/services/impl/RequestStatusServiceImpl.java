@@ -103,6 +103,9 @@ public class RequestStatusServiceImpl implements RequestStatusService {
                 employeeRepository.save(employee);
                 requestStatus.get().setType(State.ACCEPTED);
                 requestStatus.get().setMessageDetails(String.format("Your holiday request has been accepted. You have sufficient holiday balance to cover the requested duration. Enjoy your well-deserved time off from %s to %s. We hope you have a wonderful vacation!", dateFormat.format(requestHoliday.get().getStartDate()), dateFormat.format(requestHoliday.get().getFinishDate())));
+                ////////------- Add this holiday to be accessible to the employee -------////////
+
+                //////// ----------------------------------------------------------------////////
                 return RequestStatusMapper.INSTANCE.entityToResponse(requestStatusRepository.save(requestStatus.get()));
             }
         } else {
