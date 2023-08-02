@@ -1,6 +1,5 @@
 package com.giantLink.RH.utilities;
 
-
 import com.giantLink.RH.entities.*;
 import com.giantLink.RH.enums.State;
 import com.giantLink.RH.repositories.*;
@@ -11,23 +10,37 @@ import com.giantLink.RH.entities.Employee;
 import com.giantLink.RH.entities.HolidayBalance;
 import com.giantLink.RH.entities.Permission;
 import com.giantLink.RH.entities.Role;
+import com.giantLink.RH.models.response.RoleResponse;
 import com.giantLink.RH.repositories.EmployeeRepository;
 import com.giantLink.RH.repositories.HolidayBalanceRepository;
 import com.giantLink.RH.repositories.PermissionRepository;
 import com.giantLink.RH.repositories.RoleRepository;
+import com.giantLink.RH.services.RoleService;
 import lombok.RequiredArgsConstructor;
+
+import com.giantLink.RH.entities.RequestHoliday;
+import com.giantLink.RH.entities.RequestStatus;
+import com.giantLink.RH.repositories.EmployeeRepository;
+import com.giantLink.RH.repositories.HolidayBalanceRepository;
+import com.giantLink.RH.repositories.RequestHolidayRepository;
+import com.giantLink.RH.repositories.RequestStatusRepository;
+import com.giantLink.RH.entities.*;
+import com.giantLink.RH.enums.State;
+import com.giantLink.RH.repositories.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
 import java.util.Calendar;
 
 import java.util.List;
+import java.util.Date;
+import java.util.Optional;
+import java.util.Calendar;
 import java.util.logging.Logger;
 
 @Component
-@RequiredArgsConstructor
 public class DatabaseUtility {
 
     @Autowired
@@ -38,26 +51,43 @@ public class DatabaseUtility {
     RequestStatusRepository requestStatusRepository;
     @Autowired
     RequestHolidayRepository requestHolidayRepository;
-
     @Autowired
     WarningTypeRepository warningTypeRepository;
-
+    @Autowired
+    PermissionRepository permissionRepository;
+    @Autowired
+    RoleRepository roleRepository;
+    @Autowired
+    RoleService roleService;
     @Autowired
     WarningRepository warningRepository;
-
-    private final PermissionRepository permissionRepository;
-    private final RoleRepository roleRepository;
 
     public void initDatabase() {
         Logger.getLogger("Database utility").info("Seeding database ...");
         initRoles();
+        iniRequestStatus();
         initEmployees();
         initWarningTypes();
         initRequestHoliday();
         Logger.getLogger("Database utility").info("Database seeding complete");
     }
 
+
+    public void iniRequestStatus() {
+        if (requestStatusRepository.count() > 0) return;
+        RequestStatus requestStatus1 = RequestStatus.builder().type(State.PENDING).build();
+        RequestStatus requestStatus2 = RequestStatus.builder().type(State.ACCEPTED).build();
+        RequestStatus requestStatus3 = RequestStatus.builder().type(State.REFUSED).build();
+        requestStatusRepository.saveAll(Arrays.asList(
+                requestStatus1,
+                requestStatus2,
+                requestStatus3
+        ));
+
+    }
+
     public void initEmployees() {
+
 //        Check table is empty
         if (employeeRepository.count() > 0) return;
 
@@ -143,35 +173,53 @@ public class DatabaseUtility {
     }
 
     public void initRoles() {
-//        Check table is empty
-        if (roleRepository.count() > 0) return;
+        // Check if roles already exist. If yes, no need to add them again.
+        if (roleRepository.count() > 0)
+            return;
 
-        Permission readPermission = Permission.builder().namePermission("READ").build();
-        Permission updatePermission = Permission.builder().namePermission("UPDATE").build();
-        Permission createPermission = Permission.builder().namePermission("CREATE").build();
-        Permission deletePermission = Permission.builder().namePermission("DELETE").build();
+        // Create individual permission objects for different actions.
+        Permission readPermission = Permission.builder().namePermission("ADMIN_READ").build();
+        Permission updatePermission = Permission.builder().namePermission("ADMIN_UPDATE").build();
+        Permission createPermission = Permission.builder().namePermission("ADMIN_CREATE").build();
+        Permission deletePermission = Permission.builder().namePermission("ADMIN_DELETE").build();
+        Permission readPermissionManager = Permission.builder().namePermission("MANAGER_READ").build();
+        Permission updatePermissionManager = Permission.builder().namePermission("MANAGER_UPDATE").build();
+        Permission createPermissionManager = Permission.builder().namePermission("MANAGER_CREATE").build();
+        Permission deletePermissionManager = Permission.builder().namePermission("MANAGER_DELETE").build();
 
+        // Save all the permissions to the database.
         permissionRepository.saveAll(Arrays.asList(
                 readPermission,
                 updatePermission,
                 createPermission,
-                deletePermission
+                deletePermission,
+                readPermissionManager,
+                updatePermissionManager,
+                createPermissionManager,
+                deletePermissionManager
         ));
-        List<Permission> permissions = Arrays.asList(
-                readPermission,
-                updatePermission,
-                createPermission,
-                deletePermission
-        );
 
+        // Create individual role objects and assign them role names.
         roleRepository.saveAll(Arrays.asList(
-                Role.builder().roleName("ADMIN_RH").permissions(permissions).build(),
-                Role.builder().roleName("MANAGER_RH").permissions(permissions).build(),
-                Role.builder().roleName("DIRECTOR").permissions(permissions).build(),
-                Role.builder().roleName("EMPLOYEE").permissions(permissions).build()
+                Role.builder().roleName("ADMIN_RH").build(),
+                Role.builder().roleName("MANAGER_RH").build(),
+                Role.builder().roleName("DIRECTOR").build()
         ));
+
+        // Assign permissions to the "ADMIN_RH" role.
+        roleService.addPermissionToRole(1L, 1L); // ADMIN_READ
+        roleService.addPermissionToRole(1L, 2L); // ADMIN_UPDATE
+        roleService.addPermissionToRole(1L, 3L); // ADMIN_CREATE
+        roleService.addPermissionToRole(1L, 4L); // ADMIN_DELETE
+
+        // Assign permissions to the "MANAGER_RH" role.
+        roleService.addPermissionToRole(2L, 5L); // MANAGER_READ
+        roleService.addPermissionToRole(2L, 6L); // MANAGER_UPDATE
+        roleService.addPermissionToRole(2L, 7L); // MANAGER_CREATE
+        roleService.addPermissionToRole(2L, 8L); // MANAGER_DELETE
 
     }
+
 
     public void initWarningTypes() {
 
@@ -220,3 +268,4 @@ public class DatabaseUtility {
 
     }
 }
+

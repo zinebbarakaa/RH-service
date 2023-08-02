@@ -6,6 +6,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -24,9 +25,9 @@ import lombok.Setter;
 @NoArgsConstructor
 public class RequestAbsence extends Request {
 	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private boolean sickness;
+	private String reason;
+	private boolean justification;
 	@Temporal(TemporalType.DATE)
     @DateTimeFormat(style = "dd-MM-yyyy")
 	@JsonFormat(pattern = "dd-MM-yyyy" )
@@ -37,9 +38,6 @@ public class RequestAbsence extends Request {
 	@Temporal(TemporalType.TIME)
     @DateTimeFormat(style = "HH:mm")
 	private Date entryTime;
-	private boolean sickness;
-	private String reason;
-	private boolean justification;
 	
 	
 

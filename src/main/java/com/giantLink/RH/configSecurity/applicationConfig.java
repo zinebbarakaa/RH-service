@@ -20,12 +20,14 @@ public class applicationConfig {
 
     private final UserRepository userRepository;
 
+    // Define the UserDetailsService bean to load user details based on the username
     @Bean
     public UserDetailsService userDetailsService() {
         return username -> userRepository.findByEmployeeCin(username)
                 .orElseThrow(() -> new UsernameNotFoundException("username not found"));
     }
 
+    // Define the AuthenticationProvider bean to use the DaoAuthenticationProvider with custom UserDetailsService and PasswordEncoder
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
@@ -34,11 +36,13 @@ public class applicationConfig {
         return daoAuthenticationProvider;
     }
 
+    // Define the AuthenticationManager bean to retrieve the AuthenticationManager from the AuthenticationConfiguration
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
 
+    // Define the PasswordEncoder bean to use BCryptPasswordEncoder for password hashing
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
