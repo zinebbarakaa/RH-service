@@ -24,7 +24,7 @@ public class Attachment {
 
     public Attachment(String fileName, String contentType, byte[] bytes) {
     }
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "employeeId")
     @JsonBackReference
     private Employee employee;

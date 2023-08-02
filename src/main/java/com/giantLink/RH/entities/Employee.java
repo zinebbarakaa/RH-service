@@ -54,7 +54,9 @@ public class Employee
     @JsonBackReference
     private Set<Request> requests;
 
-	@Temporal(TemporalType.TIMESTAMP)
+
+	@OneToOne (mappedBy = "employee")
+	private User user;
 	private Date updatedAt;
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date createdAt;    
