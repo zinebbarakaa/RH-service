@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "8b8afc59-189e-4e40-90b6-771bbfb42e75",
+		"_postman_id": "af7e63cb-83ef-4725-b955-3056604eee5b",
 		"name": "Rh service",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "28324967"
+		"_exporter_id": "21879241"
 	},
 	"item": [
 		{
@@ -46,6 +46,16 @@
 				{
 					"name": "Get all employees",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU5fUkgiLCJ1c2VySWQiOjEsInN1YiI6Ino1NTU4ODgiLCJpYXQiOjE2OTA5NzQ3OTgsImV4cCI6MTY5MDk3NTc5OH0.Z6PuQtC6_7MfPIev0Ak-SNYgkCKz-K_8_T-zekhqD1g",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -833,6 +843,36 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Update Request Status By RequestHolidayId Copy",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"id\": 1,\r\n        \"type\": \"ACCEPTED\",\r\n        \"messageDetails\": \"YOUR REQUEST HAS BEEN ACCEPTED, CONGRATS!\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:2023/requestStatus/updateStatus/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "2023",
+							"path": [
+								"requestStatus",
+								"updateStatus",
+								"1"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -955,6 +995,143 @@
 								"api",
 								"holidaybalances",
 								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Security",
+			"item": [
+				{
+					"name": "Registser",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"password\":\"0000\",\r\n    \"id_employee\":\"2\",\r\n    \"roles\":[\r\n        {\r\n        \"roleName\":\"ADMIN_RH\"\r\n    }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:2023/api/auth/register",
+							"host": [
+								"localhost"
+							],
+							"port": "2023",
+							"path": [
+								"api",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n     \"username\":\"z555888\",\r\n      \"password\":\"0000\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:2023/api/auth/login",
+							"host": [
+								"localhost"
+							],
+							"port": "2023",
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AddRoleToUser",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/auth/addrole/5/3",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"addrole",
+								"5",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "refresh-token",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU5fUkgiLCJ1c2VySWQiOjEsInN1YiI6ImNkMjU2ODQxIiwiaWF0IjoxNjkwODAxNjg4LCJleHAiOjE2OTA4MDg2ODh9.9xS7z_JiotXD0PwgaFAoVaCrtXnYx-HxRHcB99GpYEA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:2023/api/v1/auth/refresh-token",
+							"host": [
+								"localhost"
+							],
+							"port": "2023",
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"refresh-token"
 							]
 						}
 					},
