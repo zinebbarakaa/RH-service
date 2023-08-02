@@ -167,7 +167,8 @@ public class DatabaseUtility {
         roleRepository.saveAll(Arrays.asList(
                 Role.builder().roleName("ADMIN_RH").permissions(permissions).build(),
                 Role.builder().roleName("MANAGER_RH").permissions(permissions).build(),
-                Role.builder().roleName("DIRECTOR").permissions(permissions).build()
+                Role.builder().roleName("DIRECTOR").permissions(permissions).build(),
+                Role.builder().roleName("EMPLOYEE").permissions(permissions).build()
         ));
 
     }

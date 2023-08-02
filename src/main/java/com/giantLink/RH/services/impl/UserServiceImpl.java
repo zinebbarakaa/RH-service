@@ -190,26 +190,20 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateUserProfile(Employee employee, UpdateProfileRequest updateRequest) {
-
-            if (updateRequest.getFirstName() != null) {
-                employee.setFirstName(updateRequest.getFirstName());
-            }
-            if (updateRequest.getLastName() != null) {
-                employee.setLastName(updateRequest.getLastName());
-            }
-            if (updateRequest.getEmail() != null) {
-                employee.setEmail(updateRequest.getEmail());
-            }
-            if (updateRequest.getPhone() != null) {
-                employee.setPhone(updateRequest.getPhone());
-            }
-            if(updateRequest.getCin() !=null) {
-                employee.setCin(updateRequest.getCin());
-            }
-
-            employeeRepository.save(employee);
+        if (updateRequest.getFirstName() != null) {
+            employee.setFirstName(updateRequest.getFirstName());
+        }
+        if (updateRequest.getLastName() != null) {
+            employee.setLastName(updateRequest.getLastName());
+        }
+        if (updateRequest.getEmail() != null) {
+            employee.setEmail(updateRequest.getEmail());
+        }
+        if (updateRequest.getPhone() != null) {
+            employee.setPhone(updateRequest.getPhone());
+        }
+        employeeRepository.save(employee);
     }
-
 
     @Override
     public User findByUserName(String username) {

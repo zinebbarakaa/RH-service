@@ -2,11 +2,9 @@ package com.giantLink.RH.controllers;
 
 import com.giantLink.RH.entities.Employee;
 import com.giantLink.RH.entities.User;
-import com.giantLink.RH.models.request.UpdateProfileRequest;
+import com.giantLink.RH.models.request.PayrollRequest;
 import com.giantLink.RH.models.response.PayrollResponse;
 import com.giantLink.RH.services.PayrollService;
-import com.giantLink.RH.services.UserService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,48 +13,41 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/employees/")
-@RequiredArgsConstructor
-public class ProfileController {
+@RequestMapping("/api/payrolle")
+public class PayrollController {
 
-    @Autowired
-    private UserService userService;
     @Autowired
     private PayrollService payrollService;
 
-    @GetMapping("/profile")
-    @PreAuthorize("hasAnyRole('ADMIN_RH','EMPLOYEE','MANAGER_RH','DIRECTOR')")
-    public ResponseEntity<User> getAuthenticatedUser() {
+    @PostMapping
+    @PreAuthorize("hasRole('ADMIN_RH')")
+    public ResponseEntity<PayrollResponse> createPayroll(@RequestBody PayrollRequest payrollRequest) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null) {
+        if (authentication == null || !authentication.isAuthenticated()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        User authenticatedUser = (User) authentication.getPrincipal();
-        return ResponseEntity.ok(authenticatedUser);
+
+        PayrollResponse response = payrollService.createPayroll(payrollRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
-    @PutMapping("/update-profile")
-    @PreAuthorize("hasAnyRole('ADMIN_RH','EMPLOYEE','MANAGER_RH','DIRECTOR')")
-    public ResponseEntity<String> updateProfile(@RequestBody UpdateProfileRequest updateRequest) {
+    @PutMapping("/{payrollId}")
+    @PreAuthorize("hasRole('ADMIN_RH')")
+    public ResponseEntity<PayrollResponse> updatePayroll(@PathVariable Long payrollId, @RequestBody PayrollRequest payrollRequest) {
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated.");
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        User authenticatedUser = (User) authentication.getPrincipal();
-        Employee employee = authenticatedUser.getEmployee();
-
-        userService.updateUserProfile(employee, updateRequest);
-
-        return ResponseEntity.ok("Profil mis à jour avec succès.");
+        PayrollResponse response = payrollService.updatePayroll(payrollId, payrollRequest);
+        return ResponseEntity.ok(response);
     }
 
-
     @GetMapping("/{payrollId}")
-    @PreAuthorize("hasAnyRole('EMPLOYEE')")
+    @PreAuthorize("hasAnyRole('ADMIN_RH')")
     public ResponseEntity<PayrollResponse> getPayrollById(@PathVariable Long payrollId) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -68,8 +59,8 @@ public class ProfileController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/list-payroll")
-    @PreAuthorize("hasRole('EMPLOYEE')")
+    @GetMapping
+    @PreAuthorize("hasRole('ADMIN_RH')")
     public ResponseEntity<List<PayrollResponse>> getAllPayrolls() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated()) {

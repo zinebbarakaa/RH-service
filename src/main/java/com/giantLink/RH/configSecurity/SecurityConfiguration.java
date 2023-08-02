@@ -35,7 +35,7 @@ public class SecurityConfiguration {
                         .requestMatchers(POST, "api/v1/employees/**").hasAnyAuthority("CREATE")
                         .requestMatchers(PUT,"api/v1/employees/**").hasAnyAuthority("UPDATE")
                         .requestMatchers(DELETE, "api/v1/employees/**").hasAnyAuthority("DELETE")
-                        .requestMatchers("api/v1/employees").hasAnyRole("ADMIN_RH","MANAGER_RH")
+                        .requestMatchers("api/v1/employees").hasAnyRole("ADMIN_RH","MANAGER_RH","EMPLOYEE")
                         .anyRequest().authenticated())
                 .authenticationProvider(authenticationProvider)
               .exceptionHandling(httpSecurityExceptionHandlingConfigurer -> httpSecurityExceptionHandlingConfigurer.authenticationEntryPoint(tokenAuthenticationException))
