@@ -1,45 +1,11 @@
 {
 	"info": {
-		"_postman_id": "a7653cdc-3b26-4877-b69f-d2f42e598b9c",
+		"_postman_id": "c23c01e0-b311-44de-a1a9-8307615da3b0",
 		"name": "Rh service",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "21879241"
+		"_exporter_id": "28315815"
 	},
 	"item": [
-		{
-			"name": "RequestHoliday",
-			"item": [
-				{
-					"name": "Add Holiday Request",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"numberofdays\": 5,\r\n    \"startDate\": \"2023-07-15\",\r\n    \"finishDate\": \"2023-07-20\",\r\n    \"employee_id\": 110\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:2023/api/request-holidays",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "2023",
-							"path": [
-								"api",
-								"request-holidays"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
 		{
 			"name": "Employee",
 			"item": [
@@ -144,12 +110,12 @@
 					"response": []
 				},
 				{
-					"name": "Detach holiday balance from employee",
+					"name": "Delete employee",
 					"request": {
-						"method": "PATCH",
+						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:2023/api/employees/1/detachholidaybalance",
+							"raw": "http://localhost:2023/api/employees/10",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -158,37 +124,55 @@
 							"path": [
 								"api",
 								"employees",
-								"1",
-								"detachholidaybalance"
+								"10"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Delete employee",
+					"name": "Authentification",
 					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:2023/api/employees/1",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "2023",
-							"path": [
-								"api",
-								"employees",
-								"1"
-							]
-						}
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "register",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "profile",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "add payrolle",
+					"request": {
+						"method": "GET",
+						"header": []
 					},
 					"response": []
 				}
 			]
 		},
 		{
+<<<<<<< HEAD
+			"name": "update-profile",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+=======
 			"name": "Warning Type",
 			"item": [
 				{
@@ -1115,6 +1099,7 @@
 					"response": []
 				}
 			]
+>>>>>>> df9a0cb8093bd50a887cde45f0bc56d232d2c9ef
 		}
 	]
 }

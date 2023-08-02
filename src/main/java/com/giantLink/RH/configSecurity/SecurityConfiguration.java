@@ -32,6 +32,7 @@ public class SecurityConfiguration {
                 .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 // Define authorization rules for specific HTTP requests
                 .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry -> authorizationManagerRequestMatcherRegistry
+
                         // Allow unauthenticated access to API endpoints related to authentication
                         .requestMatchers("api/auth/**").permitAll()
                         .requestMatchers(GET,"api/employees/**").hasAnyAuthority("ADMIN_READ")
@@ -40,6 +41,7 @@ public class SecurityConfiguration {
                         .requestMatchers(DELETE, "api/employees/**").hasAnyAuthority("ADMIN_DELETE")
                         .requestMatchers("api/employees").hasAnyRole("ADMIN_RH","MANAGER_RH")
                         // For all other requests, user must be authenticated
+
                         .anyRequest().authenticated())
                 // Configure the custom authentication provider
                 .authenticationProvider(authenticationProvider)
