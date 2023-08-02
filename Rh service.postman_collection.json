@@ -46,6 +46,16 @@
 				{
 					"name": "Get all employees",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU5fUkgiLCJ1c2VySWQiOjEsInN1YiI6Ino1NTU4ODgiLCJpYXQiOjE2OTA5NzQ3OTgsImV4cCI6MTY5MDk3NTc5OH0.Z6PuQtC6_7MfPIev0Ak-SNYgkCKz-K_8_T-zekhqD1g",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -972,7 +982,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"username\":\"\",\r\n    \"password\":\"0000\",\r\n    \"id_employee\":\"2\",\r\n    \"roles\":[\r\n        {\r\n        \"roleName\":\"ADMIN_RH\"\r\n    }\r\n    ]\r\n}",
+							"raw": "{\r\n    \"password\":\"0000\",\r\n    \"id_employee\":\"2\",\r\n    \"roles\":[\r\n        {\r\n        \"roleName\":\"ADMIN_RH\"\r\n    }\r\n    ]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -980,15 +990,15 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:2023/api/v1/qualification",
+							"raw": "localhost:2023/api/auth/register",
 							"host": [
 								"localhost"
 							],
 							"port": "2023",
 							"path": [
 								"api",
-								"v1",
-								"qualification"
+								"auth",
+								"register"
 							]
 						}
 					},
@@ -1011,7 +1021,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n     \"username\":\"cd256841\",\r\n      \"password\":\"0000\"\r\n}",
+							"raw": "{\r\n     \"username\":\"z555888\",\r\n      \"password\":\"0000\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1019,14 +1029,13 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:2023/api/v1/auth/login",
+							"raw": "localhost:2023/api/auth/login",
 							"host": [
 								"localhost"
 							],
 							"port": "2023",
 							"path": [
 								"api",
-								"v1",
 								"auth",
 								"login"
 							]
