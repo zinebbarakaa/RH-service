@@ -8,11 +8,13 @@ import com.giantLink.RH.services.PredefinedHolidayService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@PreAuthorize("hasRole('ADMIN_RH')")
 @RequestMapping("api/holiday")
 public class HolidayController {
 
@@ -21,10 +23,12 @@ public class HolidayController {
     @Autowired
     ApprovedLeaveService approvedLeaveService;
 
+    @PreAuthorize("hasAuthority('ADMIN_READ')")
     @GetMapping("/predefined-holidays")
     public ResponseEntity<List<PredefinedHolidayResponse>> getPredefined(){
         return new ResponseEntity<>(predefinedHolidayService.get(), HttpStatus.OK);
     }
+    @PreAuthorize("hasAuthority('ADMIN_READ')")
     @GetMapping("/predefined-holidays/{id}")
     public ResponseEntity<PredefinedHolidayResponse> getPredefinedById(@PathVariable Long id){
         return new ResponseEntity<>(predefinedHolidayService.get(id), HttpStatus.OK);
@@ -43,6 +47,7 @@ public class HolidayController {
         return new ResponseEntity<>("Done",HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN_READ')")
     @GetMapping("/approved-leaves")
     public ResponseEntity<List<ApprovedLeave>> getLeaves(){
         return new ResponseEntity<>(approvedLeaveService.getAll(),HttpStatus.OK);

@@ -41,7 +41,7 @@ public class DatabaseUtility {
     private final PermissionRepository permissionRepository;
     private final RoleRepository roleRepository;
     private final RoleService roleService;
-    private final WarningRepository warningRepository;
+
 
 
 
@@ -49,16 +49,6 @@ public class DatabaseUtility {
     @Autowired
     PredefinedHolidayRepository predefinedHolidayRepository;
 
-    public void initDatabase() {
-        Logger.getLogger("Database utility").info("Seeding database ...");
-        iniRequestStatus();
-        initEmployees();
-        initWarningTypes();
-//        initHolidayRequest();
-
-        initRequestHoliday();
-        Logger.getLogger("Database utility").info("Database seeding complete");
-    }
         public void initDatabase() {
             Logger.getLogger("Database utility").info("Seeding database ...");
             initRoles();
