@@ -15,11 +15,7 @@ import com.giantLink.RH.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Optional;
-import java.util.Calendar;
+import java.util.*;
 import java.util.logging.Logger;
 
 @Component
@@ -37,6 +33,9 @@ public class DatabaseUtility {
 
     @Autowired
     WarningRepository warningRepository;
+
+    @Autowired
+    PredefinedHolidayRepository predefinedHolidayRepository;
 
     public void initDatabase() {
         Logger.getLogger("Database utility").info("Seeding database ...");
@@ -239,5 +238,30 @@ public class DatabaseUtility {
         requestHolidayRepository.save(requestHoliday);
 
 
+    }
+
+    // Fell the Predefined-Holidays table
+    public void initPredefinedHoliday(){
+        List<PredefinedHoliday> list=new ArrayList<>();
+
+        PredefinedHoliday holiday_1= new PredefinedHoliday("Holiday_1","Country_1","Description_1");
+        holiday_1.setNumberOfDays(1L);
+        holiday_1.setStartDate(new Date());
+        holiday_1.setEndDate(new Date());
+        list.add(holiday_1);
+
+        PredefinedHoliday holiday_2= new PredefinedHoliday("Holiday_2","Country_2","Description_2");
+        holiday_2.setNumberOfDays(2L);
+        holiday_2.setStartDate(new Date());
+        holiday_2.setEndDate(new Date());
+        list.add(holiday_2);
+
+        PredefinedHoliday holiday_3= new PredefinedHoliday("Holiday_3","Country_3","Description_3");
+        holiday_3.setNumberOfDays(1L);
+        holiday_3.setStartDate(new Date());
+        holiday_3.setEndDate(new Date());
+        list.add(holiday_3);
+
+        predefinedHolidayRepository.saveAll(list);
     }
 }
