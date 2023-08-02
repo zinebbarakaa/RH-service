@@ -20,6 +20,7 @@ public class RhServiceApplication implements CommandLineRunner
 	@Override
 	public void run(String... args) throws Exception{
 		databaseUtility.initDatabase();
+		databaseUtility.initRoles();
 		databaseUtility.initPredefinedHoliday();
 	}
 

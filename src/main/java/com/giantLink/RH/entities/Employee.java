@@ -54,6 +54,9 @@ public class Employee
     @JsonBackReference
     private Set<Request> requests;
 
+
+	@OneToOne (mappedBy = "employee")
+	private User user;
 	@OneToMany(mappedBy = "employee", cascade = CascadeType.REMOVE)
     @JsonBackReference
     private Set<ApprovedLeave> approvedLeaves;

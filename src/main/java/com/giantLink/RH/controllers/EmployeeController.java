@@ -25,6 +25,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,7 +36,8 @@ import com.giantLink.RH.services.EmployeeService;
 
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/api/employees")
+@PreAuthorize("hasRole('ADMIN_RH')")
+@RequestMapping("api/employees")
 public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
@@ -48,13 +50,19 @@ public class EmployeeController {
     private RequestAbsenceService requestAbsenceService;
 
     @PostMapping
-    public ResponseEntity<EmployeeResponse> addEmployee(@RequestBody @Validated EmployeeRequest request) {
+    @PreAuthorize("hasAuthority('ADMIN_CREATE')")
+    public ResponseEntity<EmployeeResponse> addEmployee(@RequestBody @Validated EmployeeRequest request)
+    {
+
+
         EmployeeResponse employeeResponse = employeeService.add(request);
         return new ResponseEntity<>(employeeResponse, HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<List<EmployeeResponse>> getAllEmployees() {
+    @PreAuthorize("hasAuthority('ADMIN_READ')")
+    public ResponseEntity<List<EmployeeResponse>> getAllEmployees()
+    {
         List<EmployeeResponse> employees = employeeService.get();
         return new ResponseEntity<>(employees, HttpStatus.OK);
     }
