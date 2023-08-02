@@ -6,9 +6,9 @@ import com.giantLink.RH.entities.RequestStatus;
 import com.giantLink.RH.enums.State;
 import com.giantLink.RH.mappers.RequestHolidayMapper;
 import com.giantLink.RH.models.request.RequestHolidayRequest;
-import com.giantLink.RH.models.request.RequestStatusRequest;
 import com.giantLink.RH.models.response.RequestHolidayResponse;
 import com.giantLink.RH.repositories.EmployeeRepository;
+import com.giantLink.RH.repositories.HolidayBalanceRepository;
 import com.giantLink.RH.repositories.RequestHolidayRepository;
 import com.giantLink.RH.repositories.RequestStatusRepository;
 import com.giantLink.RH.services.RequestHolidayService;
@@ -32,6 +32,8 @@ public class RequestHolidayServiceImpl implements RequestHolidayService {
     private RequestStatusService requestStatusService;
     @Autowired
     private RequestStatusRepository requestStatusRepository;
+    @Autowired
+    private HolidayBalanceRepository holidayBalanceRepository;
 
     @Override
     public List<RequestHolidayResponse> get() {
@@ -71,9 +73,21 @@ public class RequestHolidayServiceImpl implements RequestHolidayService {
             requestHolidayRepository.save(requestHoliday);
 
             RequestHolidayResponse response = RequestHolidayMapper.INSTANCE.entityToResponse(requestHoliday);
-            response.setEmployee_id(findEmployee.get().getId());
-            response.setStatus_id(requestStatus.getId());
+//            response.setEmployee_id(findEmployee.get().getId());
+//            response.setStatus_id(requestStatus.getId());
             return response;
         }
     }
+    @Override
+    public List<RequestHolidayResponse> getAllRequestHolidays() {
+        List<RequestHoliday> requestHolidays = requestHolidayRepository.findAll();
+        return RequestHolidayMapper.INSTANCE.listToResponseList(requestHolidays);
+    }
+
+    @Override
+    public List<RequestHolidayResponse> getAllRequestHolidaysByIdEmployee(Long employee_id) {
+        List<RequestHoliday> requestHolidays = requestHolidayRepository.findByEmployeeId(employee_id);
+        return RequestHolidayMapper.INSTANCE.listToResponseList(requestHolidays);
+    }
+
 }

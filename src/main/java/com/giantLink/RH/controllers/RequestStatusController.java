@@ -1,6 +1,8 @@
 package com.giantLink.RH.controllers;
 
 import com.giantLink.RH.enums.State;
+import com.giantLink.RH.models.request.RequestStatusRequest;
+import com.giantLink.RH.models.request.RequestStatusUpdateRequest;
 import com.giantLink.RH.models.response.RequestStatusResponse;
 import com.giantLink.RH.services.RequestStatusService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,5 +43,10 @@ public class RequestStatusController {
     @GetMapping("/processing/{id}")
     public ResponseEntity<RequestStatusResponse> processHolidayRequest(@PathVariable("id") Long id) {
         return new ResponseEntity<>(requestStatusService.processHolidayRequest(id), HttpStatus.OK);
+    }
+
+    @PutMapping("/updateStatus/{id}")
+    public ResponseEntity<RequestStatusResponse> updateStatus(@RequestBody RequestStatusUpdateRequest requestStatusUpdateRequest, @PathVariable("id") Long id) {
+        return new ResponseEntity<>(requestStatusService.updateStatus(requestStatusUpdateRequest,id), HttpStatus.OK);
     }
 }

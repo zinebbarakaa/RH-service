@@ -2,12 +2,16 @@ package com.giantLink.RH.services.impl;
 
 
 import com.giantLink.RH.entities.Employee;
+import com.giantLink.RH.entities.Request;
 import com.giantLink.RH.entities.RequestHoliday;
 import com.giantLink.RH.entities.RequestStatus;
 import com.giantLink.RH.enums.State;
 import com.giantLink.RH.exceptions.ResourceNotFoundException;
+import com.giantLink.RH.exceptions.RessourceNotFoundException;
 import com.giantLink.RH.mappers.RequestStatusMapper;
+import com.giantLink.RH.models.request.RequestAbsenceUpdateRequest;
 import com.giantLink.RH.models.request.RequestStatusRequest;
+import com.giantLink.RH.models.request.RequestStatusUpdateRequest;
 import com.giantLink.RH.models.response.RequestStatusResponse;
 import com.giantLink.RH.repositories.*;
 import com.giantLink.RH.services.RequestStatusService;
@@ -122,4 +126,28 @@ public class RequestStatusServiceImpl implements RequestStatusService {
         }
 
     }
-}
+
+    @Override
+    public RequestStatusResponse updateStatus(RequestStatusUpdateRequest requestStatusUpdateRequest, Long requestHolidayId) {
+            Request requestHolidayById = requestHolidayRepository.findById(requestHolidayId).get();
+            if (requestHolidayById == null) {
+                String message = messageSource.getMessage("resource.notFound.message",new Object[]{"Request Holiday","Id",requestHolidayId},"No Message", LocaleContextHolder.getLocale());
+                throw new RessourceNotFoundException(message);
+            }
+             Long requestStatusId =  requestHolidayById.getStatus().getId();
+
+             if(requestStatusId == null) {
+                 throw new ResourceNotFoundException("Request State Id Not Found");
+             }
+             Optional<RequestStatus> requestStatus = requestStatusRepository.findById(requestStatusId);
+             if(!requestStatus.isPresent()) {
+                 String message = messageSource.getMessage("resource.notFound.message",new Object[]{"Request Status","Id",requestStatusId},"No Message", LocaleContextHolder.getLocale());
+                 throw new RessourceNotFoundException(message);
+             }
+            RequestStatus request = requestStatus.get();
+            request.setType(requestStatusUpdateRequest.getType());
+            request.setMessageDetails(requestStatusUpdateRequest.getMessageDetails());
+            return(RequestStatusMapper.INSTANCE.entityToResponse(requestStatusRepository.save(request)));
+        }
+    }
+

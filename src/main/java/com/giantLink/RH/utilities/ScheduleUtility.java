@@ -1,7 +1,22 @@
 package com.giantLink.RH.utilities;
 
+import com.giantLink.RH.entities.Employee;
+import com.giantLink.RH.entities.RequestAbsence;
+import com.giantLink.RH.entities.Warning;
+import com.giantLink.RH.entities.WarningType;
+import com.giantLink.RH.repositories.EmployeeRepository;
 import com.giantLink.RH.repositories.HolidayBalanceRepository;
+
+import com.giantLink.RH.repositories.RequestAbsenceRepository;
+import com.giantLink.RH.repositories.WarningRepository;
+import com.giantLink.RH.repositories.WarningTypeRepository;
+
+
+import org.hibernate.sql.Template;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -9,32 +24,72 @@ import org.springframework.stereotype.Component;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
+
+import java.util.List;
+
+import java.util.concurrent.TimeUnit;
+
 import java.util.logging.Logger;
 
 @Component
 @EnableScheduling
+@EnableAsync
 public class ScheduleUtility {
     @Autowired
-    HolidayBalanceRepository holidayBalanceRepository;
-    SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 
-    @Scheduled(fixedRate = 5000) // every 24 hours = 86400000 ms
+    HolidayBalanceRepository holidayBalanceRepository;    
+    @Autowired
+    private RequestAbsenceRepository requestAbsenceRepository ;
+    @Autowired
+    private  WarningTypeRepository warningTypeRepository;
+    @Autowired
+    private  WarningRepository warningRepository;
+    
+
+    @Async
+    @Scheduled(fixedRate = 43200000) // every 24 hours = 86400000 ms | 12 hours = 43200000
     public void incrementHolidayBalancePerMonth() {
-//        holidayBalanceRepository.findAll().forEach(holidayBalance -> {
-//            Logger.getLogger("Schedule utility").info("----------------");
-//            Logger.getLogger("Schedule utility").info("timestamp : " + formatter.format(holidayBalance.getTimestamp()));
-//            Logger.getLogger("Schedule utility").info("now : " + formatter.format(new Date()));
-//            Long result;
-//            try {
-//                result = formatter.parse(formatter.format(new Date())).getTime() - formatter.parse(formatter.format(holidayBalance.getTimestamp())).getTime();
-//            } catch (ParseException e) {
-//                throw new RuntimeException(e);
-//            }
-//            Logger.getLogger("Schedule utility").info("result : " + result.toString());
-//            Logger.getLogger("Schedule utility").info("----------------");
-//        });
+        holidayBalanceRepository.findAll().forEach(holidayBalance -> {
+            long differenceInDays = ChronoUnit.DAYS.between(new Date().toInstant() , holidayBalance.getTimestamp().toInstant());
+
+
+            if (differenceInDays <= -30){
+                holidayBalance.setBalance(holidayBalance.getBalance() + holidayBalance.getHolidayPerMonth());
+                holidayBalance.setTimestamp(new Date());
+                holidayBalanceRepository.save(holidayBalance);
+            }
+        });
     }
+
+
+    @Scheduled(fixedRate = 86400000)
+    public void checkJustificationAbsence() {
+        
+        	LocalDate currentDate = LocalDate.now(); // Obtenir la date actuelle sans l'heure
+
+            requestAbsenceRepository.findAll().forEach(requestAbsence -> {
+                LocalDate absenceDate = requestAbsence.getAbsenceDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+                // Comparer les dates par jour
+                int compareDate = currentDate.compareTo(absenceDate);
+                if (compareDate == 30 && !requestAbsence.isJustification()) {
+                Warning warning = new Warning();
+                warning.setEmployee(requestAbsence.getEmployee());
+                warning.setWarningType(warningTypeRepository.findByTitle("Unjustified Absence").get());
+                warning.setMessageDetails("Your Absence is not Justified");
+                warningRepository.save(warning);
+                
+            }
+        });
+    }
+
+
+
+
 
 }

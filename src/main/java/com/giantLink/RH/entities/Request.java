@@ -18,15 +18,16 @@ public abstract class Request {
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Long id;
 
-
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(style = "dd-MM-yyyy")
     protected Date requestDate;
 
     @ManyToOne
-    @JoinColumn(name = "employee_id")
+    @JoinColumn(name = "employee_id", nullable = false)
     @JsonBackReference
     protected Employee employee;
+    private Date updatedAt;
+    private Date createdAt;
 
 
     @OneToOne
@@ -36,6 +37,12 @@ public abstract class Request {
 
     @PrePersist
     private void onCreate() {
+        createdAt = new Date();
         this.requestDate = new Date();
     }
+    @PreUpdate
+    void setUpdatedAtField(){
+        updatedAt = new Date();
+    }
+
 }

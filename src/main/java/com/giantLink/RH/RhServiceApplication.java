@@ -9,18 +9,16 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 
+public class RhServiceApplication implements CommandLineRunner
+{
+	@Autowired
+	DatabaseUtility databaseUtility;
 
-public class RhServiceApplication implements CommandLineRunner {
-    @Autowired
-    DatabaseUtility databaseUtility;
-
-    public static void main(String[] args) {
-        SpringApplication.run(RhServiceApplication.class, args);
-    }
-
-    @Override
-    public void run(String... args) throws Exception {
-       // databaseUtility.initDatabase();
-
-    }
+	public static void main(String[] args){
+		SpringApplication.run(RhServiceApplication.class, args);
+	}
+	@Override
+	public void run(String... args) throws Exception{
+		databaseUtility.initDatabase();
+	}
 }

@@ -1,5 +1,6 @@
 package com.giantLink.RH.services.impl;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,7 +13,7 @@ import com.giantLink.RH.entities.RequestStatus;
 import com.giantLink.RH.entities.Warning;
 import com.giantLink.RH.entities.WarningType;
 import com.giantLink.RH.mappers.RequestAbsenceMapper;
-import com.giantLink.RH.models.request.RequestAbscenceUpdateRequest;
+import com.giantLink.RH.models.request.RequestAbsenceUpdateRequest;
 import com.giantLink.RH.models.request.RequestAbsenceRequest;
 import com.giantLink.RH.models.response.RequestAbsenceResponse;
 import com.giantLink.RH.repositories.EmployeeRepository;
@@ -21,7 +22,6 @@ import com.giantLink.RH.repositories.RequestStatusRepository;
 import com.giantLink.RH.repositories.WarningRepository;
 import com.giantLink.RH.repositories.WarningTypeRepository;
 import com.giantLink.RH.services.RequestAbsenceService;
-import com.giantLink.RH.services.WarningService;
 
 import jakarta.transaction.Transactional;
 
@@ -52,13 +52,20 @@ public class RequestAbsenceServiceImpl implements RequestAbsenceService {
         RequestStatus requestStatus = new RequestStatus();
         requestStatus.setType(State.PENDING);
         requestStatus.setRequest(entity);
+        if (entity.isSickness()== false) {
+        	requestStatus.setMessageDetails(" Request for Absence");
+        }
+        else {
+        	 requestStatus.setMessageDetails("Request for Sick Leave");
+        }
         entity.setStatus(requestStatus);
+        
 
         // Sauvegarder l'entité RequestStatus d'abord
         requestStatusRepository.save(requestStatus);
         
-        RequestAbsenceResponse responce =RequestAbsenceMapper.INSTANCE.entityToResponse(requestAbsenceRepository.save(entity));
-        responce.setMessage("Request added successfuly");
+        RequestAbsenceResponse response =RequestAbsenceMapper.INSTANCE.entityToResponse(requestAbsenceRepository.save(entity));
+        response.setMessage("Request added successfully");
         if (entity.getRequestDate() != null) {
             int dateCompare = entity.getAbsenceDate().compareTo(entity.getRequestDate());
             if (dateCompare < 0) {
@@ -70,9 +77,8 @@ public class RequestAbsenceServiceImpl implements RequestAbsenceService {
             }
         }
         
-        return responce ;
+        return response ;
     }
-
 
 
     @Override
@@ -88,6 +94,19 @@ public class RequestAbsenceServiceImpl implements RequestAbsenceService {
             RequestAbsence entity = optionalEntity.get();
             RequestAbsenceMapper.INSTANCE.updateEntityFromRequest(request, entity);
             RequestAbsence updatedEntity = requestAbsenceRepository.save(entity);
+            
+            int compareDate = entity.getAbsenceDate().compareTo(updatedEntity.getAbsenceDate());
+            if(compareDate != 0) {
+            	 int dateCompare = entity.getAbsenceDate().compareTo(entity.getRequestDate());
+                 if (dateCompare < 0) {
+                     WarningType warningType = warningTypeRepository.findByTitle("Warning for Absence Without Request").get();
+                     Warning warning = new Warning();
+                     warning.setWarningType(warningType);
+                     warning.setEmployee(entity.getEmployee());
+                     warningRepository.save(warning);
+                 }
+            }
+            
             return RequestAbsenceMapper.INSTANCE.entityToResponse(updatedEntity);
         }
         return null; // Gérer le cas où l'entité n'existe pas
@@ -101,19 +120,52 @@ public class RequestAbsenceServiceImpl implements RequestAbsenceService {
     @Override
     public RequestAbsenceResponse get(Long id) {
         Optional<RequestAbsence> optionalEntity = requestAbsenceRepository.findById(id);
-        return optionalEntity.map(RequestAbsenceMapper.INSTANCE::entityToResponse).orElse(null);
+        return RequestAbsenceMapper.INSTANCE.entityToResponse(optionalEntity.get());
     }
 
     @Override
-    public RequestAbsenceResponse updateJustification(RequestAbscenceUpdateRequest requestUpdate, Long id) {
+    public RequestAbsenceResponse updateJustification(RequestAbsenceUpdateRequest requestUpdate, Long id) {
         Optional<RequestAbsence> optionalEntity = requestAbsenceRepository.findById(id);
         if (optionalEntity.isPresent()) {
             RequestAbsence entity = optionalEntity.get();
             // Mettre à jour l'attribut 'justification' de l'entité avec la valeur de la requête
             entity.setJustification(requestUpdate.isJustification());
             RequestAbsence updatedEntity = requestAbsenceRepository.save(entity);
+            warningRepository.findByEmployee(entity.getEmployee()).forEach(warning->{
+            	long compareDate = warning.getCreatedAt().compareTo(entity.getAbsenceDate());
+                if (compareDate == 1 && updatedEntity.isJustification() == true && warning.getWarningType()== warningTypeRepository.findByTitle("Unjustified Absence").get()) {
+                	warningRepository.delete(warning);
+                }
+            });
             return RequestAbsenceMapper.INSTANCE.entityToResponse(updatedEntity);
         }
         return null; // Gérer le cas où l'entité n'existe pas
     }
+
+
+
+	@Override
+	public List<RequestAbsenceResponse> getIsSickness(boolean sickness) {
+		 List<RequestAbsence> entities = requestAbsenceRepository.findBySickness(sickness);
+	        return RequestAbsenceMapper.INSTANCE.listToResponseList(entities);
+	}
+
+	@Override
+	public List<RequestAbsenceResponse> getRequestAbsenceByEmployeeId(Long id) {
+	    // Rechercher toutes les demandes d'absence associées à l'employé ayant l'ID spécifié
+	    List<RequestAbsence> requestAbsences = requestAbsenceRepository.findByEmployee(employeeRepository.findById(id).get());
+	    // Convertir les entités en objets de réponse
+	    return RequestAbsenceMapper.INSTANCE.listToResponseList(requestAbsences);
+	}
+
+
+
+	@Override
+	public List<RequestAbsenceResponse> getByEmployeeIsSickness(boolean sickness, Long id) {
+	    // Rechercher toutes les demandes d'absence associées à l'employé ayant l'ID spécifié et à la condition de maladie donnée
+	    List<RequestAbsence> requestAbsences = requestAbsenceRepository.findByEmployeeAndSickness(employeeRepository.findById(id).get(), sickness);
+	    // Convertir les entités en objets de réponse
+	    return RequestAbsenceMapper.INSTANCE.listToResponseList(requestAbsences);
+	}
+	
 }
