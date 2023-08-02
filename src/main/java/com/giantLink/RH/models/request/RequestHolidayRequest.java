@@ -14,7 +14,7 @@ import java.util.Date;
 @Builder
 public class RequestHolidayRequest
 {
-    @Min(value = 1 , message = "Number of days must be at least 1.")
+    //@Min(value = 1 , message = "Number of days must be at least 1.")
     private int numberOfDays;
 
     @NotNull(message = "Start date cannot be empty.")
