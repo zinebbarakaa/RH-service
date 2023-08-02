@@ -6,6 +6,7 @@ import com.giantLink.RH.models.request.PredefinedHolidayRequest;
 import com.giantLink.RH.models.response.PredefinedHolidayResponse;
 import com.giantLink.RH.repositories.PredefinedHolidayRepository;
 import com.giantLink.RH.services.PredefinedHolidayService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class PredefinedHolidayServiceImpl implements PredefinedHolidayService {
 
     @Autowired

@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "8b8afc59-189e-4e40-90b6-771bbfb42e75",
+		"_postman_id": "f4ff9f86-eafb-43e7-97ee-ae977e4ee33d",
 		"name": "Rh service",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "28324967"
+		"_exporter_id": "28311075"
 	},
 	"item": [
 		{
@@ -16,7 +16,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"numberofdays\": 5,\r\n    \"startDate\": \"2023-07-15\",\r\n    \"finishDate\": \"2023-07-20\",\r\n    \"employee_id\": 110\r\n}",
+							"raw": "{\r\n    \"numberofdays\": 1,\r\n    \"startDate\": \"2023-08-15\",\r\n    \"finishDate\": \"2023-08-20\",\r\n    \"employee_id\": 1\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -955,6 +955,131 @@
 								"api",
 								"holidaybalances",
 								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Holidays",
+			"item": [
+				{
+					"name": "Get Predefind-Holiday",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:2023/api/holiday/predefined-holidays/2",
+							"host": [
+								"localhost"
+							],
+							"port": "2023",
+							"path": [
+								"api",
+								"holiday",
+								"predefined-holidays",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Predefind-Holidays",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:2023/api/holiday/predefined-holidays",
+							"host": [
+								"localhost"
+							],
+							"port": "2023",
+							"path": [
+								"api",
+								"holiday",
+								"predefined-holidays"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Predefind-Holiday",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"numberOfDays\": 2,\r\n    \"startDate\": \"2023-08-02\",\r\n    \"endDate\": \"2023-08-06\",\r\n    \"name\": \"Name_fromApi\",\r\n    \"country\": \"Country_fromApi\",\r\n    \"description\" : \"Description_fromApi\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:2023/api/holiday/predefined-holidays",
+							"host": [
+								"localhost"
+							],
+							"port": "2023",
+							"path": [
+								"api",
+								"holiday",
+								"predefined-holidays"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Predefind-Holiday",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"numberOfDays\": 3,\r\n    \"startDate\": \"2023-08-02\",\r\n    \"endDate\": \"2023-08-20\",\r\n    \"name\": \"Name_updated\",\r\n    \"country\":\"Country_updated\",\r\n    \"description\" : \"Description_updated\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:2023/api/holiday/predefined-holidays/2",
+							"host": [
+								"localhost"
+							],
+							"port": "2023",
+							"path": [
+								"api",
+								"holiday",
+								"predefined-holidays",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Approved-Leaves",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:2023/api/holiday/approved-leaves",
+							"host": [
+								"localhost"
+							],
+							"port": "2023",
+							"path": [
+								"api",
+								"holiday",
+								"approved-leaves"
 							]
 						}
 					},

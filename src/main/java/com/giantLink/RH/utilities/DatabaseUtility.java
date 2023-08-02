@@ -240,7 +240,7 @@ public class DatabaseUtility {
 
     }
 
-    // Fell the Predefined-Holidays table
+    // Fill the Predefined-Holidays table
     public void initPredefinedHoliday(){
         List<PredefinedHoliday> list=new ArrayList<>();
 

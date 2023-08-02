@@ -1,7 +1,9 @@
 package com.giantLink.RH.controllers;
 
+import com.giantLink.RH.entities.ApprovedLeave;
 import com.giantLink.RH.models.request.PredefinedHolidayRequest;
 import com.giantLink.RH.models.response.PredefinedHolidayResponse;
+import com.giantLink.RH.services.ApprovedLeaveService;
 import com.giantLink.RH.services.PredefinedHolidayService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +18,8 @@ public class HolidayController {
 
     @Autowired
     PredefinedHolidayService predefinedHolidayService;
+    @Autowired
+    ApprovedLeaveService approvedLeaveService;
 
     @GetMapping("/predefined-holidays")
     public ResponseEntity<List<PredefinedHolidayResponse>> getPredefined(){
@@ -37,5 +41,10 @@ public class HolidayController {
     public ResponseEntity<String> deletePredefined(@PathVariable Long id){
         predefinedHolidayService.delete(id);
         return new ResponseEntity<>("Done",HttpStatus.OK);
+    }
+
+    @GetMapping("/approved-leaves")
+    public ResponseEntity<List<ApprovedLeave>> getLeaves(){
+        return new ResponseEntity<>(approvedLeaveService.getAll(),HttpStatus.OK);
     }
 }
