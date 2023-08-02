@@ -1,11 +1,13 @@
 package com.giantLink.RH.services.impl;
 import java.util.List;
+
 import java.util.Optional;
 
 import com.giantLink.RH.entities.Employee;
 import com.giantLink.RH.entities.HolidayBalance;
 import com.giantLink.RH.exceptions.ResourceDuplicatedException;
 import com.giantLink.RH.mappers.EmployeeMapper;
+import com.giantLink.RH.mappers.HolidayBalanceMapper;
 import com.giantLink.RH.repositories.HolidayBalanceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,9 +17,11 @@ import com.giantLink.RH.services.EmployeeService;
 
 import jakarta.transaction.Transactional;
 
+
 import com.giantLink.RH.exceptions.ResourceNotFoundException;
 import com.giantLink.RH.models.request.EmployeeRequest;
 import com.giantLink.RH.models.response.EmployeeResponse;
+
 
 @Service
 @Transactional // Active la gestion des transactions pour toutes les méthodes de la classe
@@ -41,6 +45,11 @@ public class EmployeeServiceImpl implements EmployeeService
         Employee employee = EmployeeMapper.INSTANCE.requestToEntity(request);
 //        Create holiday balance of the employee
         HolidayBalance holidayBalance = new HolidayBalance();
+//        Get holiday balance info if exist
+        if(request.getHolidayBalance() != null){
+            HolidayBalanceMapper.INSTANCE.updateEntityFromRequest(request.getHolidayBalance(), holidayBalance);
+        }
+//        Save the holiday balance
         holidayBalanceRepository.save(holidayBalance);
         employee.setHolidayBalance(holidayBalance);
 //        Save the employee
@@ -101,4 +110,6 @@ public class EmployeeServiceImpl implements EmployeeService
 //        Prepare and return the response
         return EmployeeMapper.INSTANCE.entityToResponse(employee);
     }
+
+
 }

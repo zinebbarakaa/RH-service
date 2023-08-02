@@ -48,6 +48,14 @@ public class RhGlobalExceptionHandler extends ResponseEntityExceptionHandler {
         errorResponse.setErrorDetails(ex.getMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
+    @ExceptionHandler(ResourceCantBeDeletedException.class)
+    public ResponseEntity<ErrorResponse> handleResourceCantBeDeletedException(ResourceCantBeDeletedException ex) {
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setErrorCode(HttpStatus.FORBIDDEN.value());
+        errorResponse.setErrorMessage("Cant delete resource");
+        errorResponse.setErrorDetails(ex.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
+    }
 
     @ExceptionHandler(InvalidInputException.class)
     public ResponseEntity<ErrorResponse> handleInvalidInputException(InvalidInputException ex) {
@@ -66,6 +74,7 @@ public class RhGlobalExceptionHandler extends ResponseEntityExceptionHandler {
         errorResponse.setErrorDetails(ex.getMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
     }
+
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
         ValidationErrorResponse errorResponse = new ValidationErrorResponse();

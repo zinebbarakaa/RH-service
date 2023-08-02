@@ -1,10 +1,18 @@
 server:
   port: 2023
+  servlet:
+    multipart:
+      file-size-threshold: 2KB
+      max-file-size: 200MB
+      max-request-size: 215MB
+      enabled: true
 spring:
   application:
     name: rh-service
   datasource:
+
     password:
+
     url: jdbc:mysql://localhost:3306/rh-service?useSSL=false
     username: root
   jpa:
@@ -21,3 +29,4 @@ application:
       expiration: 1000000
       refresh-token:
           expiration: 7000000
+

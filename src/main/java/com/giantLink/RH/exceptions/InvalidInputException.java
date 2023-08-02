@@ -14,5 +14,6 @@ public class InvalidInputException extends RuntimeException {
         super(message);
         this.message = message;
     }
+
 }
 
