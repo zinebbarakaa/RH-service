@@ -36,8 +36,8 @@ import com.giantLink.RH.services.EmployeeService;
 
 @CrossOrigin("*")
 @RestController
-@RequestMapping("api/v1/employees")
 @PreAuthorize("hasRole('ADMIN_RH')")
+@RequestMapping("api/employees")
 public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;

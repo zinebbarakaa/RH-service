@@ -33,17 +33,12 @@ public class SecurityConfiguration {
                 // Define authorization rules for specific HTTP requests
                 .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry -> authorizationManagerRequestMatcherRegistry
                         // Allow unauthenticated access to API endpoints related to authentication
-                        .requestMatchers("api/v1/auth/**").permitAll()
-                        // Allow access to GET API endpoints related to employees only for users with "ADMIN_READ" authority
-                        .requestMatchers(GET,"api/v1/employees/**").hasAnyAuthority("ADMIN_READ")
-                        // Allow access to POST API endpoints related to employees only for users with "ADMIN_CREATE" authority
-                        .requestMatchers(POST, "api/v1/employees/**").hasAnyAuthority("ADMIN_CREATE")
-                        // Allow access to PUT API endpoints related to employees only for users with "ADMIN_UPDATE" authority
-                        .requestMatchers(PUT,"api/v1/employees/**").hasAnyAuthority("ADMIN_UPDATE")
-                        // Allow access to DELETE API endpoints related to employees only for users with "ADMIN_DELETE" authority
-                        .requestMatchers(DELETE, "api/v1/employees/**").hasAnyAuthority("ADMIN_DELETE")
-                        // Allow access to the "/api/v1/employees" endpoint for users with roles "ADMIN_RH" or "MANAGER_RH"
-                        .requestMatchers("api/v1/employees").hasAnyRole("ADMIN_RH","MANAGER_RH")
+                        .requestMatchers("api/auth/**").permitAll()
+                        .requestMatchers(GET,"api/employees/**").hasAnyAuthority("ADMIN_READ")
+                        .requestMatchers(POST, "api/employees/**").hasAnyAuthority("ADMIN_CREATE")
+                        .requestMatchers(PUT,"api/employees/**").hasAnyAuthority("ADMIN_UPDATE")
+                        .requestMatchers(DELETE, "api/employees/**").hasAnyAuthority("ADMIN_DELETE")
+                        .requestMatchers("api/employees").hasAnyRole("ADMIN_RH","MANAGER_RH")
                         // For all other requests, user must be authenticated
                         .anyRequest().authenticated())
                 // Configure the custom authentication provider
