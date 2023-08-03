@@ -31,12 +31,13 @@ public class RoleServiceImpl  implements RoleService {
         Optional<Role> findRole = roleRepository.findByRoleName(request.getRoleName());
         if (findRole.isPresent()) {
             throw new ResourceDuplicatedException("Role", "id", findRole.get().getId().toString());
-        }
-        Role role = findRole.get();
+        }else{
+        Role role = new Role();
         role.setRoleName(request.getRoleName());
         role.setPermissions(request.getPermissions());
         roleRepository.save(role);
         return RoleMapper.INSTANCE.entityToResponse(role);
+        }
     }
 
     @Override

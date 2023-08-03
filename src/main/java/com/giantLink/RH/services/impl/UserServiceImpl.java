@@ -69,6 +69,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<LoginResponse> login(LoginRequest request) {
+
         // Authenticate the user with the provided credentials.
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 request.getUsername(),
