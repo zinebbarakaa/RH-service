@@ -6,6 +6,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import com.giantLink.RH.models.response.SuccessResponse;
+import com.giantLink.RH.services.UserService;
+
 
 import com.giantLink.RH.models.response.RequestHolidayResponse;
 import com.giantLink.RH.models.response.SuccessResponse;
@@ -22,8 +25,10 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -36,12 +41,18 @@ import com.giantLink.RH.services.EmployeeService;
 
 @CrossOrigin("*")
 @RestController
+
 @PreAuthorize("hasRole('ADMIN_RH')")
 @RequestMapping("api/employees")
 public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
     @Autowired
+
+    private UserService userService;
+
+
+
     private RequestHolidayServiceImpl requestHolidayService;
     @Autowired
     private HolidayBalanceService holidayBalanceService;
@@ -60,7 +71,9 @@ public class EmployeeController {
     }
 
     @GetMapping
-    @PreAuthorize("hasAuthority('ADMIN_READ')")
+
+    @PreAuthorize("hasAuthority('READ')")
+
     public ResponseEntity<List<EmployeeResponse>> getAllEmployees()
     {
         List<EmployeeResponse> employees = employeeService.get();
@@ -100,7 +113,6 @@ public class EmployeeController {
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 
         response.setHeader("Content-Disposition", "attachment; filename=\"Holidays request " + currentDate + ".xlsx\"");
-
         Workbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet("Request Holiday for employees");
         // Create a date style
@@ -265,5 +277,6 @@ public class EmployeeController {
     public List<RequestAbsenceResponse> getAbsenceByEmployee(@PathVariable Long id ) {
         return requestAbsenceService.getByEmployeeIsSickness(false, id);
     }
+
 
 }
