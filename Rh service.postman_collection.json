@@ -978,6 +978,16 @@
 				{
 					"name": "Registser",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiU1VQRVJfQURNSU4iLCJ1c2VySWQiOjEsInN1YiI6ImNkMTExMTEiLCJpYXQiOjE2OTEwNTU0NTgsImV4cCI6MTY5MTA1NTQ2NH0.YuYd1FEb9mMq0f0oEy5Z4qu2X5ucOe7ED5JjZqUchw4",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
@@ -1102,6 +1112,165 @@
 								"v1",
 								"auth",
 								"refresh-token"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Permission",
+			"item": []
+		},
+		{
+			"name": "Permission",
+			"item": [
+				{
+					"name": "GetAllPermission",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:2023/api/permission",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "2023",
+							"path": [
+								"api",
+								"permission"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deletepermission",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:2023/api/permission/13",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "2023",
+							"path": [
+								"api",
+								"permission",
+								"13"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "addpermission",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"namePermission\":\"SUPER_ADMIN_DELEE\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:2023/api/permission",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "2023",
+							"path": [
+								"api",
+								"permission"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Role",
+			"item": [
+				{
+					"name": "AddRole",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"roleName\":\"SUPER_ADMIN\",\r\n    \"permissions\":[\r\n        {\r\n            \"namePermission\":\"SUPER_ADMIN_READ\"\r\n        },\r\n        {\r\n            \"namePermission\":\"SUPER_ADMIN_CREATE\"\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:2023/api/role",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "2023",
+							"path": [
+								"api",
+								"role"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "addPermissiontoRole",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:2023/api/role/add-permission-to-role/9/9",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "2023",
+							"path": [
+								"api",
+								"role",
+								"add-permission-to-role",
+								"9",
+								"9"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deletePermissionFromRole",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:2023/api/role/remove-permission-from-role/9/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "2023",
+							"path": [
+								"api",
+								"role",
+								"remove-permission-from-role",
+								"9",
+								"1"
 							]
 						}
 					},
