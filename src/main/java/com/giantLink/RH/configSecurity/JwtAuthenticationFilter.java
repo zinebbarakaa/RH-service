@@ -1,6 +1,7 @@
 package com.giantLink.RH.configSecurity;
 
 import com.giantLink.RH.services.impl.JwtService;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -29,7 +30,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(@NotNull HttpServletRequest request,
                                     @NotNull HttpServletResponse response,
                                     @NotNull FilterChain filterChain)
-            throws ServletException, IOException {
+            throws ServletException, IOException, ExpiredJwtException {
 
         // Get the Authorization header from the request
         final String authHeader = request.getHeader("Authorization");
@@ -52,7 +53,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             // Load the user details from the userDetailsService
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
-            // Check if the JWT is valid for the user
             if (jwtService.isTokenValid(jwt, userDetails)) {
                 // Create an authentication token and set it in the security context
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
@@ -63,6 +63,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             }
+
+            // Check if the JWT is valid for the user
+
         }
 
         // Proceed to the next filter in the chain

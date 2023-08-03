@@ -93,7 +93,7 @@ public class RhGlobalExceptionHandler extends ResponseEntityExceptionHandler {
         errorResponse.setErrorCode(HttpStatus.BAD_REQUEST.value());
         errorResponse.setErrorMessage("Token is expired");
         errorResponse.setErrorDetails("sddddd");
-        return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
     @Override

@@ -39,7 +39,7 @@ public class JwtService {
     public String extractUsername(String token) {
 
 //        try {
-            return extractClaim(token, Claims::getSubject);
+        return extractClaim(token, Claims::getSubject);
 //        } catch (ExpiredJwtException ex) {
 //            throw new ExpiredJwtException(null, null, "Token is expired");
 //        }
@@ -51,7 +51,7 @@ public class JwtService {
      * @param token The JWT token from which the role is to be extracted.
      * @return The extracted role.
      */
-    public String extractRoleFromToken(String token)  {
+    public String extractRoleFromToken(String token) {
         Claims claims = extractAllClaims(token);
         return (String) claims.get("role");
     }
@@ -73,7 +73,7 @@ public class JwtService {
      * @param userDetails The UserDetails object to validate the token against.
      * @return True if the token is valid, otherwise false.
      */
-    public boolean isTokenValid(String token, UserDetails userDetails)  {
+    public boolean isTokenValid(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
         return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
     }
@@ -85,8 +85,11 @@ public class JwtService {
      * @return True if the token has expired, otherwise false.
      */
     private boolean isTokenExpired(String token) {
+        try {
             return extractExpiration(token).before(new Date());
-
+        } catch (ExpiredJwtException e) {
+            return true;
+        }
     }
 
     /**
