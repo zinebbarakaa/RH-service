@@ -41,6 +41,9 @@ public class User implements UserDetails {
     )
     private List<Role> roles = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user")
+    private List<Payroll> payrolls;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<SimpleGrantedAuthority> authorities = roles.stream().flatMap(appRole -> appRole.getAuthorities().stream()).collect(Collectors.toList());
