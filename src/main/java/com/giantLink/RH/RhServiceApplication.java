@@ -44,5 +44,4 @@ public class RhServiceApplication implements CommandLineRunner
 		databaseUtility.initRoles();
 		databaseUtility.initPredefinedHoliday();
 	}
-
 }

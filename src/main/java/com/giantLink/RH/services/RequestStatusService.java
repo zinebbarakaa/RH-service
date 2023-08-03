@@ -5,7 +5,9 @@ import com.giantLink.RH.entities.RequestStatus;
 import com.giantLink.RH.enums.State;
 import com.giantLink.RH.exceptions.GLHolidayBalanceIsufficient;
 import com.giantLink.RH.models.request.EmployeeRequest;
+import com.giantLink.RH.models.request.RequestAbsenceUpdateRequest;
 import com.giantLink.RH.models.request.RequestStatusRequest;
+import com.giantLink.RH.models.request.RequestStatusUpdateRequest;
 import com.giantLink.RH.models.response.EmployeeResponse;
 import com.giantLink.RH.models.response.RequestStatusResponse;
 
@@ -17,4 +19,6 @@ public interface RequestStatusService extends CrudService<RequestStatusRequest, 
     RequestStatusResponse processHolidayRequest(Long requestStatusId);
 
     List<RequestStatusResponse> getByStatusName(State state);
+
+    RequestStatusResponse updateStatus(RequestStatusUpdateRequest RequestStatusUpdateRequest, Long requestHolidayId);
 }

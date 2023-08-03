@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "4ea3e81b-c163-46d3-b93c-2a58a76618df",
+		"_postman_id": "7a300452-62ea-44e9-9e38-eaa0e4305868",
 		"name": "Rh service",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "27778468"
+		"_exporter_id": "21879241"
 	},
 	"item": [
 		{
@@ -838,6 +838,36 @@
 							"path": [
 								"requestStatus",
 								"processing",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Request Status By RequestHolidayId Copy",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"id\": 1,\r\n        \"type\": \"ACCEPTED\",\r\n        \"messageDetails\": \"YOUR REQUEST HAS BEEN ACCEPTED, CONGRATS!\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:2023/requestStatus/updateStatus/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "2023",
+							"path": [
+								"requestStatus",
+								"updateStatus",
 								"1"
 							]
 						}

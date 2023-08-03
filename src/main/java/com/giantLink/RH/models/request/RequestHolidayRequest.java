@@ -12,6 +12,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+
 public class RequestHolidayRequest{
     @Min(value = 1 , message = "Number of days must be at least 1.")
     private int numberOfDays;
