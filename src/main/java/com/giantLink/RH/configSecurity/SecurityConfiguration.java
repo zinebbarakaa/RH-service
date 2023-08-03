@@ -1,5 +1,6 @@
 package com.giantLink.RH.configSecurity;
 import com.giantLink.RH.exceptions.TokenAuthenticationException;
+import com.giantLink.RH.exceptions.UnauthorizedAccessException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,13 +35,16 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry -> authorizationManagerRequestMatcherRegistry
 
                         // Allow unauthenticated access to API endpoints related to authentication
-                        .requestMatchers("api/auth/**").permitAll()
+                        .requestMatchers("api/auth/login").permitAll()
+                        .requestMatchers(POST, "api/auth/register").hasAuthority("SUPER_ADMIN_CREATE")
+                        .requestMatchers("api/auth/**").hasRole("SUPER_ADMIN")
                         .requestMatchers(GET,"api/employees/**").hasAnyAuthority("ADMIN_READ")
                         .requestMatchers(GET,"api/holiday/**").hasAnyAuthority("ADMIN_READ")
                         .requestMatchers(POST, "api/employees/**").hasAnyAuthority("ADMIN_CREATE")
                         .requestMatchers(PUT,"api/employees/**").hasAnyAuthority("ADMIN_UPDATE")
                         .requestMatchers(DELETE, "api/employees/**").hasAnyAuthority("ADMIN_DELETE")
                         .requestMatchers("api/employees").hasAnyRole("ADMIN_RH","MANAGER_RH")
+
                         // For all other requests, user must be authenticated
 
                         .anyRequest().authenticated())

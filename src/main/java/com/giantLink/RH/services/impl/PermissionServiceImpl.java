@@ -24,11 +24,12 @@ public class PermissionServiceImpl implements PermissionService {
         Optional<Permission> findPermission = permissionRepository.findByNamePermission(request.getNamePermission());
         if (findPermission.isPresent()) {
             throw new ResourceDuplicatedException("Permission", "id", findPermission.get().getId().toString());
+        } else {
+            Permission permission = new Permission();
+            permission.setNamePermission(request.getNamePermission());
+            permissionRepository.save(permission);
+            return PermissionMapper.INSTANCE.entityToResponse(permission);
         }
-        Permission permission = findPermission.get();
-        permission.setNamePermission(request.getNamePermission());
-        permissionRepository.save(permission);
-        return PermissionMapper.INSTANCE.entityToResponse(permission);
     }
 
     @Override

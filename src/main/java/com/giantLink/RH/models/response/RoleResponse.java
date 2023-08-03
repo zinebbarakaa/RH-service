@@ -14,6 +14,6 @@ public class RoleResponse {
     private Long id;
     private String roleName;
 
-    private List<Permission> permissions = new ArrayList<>();
+    private List<Permission> permissions ;
 
 }
