@@ -8,6 +8,7 @@ import com.giantLink.RH.exceptions.ResourceNotFoundException;
 import com.giantLink.RH.mappers.UserMapper;
 import com.giantLink.RH.models.request.LoginRequest;
 import com.giantLink.RH.models.request.RegisterRequest;
+import com.giantLink.RH.models.request.UpdateProfileRequest;
 import com.giantLink.RH.models.response.LoginResponse;
 import com.giantLink.RH.models.response.UserResponse;
 import com.giantLink.RH.repositories.EmployeeRepository;
@@ -20,8 +21,13 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -151,4 +157,38 @@ public class UserServiceImpl implements UserService {
         }
 
     }
+
+
+    @Override
+    public User getAuthenticatedUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null) {
+            return null;
+        }
+        String username = authentication.getName();
+        return userRepository.findByUsername(username);
+    }
+
+    @Override
+    public void updateUserProfile(Employee employee, UpdateProfileRequest updateRequest) {
+        if (updateRequest.getFirstName() != null) {
+            employee.setFirstName(updateRequest.getFirstName());
+        }
+        if (updateRequest.getLastName() != null) {
+            employee.setLastName(updateRequest.getLastName());
+        }
+        if (updateRequest.getEmail() != null) {
+            employee.setEmail(updateRequest.getEmail());
+        }
+        if (updateRequest.getPhone() != null) {
+            employee.setPhone(updateRequest.getPhone());
+        }
+        employeeRepository.save(employee);
+    }
+
+    @Override
+    public User findByUserName(String username) {
+        return userRepository.findByUsername(username);
+    }
+
 }

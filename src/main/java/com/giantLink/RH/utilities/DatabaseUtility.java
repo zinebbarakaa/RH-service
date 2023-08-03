@@ -25,24 +25,32 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
+
+import java.util.Calendar;
 import java.util.logging.Logger;
 
 @Component
 @RequiredArgsConstructor
 public class DatabaseUtility {
 
-
-    private final EmployeeRepository employeeRepository;
-    private final HolidayBalanceRepository holidayBalanceRepository;
-    private final RequestStatusRepository requestStatusRepository;
-    private final RequestHolidayRepository requestHolidayRepository;
-    private final WarningTypeRepository warningTypeRepository;
-    private final WarningRepository warningRepository;
-    private final PermissionRepository permissionRepository;
-    private final RoleRepository roleRepository;
-    private final RoleService roleService;
-
-
+    @Autowired
+    EmployeeRepository employeeRepository;
+    @Autowired
+    HolidayBalanceRepository holidayBalanceRepository;
+    @Autowired
+    RequestStatusRepository requestStatusRepository;
+    @Autowired
+    RequestHolidayRepository requestHolidayRepository;
+    @Autowired
+    WarningTypeRepository warningTypeRepository;
+    @Autowired
+    PermissionRepository permissionRepository;
+    @Autowired
+    RoleRepository roleRepository;
+    @Autowired
+    RoleService roleService;
+    @Autowired
+    WarningRepository warningRepository;
 
 
 
