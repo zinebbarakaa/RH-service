@@ -4,24 +4,22 @@ import com.giantLink.RH.entities.Employee;
 import com.giantLink.RH.entities.HolidayBalance;
 import com.giantLink.RH.entities.Permission;
 import com.giantLink.RH.entities.Role;
-import com.giantLink.RH.models.response.RoleResponse;
 import com.giantLink.RH.repositories.EmployeeRepository;
 import com.giantLink.RH.repositories.HolidayBalanceRepository;
 import com.giantLink.RH.repositories.PermissionRepository;
 import com.giantLink.RH.repositories.RoleRepository;
 import com.giantLink.RH.services.RoleService;
+import com.giantLink.RH.services.UserService;
 import lombok.RequiredArgsConstructor;
 import com.giantLink.RH.entities.RequestHoliday;
 import com.giantLink.RH.entities.RequestStatus;
-import com.giantLink.RH.repositories.EmployeeRepository;
-import com.giantLink.RH.repositories.HolidayBalanceRepository;
 import com.giantLink.RH.repositories.RequestHolidayRepository;
 import com.giantLink.RH.repositories.RequestStatusRepository;
 import com.giantLink.RH.entities.*;
 import com.giantLink.RH.enums.State;
 import com.giantLink.RH.models.request.WarningRequest;
 import com.giantLink.RH.repositories.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -57,30 +55,31 @@ public class DatabaseUtility {
     @Autowired
     PredefinedHolidayRepository predefinedHolidayRepository;
 
-        public void initDatabase() {
-            Logger.getLogger("Database utility").info("Seeding database ...");
-            initRoles();
-            iniRequestStatus();
-            initEmployees();
-            initWarningTypes();
-            initRequestHoliday();
-            Logger.getLogger("Database utility").info("Database seeding complete");
-        }
+    public void initDatabase() {
+        Logger.getLogger("Database utility").info("Seeding database ...");
+        initEmployees();
+        initRoles();
+        iniRequestStatus();
+        initWarningTypes();
+        initRequestHoliday();
+        Logger.getLogger("Database utility").info("Database seeding complete");
+    }
 
 
-            public void iniRequestStatus(){
-                if (requestStatusRepository.count() > 0) return;
-                RequestStatus requestStatus1 = RequestStatus.builder().type(State.PENDING).build();
-                RequestStatus requestStatus2 = RequestStatus.builder().type(State.ACCEPTED).build();
-                RequestStatus requestStatus3 = RequestStatus.builder().type(State.REFUSED).build();
-                requestStatusRepository.saveAll(Arrays.asList(
-                        requestStatus1,
-                        requestStatus2,
-                        requestStatus3
-                ));
+    public void iniRequestStatus() {
+        if (requestStatusRepository.count() > 0) return;
+        RequestStatus requestStatus1 = RequestStatus.builder().type(State.PENDING).build();
+        RequestStatus requestStatus2 = RequestStatus.builder().type(State.ACCEPTED).build();
+        RequestStatus requestStatus3 = RequestStatus.builder().type(State.REFUSED).build();
+        requestStatusRepository.saveAll(Arrays.asList(
+                requestStatus1,
+                requestStatus2,
+                requestStatus3
+        ));
 
-            }
-            public void initEmployees() {
+    }
+
+    public void initEmployees() {
 
 //        Check table is empty
                 if (employeeRepository.count() > 0) return;
@@ -309,6 +308,7 @@ public class DatabaseUtility {
 
 
     }
+}
 
     // Fill the Predefined-Holidays table
     public void initPredefinedHoliday(){

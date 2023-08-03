@@ -3,6 +3,7 @@ package com.giantLink.RH.exceptions.handlers;
 import com.giantLink.RH.exceptions.*;
 import com.giantLink.RH.models.response.ErrorResponse;
 import com.giantLink.RH.models.response.ValidationErrorResponse;
+import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -31,6 +32,7 @@ public class RhGlobalExceptionHandler extends ResponseEntityExceptionHandler {
         errorResponse.setErrorDetails(ex.getMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
     @ExceptionHandler(ResourceNotFoundException.class)
     //@ExceptionHandler pour gérer spécifiquement chaque type d'exception personnalisée que nous avons défini précédemment
     public ResponseEntity<ErrorResponse> handleResourceNotFoundException(ResourceNotFoundException ex) {
@@ -40,6 +42,7 @@ public class RhGlobalExceptionHandler extends ResponseEntityExceptionHandler {
         errorResponse.setErrorDetails(ex.getMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
+
     @ExceptionHandler(ResourceDuplicatedException.class)
     public ResponseEntity<ErrorResponse> handleResourceDuplicatedException(ResourceDuplicatedException ex) {
         ErrorResponse errorResponse = new ErrorResponse();
@@ -48,6 +51,7 @@ public class RhGlobalExceptionHandler extends ResponseEntityExceptionHandler {
         errorResponse.setErrorDetails(ex.getMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
+
     @ExceptionHandler(ResourceCantBeDeletedException.class)
     public ResponseEntity<ErrorResponse> handleResourceCantBeDeletedException(ResourceCantBeDeletedException ex) {
         ErrorResponse errorResponse = new ErrorResponse();
@@ -75,6 +79,23 @@ public class RhGlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
     }
 
+    @ExceptionHandler(org.springframework.security.authentication.BadCredentialsException.class)
+    public ResponseEntity<ErrorResponse> handleBadCredentialsException(org.springframework.security.authentication.BadCredentialsException ex) {
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setErrorCode(HttpStatus.BAD_REQUEST.value());
+        errorResponse.setErrorMessage("username or password incorrect");
+        errorResponse.setErrorDetails(ex.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
+    }
+    @ExceptionHandler(ExpiredJwtException.class)
+    public ResponseEntity<ErrorResponse> handleExpiredJwtException(ExpiredJwtException ex) {
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setErrorCode(HttpStatus.BAD_REQUEST.value());
+        errorResponse.setErrorMessage("Token is expired");
+        errorResponse.setErrorDetails("sddddd");
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
         ValidationErrorResponse errorResponse = new ValidationErrorResponse();
@@ -87,7 +108,6 @@ public class RhGlobalExceptionHandler extends ResponseEntityExceptionHandler {
             validationErrors.put(fieldError.getField(), fieldError.getDefaultMessage());
         }
         errorResponse.setValidationErrors(validationErrors);
-
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 }

@@ -2,8 +2,8 @@ package com.giantLink.RH.services.impl;
 
 import com.giantLink.RH.entities.Role;
 import com.giantLink.RH.entities.User;
-import com.giantLink.RH.exceptions.TokenAuthenticationException;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
@@ -37,7 +37,12 @@ public class JwtService {
      * @return The extracted username.
      */
     public String extractUsername(String token) {
+
+//        try {
         return extractClaim(token, Claims::getSubject);
+//        } catch (ExpiredJwtException ex) {
+//            throw new ExpiredJwtException(null, null, "Token is expired");
+//        }
     }
 
     /**
@@ -67,14 +72,10 @@ public class JwtService {
      * @param token       The JWT token to be validated.
      * @param userDetails The UserDetails object to validate the token against.
      * @return True if the token is valid, otherwise false.
-     * @throws TokenAuthenticationException If the token is invalid or expired.
      */
-    public boolean isTokenValid(String token, UserDetails userDetails) throws TokenAuthenticationException {
+    public boolean isTokenValid(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
-        if (!username.equals(userDetails.getUsername()) || isTokenExpired(token)) {
-            throw new TokenAuthenticationException();
-        }
-        return true;
+        return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
     }
 
     /**
@@ -84,7 +85,11 @@ public class JwtService {
      * @return True if the token has expired, otherwise false.
      */
     private boolean isTokenExpired(String token) {
-        return extractExpiration(token).before(new Date());
+        try {
+            return extractExpiration(token).before(new Date());
+        } catch (ExpiredJwtException e) {
+            return true;
+        }
     }
 
     /**

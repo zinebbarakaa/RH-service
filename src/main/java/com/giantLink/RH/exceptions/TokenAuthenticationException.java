@@ -22,12 +22,11 @@ public class TokenAuthenticationException extends RuntimeException implements Au
         ErrorResponse errorDetails = ErrorResponse.builder()
                 .errorCode(HttpStatus.UNAUTHORIZED.value())
                 .errorMessage(authException.getMessage())
-                .errorDetails("Unauthorized")
+                .errorDetails("Unauthorized access or token expired ")
                 .build();
         ObjectMapper objectMapper=new ObjectMapper();
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-
         objectMapper.writeValue(response.getOutputStream(),errorDetails);
     }
 }
