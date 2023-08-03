@@ -36,6 +36,7 @@ public class SecurityConfiguration {
                         // Allow unauthenticated access to API endpoints related to authentication
                         .requestMatchers("api/auth/**").permitAll()
                         .requestMatchers(GET,"api/employees/**").hasAnyAuthority("ADMIN_READ")
+                        .requestMatchers(GET,"api/holiday/**").hasAnyAuthority("ADMIN_READ")
                         .requestMatchers(POST, "api/employees/**").hasAnyAuthority("ADMIN_CREATE")
                         .requestMatchers(PUT,"api/employees/**").hasAnyAuthority("ADMIN_UPDATE")
                         .requestMatchers(DELETE, "api/employees/**").hasAnyAuthority("ADMIN_DELETE")
