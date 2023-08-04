@@ -16,7 +16,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"numberofdays\": 1,\r\n    \"startDate\": \"2023-08-15\",\r\n    \"finishDate\": \"2023-08-20\",\r\n    \"employee_id\": 1\r\n}",
+							"raw": "{\r\n    \"numberofdays\": 5,\r\n    \"startDate\": \"2023-07-15\",\r\n    \"finishDate\": \"2023-07-20\",\r\n    \"employee_id\": 110\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -51,7 +51,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU5fUkgiLCJ1c2VySWQiOjEsInN1YiI6Ino1NTU4ODgiLCJpYXQiOjE2OTA5NzQ3OTgsImV4cCI6MTY5MDk3NTc5OH0.Z6PuQtC6_7MfPIev0Ak-SNYgkCKz-K_8_T-zekhqD1g",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU5fUkgiLCJ1c2VySWQiOjEsInN1YiI6Ino1NTU4ODgiLCJpYXQiOjE2OTA5ODYwNTMsImV4cCI6MTY5MDk4NjA1OX0.gxyBxnwgTGBZCNOxLQFKsrn5Z21f9T8jvljVo2Vk48o",
 									"type": "string"
 								}
 							]
@@ -973,131 +973,6 @@
 			]
 		},
 		{
-			"name": "Holidays",
-			"item": [
-				{
-					"name": "Get Predefind-Holiday",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "localhost:2023/api/holiday/predefined-holidays/2",
-							"host": [
-								"localhost"
-							],
-							"port": "2023",
-							"path": [
-								"api",
-								"holiday",
-								"predefined-holidays",
-								"2"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Predefind-Holidays",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "localhost:2023/api/holiday/predefined-holidays",
-							"host": [
-								"localhost"
-							],
-							"port": "2023",
-							"path": [
-								"api",
-								"holiday",
-								"predefined-holidays"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Add Predefind-Holiday",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"numberOfDays\": 2,\r\n    \"startDate\": \"2023-08-02\",\r\n    \"endDate\": \"2023-08-06\",\r\n    \"name\": \"Name_fromApi\",\r\n    \"country\": \"Country_fromApi\",\r\n    \"description\" : \"Description_fromApi\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "localhost:2023/api/holiday/predefined-holidays",
-							"host": [
-								"localhost"
-							],
-							"port": "2023",
-							"path": [
-								"api",
-								"holiday",
-								"predefined-holidays"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update Predefind-Holiday",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"numberOfDays\": 3,\r\n    \"startDate\": \"2023-08-02\",\r\n    \"endDate\": \"2023-08-20\",\r\n    \"name\": \"Name_updated\",\r\n    \"country\":\"Country_updated\",\r\n    \"description\" : \"Description_updated\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "localhost:2023/api/holiday/predefined-holidays/2",
-							"host": [
-								"localhost"
-							],
-							"port": "2023",
-							"path": [
-								"api",
-								"holiday",
-								"predefined-holidays",
-								"2"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Approved-Leaves",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "localhost:2023/api/holiday/approved-leaves",
-							"host": [
-								"localhost"
-							],
-							"port": "2023",
-							"path": [
-								"api",
-								"holiday",
-								"approved-leaves"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
 			"name": "Security",
 			"item": [
 				{
@@ -1156,7 +1031,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n     \"username\":\"z555888\",\r\n      \"password\":\"0000\"\r\n}",
+							"raw": "{\r\n     \"username\":\"cd11111\",\r\n      \"password\":\"1234\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1299,7 +1174,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"namePermission\":\"SUPER_ADMIN_DELEE\"\r\n}",
+							"raw": "{\r\n    \"namePermission\":\"SUPER_ADMIN_CREATE\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1333,7 +1208,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"roleName\":\"SUPER_ADMIN\",\r\n    \"permissions\":[\r\n        {\r\n            \"namePermission\":\"SUPER_ADMIN_READ\"\r\n        },\r\n        {\r\n            \"namePermission\":\"SUPER_ADMIN_CREATE\"\r\n        }\r\n    ]\r\n}",
+							"raw": "{\r\n    \"roleName\":\"SUPER_ADMIN\",\r\n    \"permissions\":[\r\n        {\r\n            \"id\":\"9\",\r\n            \"namePermission\":\"SUPER_ADMIN_READ\"\r\n        }\r\n    ]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
