@@ -42,12 +42,14 @@ public class AuthenticationController {
     }
 
     @PostMapping("/add-role/{userId}/{roleId}")
+    @PreAuthorize("hasAuthority('SUPER_ADMIN_CREATE')")
     public ResponseEntity<UserResponse> addRoleToUser(@PathVariable Long userId,
                                                              @PathVariable Long roleId) {
         return new ResponseEntity<>(userServiceImpl.addRoleToUser(userId, roleId), HttpStatus.CREATED);
     }
 
     @PostMapping("/delete-role/{userId}/{roleId}")
+    @PreAuthorize("hasAuthority('SUPER_ADMIN_CREATE')")
     public ResponseEntity<String> deleteRoleFromUser(@PathVariable Long userId,
                                                      @PathVariable Long roleId) {
         userServiceImpl.deleteRoleFromUser(userId, roleId);
