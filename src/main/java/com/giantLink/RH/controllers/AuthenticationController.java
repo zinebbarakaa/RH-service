@@ -19,7 +19,6 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
-@PreAuthorize("hasRole('SUPER_ADMIN')")
 @RequestMapping("api/auth")
 @RequiredArgsConstructor
 public class AuthenticationController {
@@ -36,20 +35,20 @@ public class AuthenticationController {
 
 
     @PostMapping("/register")
-    @PreAuthorize("hasAuthority('SUPER_ADMIN_CREATE')")
+    @PreAuthorize("hasRole('SUPER_ADMIN') and hasAuthority('SUPER_ADMIN_CREATE')")
     public ResponseEntity<UserResponse> register(@RequestBody RegisterRequest registerRequest) {
         return new ResponseEntity<>(userService.register(registerRequest), HttpStatus.CREATED);
     }
 
     @PostMapping("/add-role/{userId}/{roleId}")
-    @PreAuthorize("hasAuthority('SUPER_ADMIN_CREATE')")
+    @PreAuthorize("hasRole('SUPER_ADMIN') and hasAuthority('SUPER_ADMIN_CREATE')")
     public ResponseEntity<UserResponse> addRoleToUser(@PathVariable Long userId,
                                                              @PathVariable Long roleId) {
         return new ResponseEntity<>(userServiceImpl.addRoleToUser(userId, roleId), HttpStatus.CREATED);
     }
 
     @PostMapping("/delete-role/{userId}/{roleId}")
-    @PreAuthorize("hasAuthority('SUPER_ADMIN_CREATE')")
+    @PreAuthorize("hasRole('SUPER_ADMIN') and hasAuthority('SUPER_ADMIN_CREATE')")
     public ResponseEntity<String> deleteRoleFromUser(@PathVariable Long userId,
                                                      @PathVariable Long roleId) {
         userServiceImpl.deleteRoleFromUser(userId, roleId);
