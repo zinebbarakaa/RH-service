@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import com.giantLink.RH.exceptions.UnauthorizedAccessException;
 import com.giantLink.RH.models.response.SuccessResponse;
 import com.giantLink.RH.services.UserService;
 
@@ -31,6 +32,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -51,8 +55,6 @@ public class EmployeeController {
 
     private UserService userService;
 
-
-
     private RequestHolidayServiceImpl requestHolidayService;
     @Autowired
     private HolidayBalanceService holidayBalanceService;
@@ -71,17 +73,24 @@ public class EmployeeController {
     }
 
     @GetMapping
-
-    @PreAuthorize("hasAuthority('READ')")
-
+    @PreAuthorize("hasAuthority('ADMIN_READ')")
     public ResponseEntity<List<EmployeeResponse>> getAllEmployees()
     {
         List<EmployeeResponse> employees = employeeService.get();
         return new ResponseEntity<>(employees, HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("get-one/{id}")
+    @PreAuthorize("hasAuthority('ADMIN_READ')")
     public ResponseEntity<EmployeeResponse> getEmployeeById(@PathVariable Long id) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (!authentication.getAuthorities().stream().anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN_RH"))) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            if (!employeeService.doesEmployeeIdBelongToUser(id, userDetails.getUsername())) {
+                throw new UnauthorizedAccessException("You are not authorized to access this employee's information.");
+            }
+        }
         EmployeeResponse employee = employeeService.get(id);
         return new ResponseEntity<>(employee, HttpStatus.OK);
     }

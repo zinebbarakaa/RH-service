@@ -30,18 +30,18 @@ public class PermissionController {
     }
 
     @GetMapping
-    @PreAuthorize("hasAuthority('SUPER_ADMIN_CREATE')")
+    @PreAuthorize("hasAuthority('SUPER_ADMIN_READ')")
     public ResponseEntity<List<PermissionResponse>> getAllRoles(){
         return new ResponseEntity<>(permissionService.get(),HttpStatus.OK);
     }
     @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority('SUPER_ADMIN_CREATE')")
+    @PreAuthorize("hasAuthority('SUPER_ADMIN_UPDATE')")
     public ResponseEntity<PermissionResponse> update(@RequestBody PermissionRequest request, @PathVariable Long id){
         return  new ResponseEntity<>(permissionService.update(request,id),HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('SUPER_ADMIN_CREATE')")
+    @PreAuthorize("hasAuthority('SUPER_ADMIN_DELETE')")
     public  ResponseEntity<String> deleteRole(@PathVariable Long id){
         permissionService.delete(id);
         return  new ResponseEntity<>("Permission Deleted",HttpStatus.NO_CONTENT);

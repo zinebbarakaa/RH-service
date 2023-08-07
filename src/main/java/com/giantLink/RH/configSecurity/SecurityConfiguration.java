@@ -1,4 +1,5 @@
 package com.giantLink.RH.configSecurity;
+
 import com.giantLink.RH.exceptions.TokenAuthenticationException;
 import com.giantLink.RH.exceptions.UnauthorizedAccessException;
 import lombok.RequiredArgsConstructor;
@@ -33,30 +34,9 @@ public class SecurityConfiguration {
                 .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 // Define authorization rules for specific HTTP requests
                 .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry -> authorizationManagerRequestMatcherRegistry
-
                         // Allow unauthenticated access to API endpoints related to authentication
                         .requestMatchers("api/auth/login").permitAll()
-                        .requestMatchers(POST, "api/auth/register").hasAnyAuthority("SUPER_ADMIN_CREATE")
-                        .requestMatchers("api/auth/**").hasRole("SUPER_ADMIN")
-                        .requestMatchers(GET,"api/role/**").hasAuthority("SUPER_ADMIN_READ")
-                        .requestMatchers(POST,"api/role/**").hasAuthority("SUPER_ADMIN_CREATE")
-                        .requestMatchers(PUT,"api/role/**").hasAuthority("SUPER_ADMIN_UPDATE")
-                        .requestMatchers(DELETE,"api/role/**").hasAuthority("SUPER_ADMIN_DELETE")
-                        .requestMatchers("api/role/**").hasRole("SUPER_ADMIN")
-                        .requestMatchers(GET,"api/permission/**").hasAuthority("SUPER_ADMIN_READ")
-                        .requestMatchers(POST,"api/permission/**").hasAuthority("SUPER_ADMIN_CREATE")
-                        .requestMatchers(PUT,"api/permission/**").hasAuthority("SUPER_ADMIN_UPDATE")
-                        .requestMatchers(DELETE,"api/permission/**").hasAuthority("SUPER_ADMIN_DELETE")
-                        .requestMatchers("api/permission/**").hasRole("SUPER_ADMIN")
-                        .requestMatchers(GET,"api/employees/**").hasAnyAuthority("ADMIN_READ")
-                        .requestMatchers(GET,"api/holiday/**").hasAnyAuthority("ADMIN_READ")
-                        .requestMatchers(POST, "api/employees/**").hasAnyAuthority("ADMIN_CREATE")
-                        .requestMatchers(PUT,"api/employees/**").hasAnyAuthority("ADMIN_UPDATE")
-                        .requestMatchers(DELETE, "api/employees/**").hasAnyAuthority("ADMIN_DELETE")
-                        .requestMatchers("api/employees").hasAnyRole("ADMIN_RH","MANAGER_RH")
-
                         // For all other requests, user must be authenticated
-
                         .anyRequest().authenticated())
                 // Configure the custom authentication provider
                 .authenticationProvider(authenticationProvider)

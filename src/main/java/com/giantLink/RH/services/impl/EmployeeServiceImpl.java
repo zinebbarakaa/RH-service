@@ -112,4 +112,14 @@ public class EmployeeServiceImpl implements EmployeeService
     }
 
 
+    @Override
+    public boolean doesEmployeeIdBelongToUser(Long id, String username) {
+        Employee employee = employeeRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Employee not found"));
+
+        if (employee.getUser() == null) {
+            throw new ResourceNotFoundException("User not found for the employee");
+        }
+        return  employee.getUser().getUsername().equals(username);
+    }
 }

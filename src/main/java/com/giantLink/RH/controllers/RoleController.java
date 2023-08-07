@@ -27,12 +27,12 @@ public class RoleController {
     }
 
     @GetMapping
-    @PreAuthorize("hasAuthority('SUPER_ADMIN_CREATE')")
+    @PreAuthorize("hasAuthority('SUPER_ADMIN_READ')")
     public ResponseEntity<List<RoleResponse>> getAllRoles(){
         return new ResponseEntity<>(roleService.get(),HttpStatus.OK);
     }
     @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority('SUPER_ADMIN_CREATE')")
+    @PreAuthorize("hasAuthority('SUPER_ADMIN_UPDATE')")
     public ResponseEntity<RoleResponse> update(@RequestBody RoleRequest request,@PathVariable Long id){
         return  new ResponseEntity<>(roleService.update(request,id),HttpStatus.OK);
     }
@@ -43,13 +43,13 @@ public class RoleController {
         return  new ResponseEntity<>(roleService.addPermissionToRole(idRole,idPermission),HttpStatus.OK);
     }
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('SUPER_ADMIN_CREATE')")
+    @PreAuthorize("hasAuthority('SUPER_ADMIN_DELETE')")
     public  ResponseEntity<String> deleteRole(@PathVariable Long id){
         roleService.delete(id);
         return  new ResponseEntity<>("Role Deleted",HttpStatus.NO_CONTENT);
     }
     @DeleteMapping("remove-permission-from-role/{idRole}/{idPermission}")
-    @PreAuthorize("hasAuthority('SUPER_ADMIN_CREATE')")
+    @PreAuthorize("hasAuthority('SUPER_ADMIN_DELETE')")
     public  ResponseEntity<RoleResponse > deletePermissionFromRole(@PathVariable Long idRole,@PathVariable Long idPermission){
         return  new ResponseEntity<>(roleService.deletePermissionToRole(idRole,idPermission),HttpStatus.OK);
     }

@@ -245,9 +245,9 @@ public class DatabaseUtility {
         roleService.addPermissionToRole(4L, 12L);
 
         List<Role> roles = new ArrayList<>();
-        roles.add(admin_rh);
-        roles.add(manager);
-        roles.add(director);
+//        roles.add(admin_rh);
+//        roles.add(manager);
+//        roles.add(director);
         roles.add(super_admin);
 
         Employee employee_admin = Employee.builder()
